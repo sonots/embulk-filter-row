@@ -1,0 +1,32 @@
+# in:
+#   type: random
+#   rows: 100
+#   schema:
+#     id: primary_key
+#     name: string
+#     score: integer
+in:
+  type: file
+  path_prefix: example.csv
+  parser:
+    type: csv
+    charset: UTF-8
+    newline: CRLF
+    null_string: 'NULL'
+    skip_header_lines: 1
+    comment_line_marker: '#'
+    columns:
+      - {name: foo, type: string}
+      - {name: flag, type: boolean}
+      - {name: id, type: long}
+      - {name: name, type: string}
+      - {name: score, type: double}
+filters:
+  - type: row
+    conditions:
+      - {column: flag, operator: ==, argument: true}
+      - {column: id, operator: ==, argument: 97}
+      - {column: name, operator: ==, argument: "RRNYDAzKaq4Trtt96Bxgk3N0fXLIV8hXoK0qQ7uw_Wc"}
+      - {column: score, operator: ">", argument: 3000}
+out:
+  type: stdout

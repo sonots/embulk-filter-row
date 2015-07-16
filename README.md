@@ -7,6 +7,9 @@ A filter plugin for Embulk to filter out rows
 * **conditions**: select only rows which matches with conditions. (support only AND conditions)
   * **column**: column name (string, required)
   * **operator** operator (string, required)
+    * boolean operator
+      * ==
+      * !=
     * numeric operator
       * >
       * >=
@@ -25,6 +28,7 @@ A filter plugin for Embulk to filter out rows
       * "IS NOT NULL"
   * **argument**: argument for the operation (string, required for binary operators)
   * **not**: not operation (boolean, default: false)
+  * **value**: synonym to `operator: ==` and `argument: #{value}`
 
 ## Example
 
