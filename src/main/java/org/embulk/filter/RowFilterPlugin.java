@@ -79,44 +79,69 @@ public class RowFilterPlugin implements FilterPlugin
                     String operator = conditionConfig.getOperator();
                     Condition condition = null;
                     if (type instanceof BooleanType) {
-                        if (!(conditionConfig.getArgument().get() instanceof Boolean)) {
+                        if (!conditionConfig.getArgument().isPresent()) {
+                            condition = new BooleanCondition(operator, null);
+                        }
+                        else if (conditionConfig.getArgument().get() instanceof Boolean) {
+                            Boolean argument = (Boolean)conditionConfig.getArgument().get();
+                            condition = new BooleanCondition(operator, argument);
+                        }
+                        else {
                             log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
                             System.exit(1);
                         }
-                        boolean argument = ((Boolean)conditionConfig.getArgument().get()).booleanValue();
-                        condition = new BooleanCondition(operator, argument);
                     }
                     else if (type instanceof LongType) {
-                        if (!(conditionConfig.getArgument().get() instanceof Integer)) {
+                        if (!conditionConfig.getArgument().isPresent()) {
+                            condition = new LongCondition(operator, null);
+                        }
+                        else if (conditionConfig.getArgument().get() instanceof Integer) {
+                            Long argument = new Long(((Integer)conditionConfig.getArgument().get()).longValue());
+                            condition = new LongCondition(operator, argument);
+                        }
+                        else {
                             log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
                             System.exit(1);
                         }
-                        long argument = ((Integer)conditionConfig.getArgument().get()).longValue();
-                        condition = new LongCondition(operator, argument);
                     }
                     else if (type instanceof DoubleType) {
-                        if (!(conditionConfig.getArgument().get() instanceof Number)) {
+                        if (!conditionConfig.getArgument().isPresent()) {
+                            condition = new DoubleCondition(operator, null);
+                        }
+                        else if (conditionConfig.getArgument().get() instanceof Number) {
+                            Double argument = new Double(conditionConfig.getArgument().get().toString());
+                            condition = new DoubleCondition(operator, argument);
+                        }
+                        else {
                             log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
                             System.exit(1);
                         }
-                        double argument = new Double(conditionConfig.getArgument().get().toString()).doubleValue();
-                        condition = new DoubleCondition(operator, argument);
                     }
                     else if (type instanceof StringType) {
-                        if (!(conditionConfig.getArgument().get() instanceof String)) {
+                        if (!conditionConfig.getArgument().isPresent()) {
+                            condition = new StringCondition(operator, null);
+                        }
+                        else if (conditionConfig.getArgument().get() instanceof String) {
+                            String argument = (String)conditionConfig.getArgument().get();
+                            condition = new StringCondition(operator, argument);
+                        }
+                        else {
                             log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
                             System.exit(1);
                         }
-                        String argument = (String)conditionConfig.getArgument().get();
-                        condition = new StringCondition(operator, argument);
                     }
                     else if (type instanceof TimestampType) {
-                        if (!(conditionConfig.getArgument().get() instanceof Timestamp)) {
+                        if (!conditionConfig.getArgument().isPresent()) {
+                            condition = new TimestampCondition(operator, null);
+                        }
+                        else if (conditionConfig.getArgument().get() instanceof Timestamp) {
+                            Timestamp argument = (Timestamp)conditionConfig.getArgument().get();
+                            condition = new TimestampCondition(operator, argument);
+                        }
+                        else {
                             log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
                             System.exit(1);
                         }
-                        Timestamp argument = (Timestamp)conditionConfig.getArgument().get();
-                        condition = new TimestampCondition(operator, argument);
                     }
                     else {
                         assert(false);
@@ -167,9 +192,10 @@ public class RowFilterPlugin implements FilterPlugin
                     BooleanCondition condition = (BooleanCondition)conditionMap.get(column.getName());
                     if (condition != null) {
                         if (pageReader.isNull(column)) {
+                            if (!condition.compare(null)) shouldAddRecord = false;
                         } else {
-                            boolean value = pageReader.getBoolean(column);
-                            if (!condition.compare(value)) shouldAddRecord = false;
+                            boolean subject = pageReader.getBoolean(column);
+                            if (!condition.compare(subject)) shouldAddRecord = false;
                         }
                     }
                     if (pageReader.isNull(column)) {
@@ -185,9 +211,10 @@ public class RowFilterPlugin implements FilterPlugin
                     LongCondition condition = (LongCondition)conditionMap.get(column.getName());
                     if (condition != null) {
                         if (pageReader.isNull(column)) {
+                            if (!condition.compare(null)) shouldAddRecord = false;
                         } else {
-                            long value = pageReader.getLong(column);
-                            if (!condition.compare(value)) shouldAddRecord = false;
+                            long subject = pageReader.getLong(column);
+                            if (!condition.compare(subject)) shouldAddRecord = false;
                         }
                     }
                     if (pageReader.isNull(column)) {
@@ -203,9 +230,10 @@ public class RowFilterPlugin implements FilterPlugin
                     DoubleCondition condition = (DoubleCondition)conditionMap.get(column.getName());
                     if (condition != null) {
                         if (pageReader.isNull(column)) {
+                            if (!condition.compare(null)) shouldAddRecord = false;
                         } else {
-                            double value = pageReader.getDouble(column);
-                            if (!condition.compare(value)) shouldAddRecord = false;
+                            double subject = pageReader.getDouble(column);
+                            if (!condition.compare(subject)) shouldAddRecord = false;
                         }
                     }
                     if (pageReader.isNull(column)) {
@@ -221,9 +249,10 @@ public class RowFilterPlugin implements FilterPlugin
                     StringCondition condition = (StringCondition)conditionMap.get(column.getName());
                     if (condition != null) {
                         if (pageReader.isNull(column)) {
+                            if (!condition.compare(null)) shouldAddRecord = false;
                         } else {
-                            String value = pageReader.getString(column);
-                            if (!condition.compare(value)) shouldAddRecord = false;
+                            String subject = pageReader.getString(column);
+                            if (!condition.compare(subject)) shouldAddRecord = false;
                         }
                     }
                     if (pageReader.isNull(column)) {
@@ -239,9 +268,10 @@ public class RowFilterPlugin implements FilterPlugin
                     TimestampCondition condition = (TimestampCondition)conditionMap.get(column.getName());
                     if (condition != null) {
                         if (pageReader.isNull(column)) {
+                            if (!condition.compare(null)) shouldAddRecord = false;
                         } else {
-                            Timestamp value = pageReader.getTimestamp(column);
-                            if (!condition.compare(value)) shouldAddRecord = false;
+                            Timestamp subject = pageReader.getTimestamp(column);
+                            if (!condition.compare(subject)) shouldAddRecord = false;
                         }
                     }
                     if (pageReader.isNull(column)) {

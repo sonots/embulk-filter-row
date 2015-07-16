@@ -6,27 +6,34 @@ public class LongCondition implements Condition
 
     @FunctionalInterface
     interface LongComparator {
-        boolean compare(long subject);
+        boolean compare(Long subject);
     }
 
-    public LongCondition(String operator, long argument) {
-        switch (operator) {
+    public LongCondition(String operator, Long argument) {
+        switch (operator.toUpperCase()) {
             case "==":
-                this.comparator = (long subject) -> { return subject == argument; };
+                this.comparator = (Long subject) -> { return subject.equals(argument); };
                 break;
             case "!=":
-                this.comparator = (long subject) -> { return subject != argument; };
+                this.comparator = (Long subject) -> { return !subject.equals(argument); };
+                break;
             case ">":
-                this.comparator = (long subject) -> { return subject > argument; };
+                this.comparator = (Long subject) -> { return subject.compareTo(argument) > 0; };
                 break;
             case ">=":
-                this.comparator = (long subject) -> { return subject >= argument; };
+                this.comparator = (Long subject) -> { return subject.compareTo(argument) >= 0; };
                 break;
             case "<":
-                this.comparator = (long subject) -> { return subject < argument; };
+                this.comparator = (Long subject) -> { return subject.compareTo(argument) < 0; };
                 break;
             case "<=":
-                this.comparator = (long subject) -> { return subject <= argument; };
+                this.comparator = (Long subject) -> { return subject.compareTo(argument) <= 0; };
+                break;
+            case "IS NULL":
+                this.comparator = (Long subject) -> { return subject == null; };
+                break;
+            case "IS NOT NULL":
+                this.comparator = (Long subject) -> { return subject != null; };
                 break;
             default:
                 assert(false);
@@ -34,7 +41,7 @@ public class LongCondition implements Condition
         }
     }
 
-    public boolean compare(long subject) {
+    public boolean compare(Long subject) {
         return this.comparator.compare(subject);
     }
 }

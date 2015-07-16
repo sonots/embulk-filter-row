@@ -11,7 +11,7 @@ public class TimestampCondition implements Condition
     }
 
     public TimestampCondition(String operator, Timestamp argument) {
-        switch (operator) {
+        switch (operator.toUpperCase()) {
             case "==":
                 this.comparator = (Timestamp subject) -> { return subject.equals(argument); };
                 break;
@@ -23,11 +23,18 @@ public class TimestampCondition implements Condition
                 break;
             case ">=":
                 this.comparator = (Timestamp subject) -> { return subject.compareTo(argument) >= 0; };
+                break;
             case "<":
                 this.comparator = (Timestamp subject) -> { return subject.compareTo(argument) < 0; };
                 break;
             case "<=":
                 this.comparator = (Timestamp subject) -> { return subject.compareTo(argument) <= 0; };
+                break;
+            case "IS NULL":
+                this.comparator = (Timestamp subject) -> { return subject == null; };
+                break;
+            case "IS NOT NULL":
+                this.comparator = (Timestamp subject) -> { return subject != null; };
                 break;
             default:
                 assert(false);

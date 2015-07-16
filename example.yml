@@ -17,6 +17,7 @@ in:
     comment_line_marker: '#'
     columns:
       - {name: foo, type: string}
+      - {name: bar, type: string}
       - {name: flag, type: boolean}
       - {name: id, type: long}
       - {name: name, type: string}
@@ -24,6 +25,7 @@ in:
 filters:
   - type: row
     conditions:
+      - {column: foo, operator: "IS NULL"}
       - {column: flag, operator: ==, argument: true}
       - {column: id, operator: ==, argument: 97}
       - {column: name, operator: ==, argument: "RRNYDAzKaq4Trtt96Bxgk3N0fXLIV8hXoK0qQ7uw_Wc"}

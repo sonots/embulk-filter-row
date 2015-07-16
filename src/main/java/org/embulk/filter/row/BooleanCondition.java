@@ -6,16 +6,22 @@ public class BooleanCondition implements Condition
 
     @FunctionalInterface
     interface BooleanComparator {
-        boolean compare(boolean subject);
+        boolean compare(Boolean subject);
     }
 
-    public BooleanCondition(String operator, boolean argument) {
-        switch (operator) {
+    public BooleanCondition(String operator, Boolean argument) {
+        switch (operator.toUpperCase()) {
             case "==":
-                this.comparator = (boolean subject) -> { return subject == argument; };
+                this.comparator = (Boolean subject) -> { return subject.equals(argument); };
                 break;
             case "!=":
-                this.comparator = (boolean subject) -> { return subject != argument; };
+                this.comparator = (Boolean subject) -> { return !subject.equals(argument); };
+                break;
+            case "IS NULL":
+                this.comparator = (Boolean subject) -> { return subject == null; };
+                break;
+            case "IS NOT NULL":
+                this.comparator = (Boolean subject) -> { return subject != null; };
                 break;
             default:
                 assert(false);
@@ -23,7 +29,7 @@ public class BooleanCondition implements Condition
         }
     }
 
-    public boolean compare(boolean subject) {
+    public boolean compare(Boolean subject) {
         return this.comparator.compare(subject);
     }
 }

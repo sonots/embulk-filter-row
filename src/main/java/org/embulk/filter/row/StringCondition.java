@@ -10,7 +10,7 @@ public class StringCondition implements Condition
     }
 
     public StringCondition(String operator, String argument) {
-        switch (operator) {
+        switch (operator.toUpperCase()) {
             case "==":
                 this.comparator = (String subject) -> { return subject.equals(argument); };
                 break;
@@ -25,6 +25,12 @@ public class StringCondition implements Condition
                 break;
             case "include":
                 this.comparator = (String subject) -> { return subject.contains(argument); };
+                break;
+            case "IS NULL":
+                this.comparator = (String subject) -> { return subject == null; };
+                break;
+            case "IS NOT NULL":
+                this.comparator = (String subject) -> { return subject != null; };
                 break;
             default:
                 assert(false);
