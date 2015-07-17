@@ -62,6 +62,12 @@ $ ./gradlew classpath
 $ embulk run -I lib example.yml
 ```
 
+Run test:
+
+```
+$ ./gradlew test
+```
+
 Release gem:
 
 ```
