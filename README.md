@@ -53,6 +53,10 @@ NOTE: column type is automatically retrieved from input data (inputSchema)
 * Support OR condition
   * It should be better to think using Query engine like [Apache Drill](https://drill.apache.org/) or [Presto](https://prestodb.io/)
 
+## ChangeLog
+
+[CHANGELOG.md](./CHANGELOG.md)
+
 ## Development
 
 Run example:
