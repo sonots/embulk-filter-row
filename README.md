@@ -31,6 +31,8 @@ A filter plugin for Embulk to filter out rows
   * **format**: special option for timestamp column. (string, default is `%Y-%m-%d %H:%M:%S.%N %z`)
   * **timezone**: special option for timestamp column. (string, default is `UTC`)
 
+NOTE: column type is retrieved from input data (inputSchema)
+
 ## Example
 
 ```yaml
@@ -43,6 +45,8 @@ filters:
       - {column: name, opeartor: "==",  argument: foo, not: true}
       - {column: time, operator: "==",  argument: "2015-07-13", format: "%Y-%m-%d"}
 ```
+
+NOTE: column type is retrieved from input data (inputSchema)
 
 ## ToDo
 
