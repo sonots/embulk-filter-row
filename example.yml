@@ -16,18 +16,20 @@ in:
     skip_header_lines: 1
     comment_line_marker: '#'
     columns:
-      - {name: foo, type: string}
-      - {name: bar, type: string}
-      - {name: flag, type: boolean}
-      - {name: id, type: long}
-      - {name: name, type: string}
+      - {name: time,  type: timestamp, format: "%Y-%m-%d"}
+      - {name: foo,   type: string}
+      - {name: bar,   type: string}
+      - {name: flag,  type: boolean}
+      - {name: id,    type: long}
+      - {name: name,  type: string}
       - {name: score, type: double}
 filters:
   - type: row
     conditions:
-      - {column: foo, operator: "IS NULL"}
-      - {column: id, operator: ==, argument: 97}
-      - {column: name, operator: ==, argument: "RRNYDAzKaq4Trtt96Bxgk3N0fXLIV8hXoK0qQ7uw_Wc"}
+      - {column: foo,   operator: "IS NULL"}
+      - {column: id,    operator: ==,  argument: 97}
+      - {column: name,  operator: ==,  argument: "RRNYDAzKaq4Trtt96Bxgk3N0fXLIV8hXoK0qQ7uw_Wc"}
       - {column: score, operator: "<", argument: 3000, not: true}
+      - {column: time,  operator: ==,  argument: "2015-07-13", format: "%Y-%m-%d"}
 out:
   type: stdout

@@ -30,6 +30,7 @@ import org.embulk.spi.Schema;
 import org.embulk.spi.SchemaConfig;
 import org.embulk.spi.Column;
 import org.embulk.spi.ColumnVisitor;
+import org.embulk.spi.time.TimestampParser;
 import org.embulk.filter.row.ConditionConfig;
 import org.embulk.filter.row.Condition;
 import org.embulk.filter.row.BooleanCondition;
@@ -41,7 +42,8 @@ import org.embulk.filter.row.ConditionFactory;
 
 public class RowFilterPlugin implements FilterPlugin
 {
-    public interface PluginTask extends Task
+    public interface PluginTask
+            extends Task, TimestampParser.Task
     {
         @Config("conditions")
         public List<ConditionConfig> getConditions();
@@ -76,7 +78,7 @@ public class RowFilterPlugin implements FilterPlugin
             String columnName = conditionConfig.getColumn();
             for (Column column : outputSchema.getColumns()) {
                 if (columnName.equals(column.getName())) {
-                    ConditionFactory factory = new ConditionFactory(column, conditionConfig);
+                    ConditionFactory factory = new ConditionFactory(task, column, conditionConfig);
                     Condition condition = factory.createCondition();
                     conditionMap.put(columnName, condition);
                     break;

@@ -1,7 +1,9 @@
 package org.embulk.filter.row;
 
 import org.slf4j.Logger;
+import org.joda.time.DateTimeZone;
 
+import org.embulk.config.Task;
 import org.embulk.spi.Exec;
 import org.embulk.spi.Column;
 import org.embulk.spi.type.Type;
@@ -11,6 +13,9 @@ import org.embulk.spi.type.DoubleType;
 import org.embulk.spi.type.StringType;
 import org.embulk.spi.type.TimestampType;
 import org.embulk.spi.time.Timestamp;
+import org.embulk.spi.time.TimestampParser;
+import org.embulk.spi.time.TimestampParseException;
+import com.google.common.base.Throwables;
 
 import org.embulk.filter.row.ConditionConfig;
 import org.embulk.filter.row.Condition;
@@ -23,6 +28,7 @@ import org.slf4j.Logger;
 
 public class ConditionFactory
 {
+    private TimestampParser.Task task;
     private Column column;
     private String columnName;
     private Type columnType;
@@ -31,8 +37,9 @@ public class ConditionFactory
     private boolean not;
     private final Logger log;
 
-    public ConditionFactory(Column column, ConditionConfig conditionConfig)
+    public ConditionFactory(TimestampParser.Task task, Column column, ConditionConfig conditionConfig)
     {
+        this.task            = task;
         this.log             = Exec.getLogger(ConditionFactory.class);
         this.column          = column;
         this.columnName      = column.getName();
@@ -154,9 +161,18 @@ public class ConditionFactory
             log.warn(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
             System.exit(1);
         }
-        else if (conditionConfig.getArgument().get() instanceof Timestamp) {
-            Timestamp argument = (Timestamp)conditionConfig.getArgument().get();
-            return new TimestampCondition(operator, argument, not);
+        else if (conditionConfig.getArgument().get() instanceof String) {
+            String argument        = (String)conditionConfig.getArgument().get();
+            String format          = (String)conditionConfig.getFormat().get();
+            DateTimeZone timezone  = DateTimeZone.forID((String)conditionConfig.getTimezone().get());
+
+            TimestampParser parser = new TimestampParser(task.getJRuby(), format, timezone);
+            try {
+                Timestamp timestamp = parser.parse(argument);
+                return new TimestampCondition(operator, timestamp, not);
+            } catch(TimestampParseException ex) {
+                throw Throwables.propagate(ex);
+            }
         }
         else {
             log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));

@@ -11,7 +11,7 @@ public interface ConditionConfig extends Task
     public String getColumn();
 
     @Config("operator")
-    @ConfigDefault("==")
+    @ConfigDefault("\"==\"")
     public Optional<String> getOperator();
 
     @Config("argument")
@@ -21,4 +21,12 @@ public interface ConditionConfig extends Task
     @Config("not")
     @ConfigDefault("false")
     public Optional<Boolean> getNot();
+
+    @Config("format")
+    @ConfigDefault("\"%Y-%m-%d %H:%M:%S.%N %z\"")
+    public Optional<String> getFormat();
+
+    @Config("timezone")
+    @ConfigDefault("\"UTC\"")
+    public Optional<String> getTimezone();
 }

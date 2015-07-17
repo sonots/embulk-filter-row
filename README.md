@@ -28,6 +28,8 @@ A filter plugin for Embulk to filter out rows
       * "IS NOT NULL"
   * **argument**: argument for the operation (string, required for non-unary operators)
   * **not**: not (boolean, optional, default: false)
+  * **format**: special option for timestamp column. (string, default is `%Y-%m-%d %H:%M:%S.%N %z`)
+  * **timezone**: special option for timestamp column. (string, default is `UTC`)
 
 ## Example
 
@@ -35,8 +37,11 @@ A filter plugin for Embulk to filter out rows
 filters:
   - type: row
     conditions:
-      - {column: id,   operator: >,  argument: 10}
-      - {column: name, opeartor: ==, argument: foo, not: true}
+      - {column: foo,  operator: "IS NOT NULL"}
+      - {column: id,   operator: ">=",  argument: 10}
+      - {column: id,   operator: "<",   argument: 20}
+      - {column: name, opeartor: "==",  argument: foo, not: true}
+      - {column: time, operator: "==",  argument: "2015-07-13", format: "%Y-%m-%d"}
 ```
 
 ## ToDo
