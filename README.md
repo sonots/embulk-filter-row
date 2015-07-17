@@ -6,12 +6,15 @@ A filter plugin for Embulk to filter out rows
 
 * **conditions**: select only rows which matches with conditions. (support only AND conditions)
   * **column**: column name (string, required)
-  * **operator** operator (string, required)
-    * numeric operator
-      * >
-      * >=
+  * **operator** operator (string, optional, default: ==)
+    * boolean operator
       * ==
       * !=
+    * numeric operator
+      * ==
+      * !=
+      * >
+      * >=
       * <=
       * <
     * string operator
@@ -23,8 +26,10 @@ A filter plugin for Embulk to filter out rows
     * unary operator
       * "IS NULL"
       * "IS NOT NULL"
-  * **argument**: argument for the operation (string, required for binary operators)
-  * **not**: not operation (boolean, default: false)
+  * **argument**: argument for the operation (string, required for non-unary operators)
+  * **not**: not (boolean, optional, default: false)
+  * **format**: special option for timestamp column. (string, default is `%Y-%m-%d %H:%M:%S.%N %z`)
+  * **timezone**: special option for timestamp column. (string, default is `UTC`)
 
 ## Example
 
@@ -32,8 +37,11 @@ A filter plugin for Embulk to filter out rows
 filters:
   - type: row
     conditions:
-      - {column: id,   operator: >,  argument: 10}
-      - {column: name, operator: ==, argument: foo, not: true}
+      - {column: foo,  operator: "IS NOT NULL"}
+      - {column: id,   operator: ">=",  argument: 10}
+      - {column: id,   operator: "<",   argument: 20}
+      - {column: name, opeartor: "==",  argument: foo, not: true}
+      - {column: time, operator: "==",  argument: "2015-07-13", format: "%Y-%m-%d"}
 ```
 
 ## ToDo

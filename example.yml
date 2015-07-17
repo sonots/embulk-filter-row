@@ -1,0 +1,36 @@
+# in:
+#   type: random
+#   rows: 100
+#   schema:
+#     id: primary_key
+#     name: string
+#     score: integer
+in:
+  type: file
+  path_prefix: example.csv
+  parser:
+    type: csv
+    charset: UTF-8
+    newline: CRLF
+    null_string: 'NULL'
+    skip_header_lines: 1
+    comment_line_marker: '#'
+    columns:
+      - {name: time,  type: timestamp, format: "%Y-%m-%d"}
+      - {name: foo,   type: string}
+      - {name: bar,   type: string}
+      - {name: flag,  type: boolean}
+      - {name: id,    type: long}
+      - {name: name,  type: string}
+      - {name: score, type: double}
+filters:
+  - type: row
+    conditions:
+      - {column: foo,   operator: "IS NULL"}
+      - {column: id,    operator: ==,  argument: 97}
+      - {column: name,  operator: ==,  argument: "xxxx", not: true}
+      - {column: score, operator: ">", argument: 2000}
+      - {column: score, operator: "<", argument: 6000}
+      - {column: time,  operator: ==,  argument: "2015-07-13", format: "%Y-%m-%d"}
+out:
+  type: stdout
