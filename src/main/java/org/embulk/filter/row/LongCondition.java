@@ -44,7 +44,7 @@ public class LongCondition implements Condition
                 break;
             case "!=":
                 comparator = (Long subject) -> {
-                    return subject == null ? false : !subject.equals(argument);
+                    return subject == null ? true : !subject.equals(argument);
                 };
                 break;
             default: // case "==":

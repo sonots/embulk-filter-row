@@ -44,7 +44,7 @@ public class DoubleCondition implements Condition
                 break;
             case "!=":
                 comparator = (Double subject) -> {
-                    return subject == null ? false : !subject.equals(argument);
+                    return subject == null ? true : !subject.equals(argument);
                 };
                 break;
             default: // case "==":

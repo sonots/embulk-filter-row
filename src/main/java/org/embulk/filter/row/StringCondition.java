@@ -39,7 +39,7 @@ public class StringCondition implements Condition
                 break;
             case "!=":
                 comparator = (String subject) -> {
-                    return subject == null ? false : !subject.equals(argument);
+                    return subject == null ? true : !subject.equals(argument);
                 };
                 break;
             default: // case "==":
