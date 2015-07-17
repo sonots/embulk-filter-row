@@ -26,9 +26,8 @@ filters:
   - type: row
     conditions:
       - {column: foo, operator: "IS NULL"}
-      - {column: flag, operator: ==, argument: true}
       - {column: id, operator: ==, argument: 97}
       - {column: name, operator: ==, argument: "RRNYDAzKaq4Trtt96Bxgk3N0fXLIV8hXoK0qQ7uw_Wc"}
-      - {column: score, operator: ">", argument: 3000}
+      - {column: score, operator: "<", argument: 3000, not: true}
 out:
   type: stdout

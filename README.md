@@ -6,15 +6,15 @@ A filter plugin for Embulk to filter out rows
 
 * **conditions**: select only rows which matches with conditions. (support only AND conditions)
   * **column**: column name (string, required)
-  * **operator** operator (string, required)
+  * **operator** operator (string, optional, default: ==)
     * boolean operator
       * ==
       * !=
     * numeric operator
-      * >
-      * >=
       * ==
       * !=
+      * >
+      * >=
       * <=
       * <
     * string operator
@@ -26,9 +26,8 @@ A filter plugin for Embulk to filter out rows
     * unary operator
       * "IS NULL"
       * "IS NOT NULL"
-  * **argument**: argument for the operation (string, required for binary operators)
-  * **not**: not operation (boolean, default: false)
-  * **value**: synonym to `operator: ==` and `argument: #{value}`
+  * **argument**: argument for the operation (string, required for non-unary operators)
+  * **not**: not (boolean, optional, default: false)
 
 ## Example
 
@@ -37,7 +36,7 @@ filters:
   - type: row
     conditions:
       - {column: id,   operator: >,  argument: 10}
-      - {column: name, operator: ==, argument: foo, not: true}
+      - {column: name, opeartor: ==, argument: foo, not: true}
 ```
 
 ## ToDo

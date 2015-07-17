@@ -10,36 +10,52 @@ public class TimestampCondition implements Condition
         boolean compare(Timestamp subject);
     }
 
-    public TimestampCondition(String operator, Timestamp argument) {
+    public TimestampCondition(String operator, Timestamp argument, boolean not) {
+        TimestampComparator comparator;
         switch (operator.toUpperCase()) {
-            case "==":
-                this.comparator = (Timestamp subject) -> { return subject.equals(argument); };
-                break;
-            case "!=":
-                this.comparator = (Timestamp subject) -> { return !subject.equals(argument); };
-                break;
             case ">":
-                this.comparator = (Timestamp subject) -> { return subject.compareTo(argument) > 0; };
+                comparator = (Timestamp subject) -> {
+                    return subject == null ? false : subject.compareTo(argument) > 0;
+                };
                 break;
             case ">=":
-                this.comparator = (Timestamp subject) -> { return subject.compareTo(argument) >= 0; };
+                comparator = (Timestamp subject) -> {
+                    return subject == null ? false : subject.compareTo(argument) >= 0;
+                };
                 break;
             case "<":
-                this.comparator = (Timestamp subject) -> { return subject.compareTo(argument) < 0; };
+                comparator = (Timestamp subject) -> {
+                    return subject == null ? false : subject.compareTo(argument) < 0;
+                };
                 break;
             case "<=":
-                this.comparator = (Timestamp subject) -> { return subject.compareTo(argument) <= 0; };
+                comparator = (Timestamp subject) -> {
+                    return subject == null ? false : subject.compareTo(argument) <= 0;
+                };
                 break;
             case "IS NULL":
-                this.comparator = (Timestamp subject) -> { return subject == null; };
+                comparator = (Timestamp subject) -> {
+                    return subject == null;
+                };
                 break;
             case "IS NOT NULL":
-                this.comparator = (Timestamp subject) -> { return subject != null; };
+                comparator = (Timestamp subject) -> {
+                    return subject != null;
+                };
                 break;
-            default:
-                assert(false);
+            case "!=":
+                comparator = (Timestamp subject) -> {
+                    return subject == null ? false : !subject.equals(argument);
+                };
+                break;
+            default: // case "==":
+                comparator = (Timestamp subject) -> {
+                    return subject == null ? false : subject.equals(argument);
+                };
                 break;
         }
+        this.comparator = comparator;
+        if (not) this.comparator = (Timestamp subject) -> { return !comparator.compare(subject); };
     }
 
     public boolean compare(Timestamp subject) {

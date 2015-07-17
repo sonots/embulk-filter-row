@@ -9,24 +9,32 @@ public class BooleanCondition implements Condition
         boolean compare(Boolean subject);
     }
 
-    public BooleanCondition(String operator, Boolean argument) {
+    public BooleanCondition(String operator, Boolean argument, boolean not) {
+        BooleanComparator comparator;
         switch (operator.toUpperCase()) {
-            case "==":
-                this.comparator = (Boolean subject) -> { return subject.equals(argument); };
-                break;
-            case "!=":
-                this.comparator = (Boolean subject) -> { return !subject.equals(argument); };
-                break;
             case "IS NULL":
-                this.comparator = (Boolean subject) -> { return subject == null; };
+                comparator = (Boolean subject) -> {
+                    return subject == null;
+                };
                 break;
             case "IS NOT NULL":
-                this.comparator = (Boolean subject) -> { return subject != null; };
+                comparator = (Boolean subject) -> {
+                    return subject != null;
+                };
                 break;
-            default:
-                assert(false);
+            case "!=":
+                comparator = (Boolean subject) -> {
+                    return subject == null ? false : !subject.equals(argument);
+                };
+                break;
+            default: // case "==":
+                comparator = (Boolean subject) -> {
+                    return subject == null ? false : subject.equals(argument);
+                };
                 break;
         }
+        this.comparator = comparator;
+        if (not) this.comparator = (Boolean subject) -> { return !comparator.compare(subject); };
     }
 
     public boolean compare(Boolean subject) {

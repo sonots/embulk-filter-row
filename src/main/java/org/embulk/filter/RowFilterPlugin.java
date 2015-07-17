@@ -75,16 +75,23 @@ public class RowFilterPlugin implements FilterPlugin
             String columnName = conditionConfig.getColumn();
             for (Column column : outputSchema.getColumns()) {
                 if (columnName.equals(column.getName())) {
+
                     Type type = column.getType();
-                    String operator = conditionConfig.getOperator();
+                    String operator = conditionConfig.getOperator().get().toUpperCase(); // default: ==
+                    boolean not     = conditionConfig.getNot().get().booleanValue(); // default: false
                     Condition condition = null;
+
                     if (type instanceof BooleanType) {
-                        if (!conditionConfig.getArgument().isPresent()) {
-                            condition = new BooleanCondition(operator, null);
+                        if (operator.equals("IS NULL") || operator.equals("IS NOT NULL")) {
+                            condition = new BooleanCondition(operator, null, not);
+                        }
+                        else if (!conditionConfig.getArgument().isPresent()) {
+                            log.warn(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
+                            System.exit(1);
                         }
                         else if (conditionConfig.getArgument().get() instanceof Boolean) {
                             Boolean argument = (Boolean)conditionConfig.getArgument().get();
-                            condition = new BooleanCondition(operator, argument);
+                            condition = new BooleanCondition(operator, argument, not);
                         }
                         else {
                             log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
@@ -92,12 +99,16 @@ public class RowFilterPlugin implements FilterPlugin
                         }
                     }
                     else if (type instanceof LongType) {
-                        if (!conditionConfig.getArgument().isPresent()) {
-                            condition = new LongCondition(operator, null);
+                        if (operator.equals("IS NULL") || operator.equals("IS NOT NULL")) {
+                            condition = new LongCondition(operator, null, not);
+                        }
+                        else if (!conditionConfig.getArgument().isPresent()) {
+                            log.warn(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
+                            System.exit(1);
                         }
                         else if (conditionConfig.getArgument().get() instanceof Integer) {
                             Long argument = new Long(((Integer)conditionConfig.getArgument().get()).longValue());
-                            condition = new LongCondition(operator, argument);
+                            condition = new LongCondition(operator, argument, not);
                         }
                         else {
                             log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
@@ -105,12 +116,16 @@ public class RowFilterPlugin implements FilterPlugin
                         }
                     }
                     else if (type instanceof DoubleType) {
-                        if (!conditionConfig.getArgument().isPresent()) {
-                            condition = new DoubleCondition(operator, null);
+                        if (operator.equals("IS NULL") || operator.equals("IS NOT NULL")) {
+                            condition = new DoubleCondition(operator, null, not);
+                        }
+                        else if (!conditionConfig.getArgument().isPresent()) {
+                            log.warn(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
+                            System.exit(1);
                         }
                         else if (conditionConfig.getArgument().get() instanceof Number) {
                             Double argument = new Double(conditionConfig.getArgument().get().toString());
-                            condition = new DoubleCondition(operator, argument);
+                            condition = new DoubleCondition(operator, argument, not);
                         }
                         else {
                             log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
@@ -118,12 +133,16 @@ public class RowFilterPlugin implements FilterPlugin
                         }
                     }
                     else if (type instanceof StringType) {
-                        if (!conditionConfig.getArgument().isPresent()) {
-                            condition = new StringCondition(operator, null);
+                        if (operator.equals("IS NULL") || operator.equals("IS NOT NULL")) {
+                            condition = new StringCondition(operator, null, not);
+                        }
+                        else if (!conditionConfig.getArgument().isPresent()) {
+                            log.warn(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
+                            System.exit(1);
                         }
                         else if (conditionConfig.getArgument().get() instanceof String) {
                             String argument = (String)conditionConfig.getArgument().get();
-                            condition = new StringCondition(operator, argument);
+                            condition = new StringCondition(operator, argument, not);
                         }
                         else {
                             log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
@@ -131,12 +150,12 @@ public class RowFilterPlugin implements FilterPlugin
                         }
                     }
                     else if (type instanceof TimestampType) {
-                        if (!conditionConfig.getArgument().isPresent()) {
-                            condition = new TimestampCondition(operator, null);
+                        if (operator.equals("IS NULL") || operator.equals("IS NOT NULL")) {
+                            condition = new TimestampCondition(operator, null, not);
                         }
                         else if (conditionConfig.getArgument().get() instanceof Timestamp) {
                             Timestamp argument = (Timestamp)conditionConfig.getArgument().get();
-                            condition = new TimestampCondition(operator, argument);
+                            condition = new TimestampCondition(operator, argument, not);
                         }
                         else {
                             log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
@@ -146,6 +165,7 @@ public class RowFilterPlugin implements FilterPlugin
                     else {
                         assert(false);
                     }
+
                     conditionMap.put(columnName, condition);
                     break;
                 }

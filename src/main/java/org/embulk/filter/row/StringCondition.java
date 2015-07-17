@@ -9,33 +9,47 @@ public class StringCondition implements Condition
         boolean compare(String subject);
     }
 
-    public StringCondition(String operator, String argument) {
+    public StringCondition(String operator, String argument, boolean not) {
+        StringComparator comparator;
         switch (operator.toUpperCase()) {
-            case "==":
-                this.comparator = (String subject) -> { return subject.equals(argument); };
+            case "START_WITH":
+                comparator = (String subject) -> {
+                    return subject == null ? false : subject.startsWith(argument);
+                };
                 break;
-            case "!=":
-                this.comparator = (String subject) -> { return !subject.equals(argument); };
+            case "END_WITH":
+                comparator = (String subject) -> {
+                    return subject == null ? false : subject.endsWith(argument);
+                };
                 break;
-            case "start_with":
-                this.comparator = (String subject) -> { return subject.startsWith(argument); };
-                break;
-            case "end_with":
-                this.comparator = (String subject) -> { return subject.endsWith(argument); };
-                break;
-            case "include":
-                this.comparator = (String subject) -> { return subject.contains(argument); };
+            case "INCLUDE":
+                comparator = (String subject) -> {
+                    return subject == null ? false : subject.contains(argument);
+                };
                 break;
             case "IS NULL":
-                this.comparator = (String subject) -> { return subject == null; };
+                comparator = (String subject) -> {
+                    return subject == null;
+                };
                 break;
             case "IS NOT NULL":
-                this.comparator = (String subject) -> { return subject != null; };
+                comparator = (String subject) -> {
+                    return subject != null;
+                };
                 break;
-            default:
-                assert(false);
+            case "!=":
+                comparator = (String subject) -> {
+                    return subject == null ? false : !subject.equals(argument);
+                };
+                break;
+            default: // case "==":
+                comparator = (String subject) -> {
+                    return subject == null ? false : subject.equals(argument);
+                };
                 break;
         }
+        this.comparator = comparator;
+        if (not) this.comparator = (String subject) -> { return !comparator.compare(subject); };
     }
 
     public boolean compare(String subject) {

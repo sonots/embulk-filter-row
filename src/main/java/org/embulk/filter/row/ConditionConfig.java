@@ -11,7 +11,8 @@ public interface ConditionConfig extends Task
     public String getColumn();
 
     @Config("operator")
-    public String getOperator();
+    @ConfigDefault("==")
+    public Optional<String> getOperator();
 
     @Config("argument")
     @ConfigDefault("null")
@@ -19,5 +20,5 @@ public interface ConditionConfig extends Task
 
     @Config("not")
     @ConfigDefault("false")
-    public boolean getNot();
+    public Optional<Boolean> getNot();
 }

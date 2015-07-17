@@ -9,36 +9,52 @@ public class LongCondition implements Condition
         boolean compare(Long subject);
     }
 
-    public LongCondition(String operator, Long argument) {
+    public LongCondition(String operator, Long argument, boolean not) {
+        LongComparator comparator;
         switch (operator.toUpperCase()) {
-            case "==":
-                this.comparator = (Long subject) -> { return subject.equals(argument); };
-                break;
-            case "!=":
-                this.comparator = (Long subject) -> { return !subject.equals(argument); };
-                break;
-            case ">":
-                this.comparator = (Long subject) -> { return subject.compareTo(argument) > 0; };
-                break;
-            case ">=":
-                this.comparator = (Long subject) -> { return subject.compareTo(argument) >= 0; };
-                break;
-            case "<":
-                this.comparator = (Long subject) -> { return subject.compareTo(argument) < 0; };
-                break;
-            case "<=":
-                this.comparator = (Long subject) -> { return subject.compareTo(argument) <= 0; };
-                break;
             case "IS NULL":
-                this.comparator = (Long subject) -> { return subject == null; };
+                comparator = (Long subject) -> {
+                    return subject == null;
+                };
                 break;
             case "IS NOT NULL":
-                this.comparator = (Long subject) -> { return subject != null; };
+                comparator = (Long subject) -> {
+                    return subject != null;
+                };
                 break;
-            default:
-                assert(false);
+            case ">":
+                comparator = (Long subject) -> {
+                    return subject == null ? false : subject.compareTo(argument) > 0;
+                };
+                break;
+            case ">=":
+                comparator = (Long subject) -> {
+                    return subject == null ? false : subject.compareTo(argument) >= 0;
+                };
+                break;
+            case "<":
+                comparator = (Long subject) -> {
+                    return subject == null ? false : subject.compareTo(argument) < 0;
+                };
+                break;
+            case "<=":
+                comparator = (Long subject) -> {
+                    return subject == null ? false : subject.compareTo(argument) <= 0; 
+                };
+                break;
+            case "!=":
+                comparator = (Long subject) -> {
+                    return subject == null ? false : !subject.equals(argument);
+                };
+                break;
+            default: // case "==":
+                comparator = (Long subject) -> {
+                    return subject == null ? false : subject.equals(argument);
+                };
                 break;
         }
+        this.comparator = comparator;
+        if (not) this.comparator = (Long subject) -> { return !comparator.compare(subject); };
     }
 
     public boolean compare(Long subject) {
