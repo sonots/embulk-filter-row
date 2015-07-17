@@ -26,6 +26,7 @@ in:
 filters:
   - type: row
     conditions:
+      - {column: flag,  operator: ==}
       - {column: foo,   operator: "IS NULL"}
       - {column: id,    operator: ==,  argument: 97}
       - {column: name,  operator: ==,  argument: "xxxx", not: true}

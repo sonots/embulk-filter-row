@@ -1,7 +1,5 @@
 package org.embulk.filter.row;
 
-import org.slf4j.Logger;
-
 import org.embulk.config.Task;
 import org.embulk.spi.Exec;
 import org.embulk.spi.Column;
@@ -11,6 +9,7 @@ import org.embulk.spi.type.LongType;
 import org.embulk.spi.type.DoubleType;
 import org.embulk.spi.type.StringType;
 import org.embulk.spi.type.TimestampType;
+import org.embulk.config.ConfigException;
 
 import org.joda.time.DateTimeZone;
 import org.embulk.spi.time.Timestamp;
@@ -25,23 +24,21 @@ import org.embulk.filter.row.LongCondition;
 import org.embulk.filter.row.DoubleCondition;
 import org.embulk.filter.row.StringCondition;
 import org.embulk.filter.row.TimestampCondition;
-import org.slf4j.Logger;
+import org.jruby.embed.ScriptingContainer;
 
 public class ConditionFactory
 {
-    private TimestampParser.Task task;
+    private final ScriptingContainer jruby;
     private Column column;
     private String columnName;
     private Type columnType;
     private ConditionConfig conditionConfig;
     private String operator;
     private boolean not;
-    private final Logger log;
 
-    public ConditionFactory(TimestampParser.Task task, Column column, ConditionConfig conditionConfig)
+    public ConditionFactory(ScriptingContainer jruby, Column column, ConditionConfig conditionConfig)
     {
-        this.task            = task;
-        this.log             = Exec.getLogger(ConditionFactory.class);
+        this.jruby           = jruby;
         this.column          = column;
         this.columnName      = column.getName();
         this.columnType      = column.getType();
@@ -77,20 +74,15 @@ public class ConditionFactory
             return new BooleanCondition(operator, null, not);
         }
         else if (!conditionConfig.getArgument().isPresent()) {
-            log.warn(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
-            // how to exit embulk without dirty stack trace??
-            System.exit(1);
+            throw new ConfigException(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
         }
         else if (conditionConfig.getArgument().get() instanceof Boolean) {
             Boolean argument = (Boolean)conditionConfig.getArgument().get();
             return new BooleanCondition(operator, argument, not);
         }
         else {
-            log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
-            // how to exit embulk without dirty stack trace??
-            System.exit(1);
+            throw new ConfigException(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
         }
-        return null;
     }
 
     public LongCondition createLongCondition()
@@ -99,18 +91,15 @@ public class ConditionFactory
             return new LongCondition(operator, null, not);
         }
         else if (!conditionConfig.getArgument().isPresent()) {
-            log.warn(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
-            System.exit(1);
+            throw new ConfigException(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
         }
-        else if (conditionConfig.getArgument().get() instanceof Integer) {
-            Long argument = new Long(((Integer)conditionConfig.getArgument().get()).longValue());
+        else if (conditionConfig.getArgument().get() instanceof Number) {
+            Long argument = new Long(conditionConfig.getArgument().get().toString()).longValue();
             return new LongCondition(operator, argument, not);
         }
         else {
-            log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
-            System.exit(1);
+            throw new ConfigException(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
         }
-        return null;
     }
 
     public DoubleCondition createDoubleCondition()
@@ -119,18 +108,15 @@ public class ConditionFactory
             return new DoubleCondition(operator, null, not);
         }
         else if (!conditionConfig.getArgument().isPresent()) {
-            log.warn(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
-            System.exit(1);
+            throw new ConfigException(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
         }
         else if (conditionConfig.getArgument().get() instanceof Number) {
             Double argument = new Double(conditionConfig.getArgument().get().toString());
             return new DoubleCondition(operator, argument, not);
         }
         else {
-            log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
-            System.exit(1);
+            throw new ConfigException(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
         }
-        return null;
     }
 
     public StringCondition createStringCondition()
@@ -139,18 +125,15 @@ public class ConditionFactory
             return new StringCondition(operator, null, not);
         }
         else if (!conditionConfig.getArgument().isPresent()) {
-            log.warn(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
-            System.exit(1);
+            throw new ConfigException(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
         }
         else if (conditionConfig.getArgument().get() instanceof String) {
             String argument = (String)conditionConfig.getArgument().get();
             return new StringCondition(operator, argument, not);
         }
         else {
-            log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
-            System.exit(1);
+            throw new ConfigException(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
         }
-        return null;
     }
 
     public TimestampCondition createTimestampCondition()
@@ -159,15 +142,14 @@ public class ConditionFactory
             return new TimestampCondition(operator, null, not);
         }
         else if (!conditionConfig.getArgument().isPresent()) {
-            log.warn(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
-            System.exit(1);
+            throw new ConfigException(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
         }
         else if (conditionConfig.getArgument().get() instanceof String) {
             String argument        = (String)conditionConfig.getArgument().get();
             String format          = (String)conditionConfig.getFormat().get();
             DateTimeZone timezone  = DateTimeZone.forID((String)conditionConfig.getTimezone().get());
 
-            TimestampParser parser = new TimestampParser(task.getJRuby(), format, timezone);
+            TimestampParser parser = new TimestampParser(jruby, format, timezone);
             try {
                 Timestamp timestamp = parser.parse(argument);
                 return new TimestampCondition(operator, timestamp, not);
@@ -176,9 +158,7 @@ public class ConditionFactory
             }
         }
         else {
-            log.warn(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
-            System.exit(1);
+            throw new ConfigException(String.format("RowFilterPlugin: Type mismatch on column: %s", columnName));
         }
-        return null;
     }
 }
