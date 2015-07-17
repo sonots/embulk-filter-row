@@ -28,8 +28,9 @@ filters:
     conditions:
       - {column: foo,   operator: "IS NULL"}
       - {column: id,    operator: ==,  argument: 97}
-      - {column: name,  operator: ==,  argument: "RRNYDAzKaq4Trtt96Bxgk3N0fXLIV8hXoK0qQ7uw_Wc"}
-      - {column: score, operator: "<", argument: 3000, not: true}
+      - {column: name,  operator: ==,  argument: "xxxx", not: true}
+      - {column: score, operator: ">", argument: 2000}
+      - {column: score, operator: "<", argument: 6000}
       - {column: time,  operator: ==,  argument: "2015-07-13", format: "%Y-%m-%d"}
 out:
   type: stdout

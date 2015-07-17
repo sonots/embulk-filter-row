@@ -8,6 +8,7 @@ import org.embulk.config.Task;
 import org.embulk.config.TaskSource;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
@@ -73,14 +74,19 @@ public class RowFilterPlugin implements FilterPlugin
     {
         PluginTask task = taskSource.loadTask(PluginTask.class);
 
-        HashMap<String, Condition> conditionMap = new HashMap<String, Condition>();
+        HashMap<String, List<Condition>> conditionMap = new HashMap<String, List<Condition>>();
+        for (Column column : outputSchema.getColumns()) {
+            String columnName = column.getName();
+            conditionMap.put(columnName, new ArrayList<Condition>());
+        }
+
         for (ConditionConfig conditionConfig : task.getConditions()) {
             String columnName = conditionConfig.getColumn();
             for (Column column : outputSchema.getColumns()) {
                 if (columnName.equals(column.getName())) {
                     ConditionFactory factory = new ConditionFactory(task, column, conditionConfig);
                     Condition condition = factory.createCondition();
-                    conditionMap.put(columnName, condition);
+                    conditionMap.get(columnName).add(condition);
                     break;
                 }
             }
@@ -123,13 +129,14 @@ public class RowFilterPlugin implements FilterPlugin
                 @Override
                 public void booleanColumn(Column column) {
                     if (!shouldAddRecord) return;
-                    BooleanCondition condition = (BooleanCondition)conditionMap.get(column.getName());
-                    if (condition != null) {
+                    List<Condition> conditionList = conditionMap.get(column.getName());
+                    for (Condition _condition : conditionList) {
+                        BooleanCondition condition = (BooleanCondition)_condition;
                         if (pageReader.isNull(column)) {
-                            if (!condition.compare(null)) shouldAddRecord = false;
+                            if (!condition.compare(null)) { shouldAddRecord = false; break; }
                         } else {
                             boolean subject = pageReader.getBoolean(column);
-                            if (!condition.compare(subject)) shouldAddRecord = false;
+                            if (!condition.compare(subject)) { shouldAddRecord = false; break; }
                         }
                     }
                     if (pageReader.isNull(column)) {
@@ -142,13 +149,14 @@ public class RowFilterPlugin implements FilterPlugin
                 @Override
                 public void longColumn(Column column) {
                     if (!shouldAddRecord) return;
-                    LongCondition condition = (LongCondition)conditionMap.get(column.getName());
-                    if (condition != null) {
+                    List<Condition> conditionList = conditionMap.get(column.getName());
+                    for (Condition _condition : conditionList) {
+                        LongCondition condition = (LongCondition)_condition;
                         if (pageReader.isNull(column)) {
-                            if (!condition.compare(null)) shouldAddRecord = false;
+                            if (!condition.compare(null)) { shouldAddRecord = false; break; }
                         } else {
                             long subject = pageReader.getLong(column);
-                            if (!condition.compare(subject)) shouldAddRecord = false;
+                            if (!condition.compare(subject)) { shouldAddRecord = false; break; }
                         }
                     }
                     if (pageReader.isNull(column)) {
@@ -161,13 +169,14 @@ public class RowFilterPlugin implements FilterPlugin
                 @Override
                 public void doubleColumn(Column column) {
                     if (!shouldAddRecord) return;
-                    DoubleCondition condition = (DoubleCondition)conditionMap.get(column.getName());
-                    if (condition != null) {
+                    List<Condition> conditionList = conditionMap.get(column.getName());
+                    for (Condition _condition : conditionList) {
+                        DoubleCondition condition = (DoubleCondition)_condition;
                         if (pageReader.isNull(column)) {
-                            if (!condition.compare(null)) shouldAddRecord = false;
+                            if (!condition.compare(null)) { shouldAddRecord = false; break; }
                         } else {
                             double subject = pageReader.getDouble(column);
-                            if (!condition.compare(subject)) shouldAddRecord = false;
+                            if (!condition.compare(subject)) { shouldAddRecord = false; break; }
                         }
                     }
                     if (pageReader.isNull(column)) {
@@ -180,13 +189,14 @@ public class RowFilterPlugin implements FilterPlugin
                 @Override
                 public void stringColumn(Column column) {
                     if (!shouldAddRecord) return;
-                    StringCondition condition = (StringCondition)conditionMap.get(column.getName());
-                    if (condition != null) {
+                    List<Condition> conditionList = conditionMap.get(column.getName());
+                    for (Condition _condition : conditionList) {
+                        StringCondition condition = (StringCondition)_condition;
                         if (pageReader.isNull(column)) {
-                            if (!condition.compare(null)) shouldAddRecord = false;
+                            if (!condition.compare(null)) { shouldAddRecord = false; break; }
                         } else {
                             String subject = pageReader.getString(column);
-                            if (!condition.compare(subject)) shouldAddRecord = false;
+                            if (!condition.compare(subject)) { shouldAddRecord = false; break; }
                         }
                     }
                     if (pageReader.isNull(column)) {
@@ -199,13 +209,14 @@ public class RowFilterPlugin implements FilterPlugin
                 @Override
                 public void timestampColumn(Column column) {
                     if (!shouldAddRecord) return;
-                    TimestampCondition condition = (TimestampCondition)conditionMap.get(column.getName());
-                    if (condition != null) {
+                    List<Condition> conditionList = conditionMap.get(column.getName());
+                    for (Condition _condition : conditionList) {
+                        TimestampCondition condition = (TimestampCondition)_condition;
                         if (pageReader.isNull(column)) {
-                            if (!condition.compare(null)) shouldAddRecord = false;
+                            if (!condition.compare(null)) { shouldAddRecord = false; break; }
                         } else {
                             Timestamp subject = pageReader.getTimestamp(column);
-                            if (!condition.compare(subject)) shouldAddRecord = false;
+                            if (!condition.compare(subject)) { shouldAddRecord = false; break; }
                         }
                     }
                     if (pageReader.isNull(column)) {
