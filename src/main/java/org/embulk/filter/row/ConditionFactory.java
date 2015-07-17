@@ -1,7 +1,6 @@
 package org.embulk.filter.row;
 
 import org.slf4j.Logger;
-import org.joda.time.DateTimeZone;
 
 import org.embulk.config.Task;
 import org.embulk.spi.Exec;
@@ -12,6 +11,8 @@ import org.embulk.spi.type.LongType;
 import org.embulk.spi.type.DoubleType;
 import org.embulk.spi.type.StringType;
 import org.embulk.spi.type.TimestampType;
+
+import org.joda.time.DateTimeZone;
 import org.embulk.spi.time.Timestamp;
 import org.embulk.spi.time.TimestampParser;
 import org.embulk.spi.time.TimestampParseException;

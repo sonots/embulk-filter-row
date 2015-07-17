@@ -23,6 +23,14 @@ public class TestBooleanCondition
     }
 
     @Test
+    public void testNot() {
+        BooleanCondition condition = new BooleanCondition("IS NOT NULL", null, true);
+        assertTrue(condition.compare(null));
+        assertFalse(condition.compare(new Boolean(true)));
+        assertFalse(condition.compare(new Boolean(false)));
+    }
+
+    @Test
     public void testEquals() {
         BooleanCondition condition = new BooleanCondition("==", new Boolean(true), false);
         assertTrue(condition.compare(new Boolean(true)));
