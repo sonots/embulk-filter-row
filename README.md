@@ -10,7 +10,7 @@ A filter plugin for Embulk to filter out rows
     * boolean operator
       * ==
       * !=
-    * numeric operator
+    * numeric operator (long, double, Timestamp)
       * ==
       * !=
       * >
@@ -28,8 +28,8 @@ A filter plugin for Embulk to filter out rows
       * "IS NOT NULL"
   * **argument**: argument for the operation (string, required for non-unary operators)
   * **not**: not (boolean, optional, default: false)
-  * **format**: special option for timestamp column. (string, default is `%Y-%m-%d %H:%M:%S.%N %z`)
-  * **timezone**: special option for timestamp column. (string, default is `UTC`)
+  * **format**: special option for timestamp column, specify the format of timestamp argument (string, default is `%Y-%m-%d %H:%M:%S.%N %z`)
+  * **timezone**: special option for timestamp column, specify the timezone of timestamp argument (string, default is `UTC`)
 
 NOTE: column type is automatically retrieved from input data (inputSchema)
 
