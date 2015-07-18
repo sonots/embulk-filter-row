@@ -1,5 +1,7 @@
 # Row filter plugin for Embulk
 
+[![Build Status](https://secure.travis-ci.org/sonots/embulk-filter-row.png?branch=master)](http://travis-ci.org/sonots/embulk-filter-row)
+
 A filter plugin for Embulk to filter out rows
 
 ## Configuration
