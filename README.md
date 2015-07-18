@@ -20,9 +20,9 @@ A filter plugin for Embulk to filter out rows
     * string operator
       * ==
       * !=
-      * start_with
-      * end_with
-      * include
+      * start_with (or startsWith)
+      * end_with (or endsWith)
+      * include (or contains)
     * unary operator
       * "IS NULL"
       * "IS NOT NULL"

@@ -13,16 +13,19 @@ public class StringCondition implements Condition
         StringComparator comparator;
         switch (operator.toUpperCase()) {
             case "START_WITH":
+            case "STARTSWITH":
                 comparator = (String subject) -> {
                     return subject == null ? false : subject.startsWith(argument);
                 };
                 break;
             case "END_WITH":
+            case "ENDSWITH":
                 comparator = (String subject) -> {
                     return subject == null ? false : subject.endsWith(argument);
                 };
                 break;
             case "INCLUDE":
+            case "CONTAINS":
                 comparator = (String subject) -> {
                     return subject == null ? false : subject.contains(argument);
                 };

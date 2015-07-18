@@ -48,6 +48,14 @@ public class TestStringCondition
     }
 
     @Test
+    public void testStartsWith() {
+        StringCondition condition = new StringCondition("startsWith", "f", false);
+        assertFalse(condition.compare(null));
+        assertTrue( condition.compare("foo"));
+        assertFalse(condition.compare("bar"));
+    }
+
+    @Test
     public void testEndWith() {
         StringCondition condition = new StringCondition("end_with", "o", false);
         assertFalse(condition.compare(null));
@@ -56,8 +64,24 @@ public class TestStringCondition
     }
 
     @Test
+    public void testEndsWith() {
+        StringCondition condition = new StringCondition("endsWith", "o", false);
+        assertFalse(condition.compare(null));
+        assertTrue( condition.compare("foo"));
+        assertFalse(condition.compare("bar"));
+    }
+
+    @Test
     public void testInclude() {
         StringCondition condition = new StringCondition("include", "o", false);
+        assertFalse(condition.compare(null));
+        assertTrue( condition.compare("foo"));
+        assertFalse(condition.compare("bar"));
+    }
+
+    @Test
+    public void testContains() {
+        StringCondition condition = new StringCondition("contains", "o", false);
         assertFalse(condition.compare(null));
         assertTrue( condition.compare("foo"));
         assertFalse(condition.compare("bar"));
