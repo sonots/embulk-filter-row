@@ -42,7 +42,7 @@ filters:
       - {column: foo,  operator: "IS NOT NULL"}
       - {column: id,   operator: ">=", argument: 10}
       - {column: id,   operator: "<",  argument: 20}
-      - {column: name, opeartor: "==", argument: foo, not: true}
+      - {column: name, opeartor: "include", argument: foo, not: true}
       - {column: time, operator: "==", argument: "2015-07-13", format: "%Y-%m-%d"}
 ```
 
