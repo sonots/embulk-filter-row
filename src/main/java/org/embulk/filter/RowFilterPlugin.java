@@ -43,8 +43,13 @@ import org.embulk.filter.row.ConditionFactory;
 
 public class RowFilterPlugin implements FilterPlugin
 {
-    public interface PluginTask
-            extends Task, TimestampParser.Task
+    private static final Logger logger = Exec.getLogger(RowFilterPlugin.class);
+
+    public RowFilterPlugin()
+    {
+    }
+
+    public interface PluginTask extends Task, TimestampParser.Task
     {
         @Config("conditions")
         public List<ConditionConfig> getConditions();
@@ -59,13 +64,6 @@ public class RowFilterPlugin implements FilterPlugin
         Schema outputSchema = inputSchema;
 
         control.run(task.dump(), outputSchema);
-    }
-
-    private final Logger log;
-
-    public RowFilterPlugin()
-    {
-        log = Exec.getLogger(RowFilterPlugin.class);
     }
 
     @Override
