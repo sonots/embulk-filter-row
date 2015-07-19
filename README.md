@@ -54,6 +54,7 @@ NOTE: column type is automatically retrieved from input data (inputSchema)
 
 * Support OR condition
   * It should be better to think using Query engine like [Apache Drill](https://drill.apache.org/) or [Presto](https://prestodb.io/)
+  * With them, it is possible to send a query to local files, even to S3 files.
 
 ## ChangeLog
 
