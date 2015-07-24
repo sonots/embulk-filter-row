@@ -67,12 +67,12 @@ public class RowFilterPlugin implements FilterPlugin
     }
 
     @Override
-    public PageOutput open(TaskSource taskSource, Schema inputSchema,
-            Schema outputSchema, PageOutput output)
+    public PageOutput open(TaskSource taskSource, final Schema inputSchema,
+            final Schema outputSchema, final PageOutput output)
     {
         PluginTask task = taskSource.loadTask(PluginTask.class);
 
-        HashMap<String, List<Condition>> conditionMap = new HashMap<String, List<Condition>>();
+        final HashMap<String, List<Condition>> conditionMap = new HashMap<String, List<Condition>>();
         for (Column column : outputSchema.getColumns()) {
             String columnName = column.getName();
             conditionMap.put(columnName, new ArrayList<Condition>());

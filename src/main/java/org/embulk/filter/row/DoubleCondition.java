@@ -4,57 +4,79 @@ public class DoubleCondition implements Condition
 {
     private DoubleComparator comparator;
 
-    @FunctionalInterface
+    // @FunctionalInterface
     interface DoubleComparator {
         boolean compare(Double subject);
     }
 
-    public DoubleCondition(String operator, Double argument, boolean not) {
-        DoubleComparator comparator;
+    public DoubleCondition(final String operator, final Double argument, final boolean not) {
+        final DoubleComparator comparator;
         switch (operator.toUpperCase()) {
             case "IS NULL":
-                comparator = (Double subject) -> {
-                    return subject == null;
+                comparator = new DoubleComparator() {
+                    public boolean compare(Double subject) {
+                        return subject == null;
+                    }
                 };
                 break;
             case "IS NOT NULL":
-                comparator = (Double subject) -> {
-                    return subject != null;
+                comparator = new DoubleComparator() {
+                    public boolean compare(Double subject) {
+                        return subject != null;
+                    }
                 };
                 break;
             case ">":
-                comparator = (Double subject) -> {
-                    return subject == null ? false : subject.compareTo(argument) > 0;
+                comparator = new DoubleComparator() {
+                    public boolean compare(Double subject) {
+                        return subject == null ? false : subject.compareTo(argument) > 0;
+                    }
                 };
                 break;
             case ">=":
-                comparator = (Double subject) -> {
-                    return subject == null ? false : subject.compareTo(argument) >= 0;
+                comparator = new DoubleComparator() {
+                    public boolean compare(Double subject) {
+                        return subject == null ? false : subject.compareTo(argument) >= 0;
+                    }
                 };
                 break;
             case "<":
-                comparator = (Double subject) -> {
-                    return subject == null ? false : subject.compareTo(argument) < 0;
+                comparator = new DoubleComparator() {
+                    public boolean compare(Double subject) {
+                        return subject == null ? false : subject.compareTo(argument) < 0;
+                    }
                 };
                 break;
             case "<=":
-                comparator = (Double subject) -> {
-                    return subject == null ? false : subject.compareTo(argument) <= 0;
+                comparator = new DoubleComparator() {
+                    public boolean compare(Double subject) {
+                        return subject == null ? false : subject.compareTo(argument) <= 0;
+                    }
                 };
                 break;
             case "!=":
-                comparator = (Double subject) -> {
-                    return subject == null ? true : !subject.equals(argument);
+                comparator = new DoubleComparator() {
+                    public boolean compare(Double subject) {
+                        return subject == null ? true : !subject.equals(argument);
+                    }
                 };
                 break;
             default: // case "==":
-                comparator = (Double subject) -> {
-                    return subject == null ? false : subject.equals(argument);
+                comparator = new DoubleComparator() {
+                    public boolean compare(Double subject) {
+                        return subject == null ? false : subject.equals(argument);
+                    }
                 };
                 break;
         }
         this.comparator = comparator;
-        if (not) this.comparator = (Double subject) -> { return !comparator.compare(subject); };
+        if (not) {
+            this.comparator = new DoubleComparator() {
+                public boolean compare(Double subject) {
+                    return !comparator.compare(subject);
+                }
+            };
+        }
     }
 
     public boolean compare(Double subject) {

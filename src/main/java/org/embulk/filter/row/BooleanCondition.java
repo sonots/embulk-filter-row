@@ -4,37 +4,51 @@ public class BooleanCondition implements Condition
 {
     private BooleanComparator comparator;
 
-    @FunctionalInterface
+    // @FunctionalInterface
     interface BooleanComparator {
         boolean compare(Boolean subject);
     }
 
-    public BooleanCondition(String operator, Boolean argument, boolean not) {
-        BooleanComparator comparator;
+    public BooleanCondition(final String operator, final Boolean argument, final boolean not) {
+        final BooleanComparator comparator;
         switch (operator.toUpperCase()) {
             case "IS NULL":
-                comparator = (Boolean subject) -> {
-                    return subject == null;
+                comparator = new BooleanComparator() {
+                    public boolean compare(Boolean subject) {
+                        return subject == null;
+                    }
                 };
                 break;
             case "IS NOT NULL":
-                comparator = (Boolean subject) -> {
-                    return subject != null;
+                comparator = new BooleanComparator() {
+                    public boolean compare(Boolean subject) {
+                        return subject != null;
+                    }
                 };
                 break;
             case "!=":
-                comparator = (Boolean subject) -> {
-                    return subject == null ? true : !subject.equals(argument);
+                comparator = new BooleanComparator() {
+                    public boolean compare(Boolean subject) {
+                        return subject == null ? true : !subject.equals(argument);
+                    }
                 };
                 break;
             default: // case "==":
-                comparator = (Boolean subject) -> {
-                    return subject == null ? false : subject.equals(argument);
+                comparator = new BooleanComparator() {
+                    public boolean compare(Boolean subject) {
+                        return subject == null ? false : subject.equals(argument);
+                    }
                 };
                 break;
         }
         this.comparator = comparator;
-        if (not) this.comparator = (Boolean subject) -> { return !comparator.compare(subject); };
+        if (not) {
+            this.comparator = new BooleanComparator() {
+                public boolean compare(Boolean subject) {
+                    return !comparator.compare(subject);
+                }
+            };
+        }
     }
 
     public boolean compare(Boolean subject) {

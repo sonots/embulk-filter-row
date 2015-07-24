@@ -4,55 +4,75 @@ public class StringCondition implements Condition
 {
     private StringComparator comparator;
 
-    @FunctionalInterface
+    // @FunctionalInterface
     interface StringComparator {
         boolean compare(String subject);
     }
 
-    public StringCondition(String operator, String argument, boolean not) {
-        StringComparator comparator;
+    public StringCondition(final String operator, final String argument, final boolean not) {
+        final StringComparator comparator;
         switch (operator.toUpperCase()) {
             case "START_WITH":
             case "STARTSWITH":
-                comparator = (String subject) -> {
-                    return subject == null ? false : subject.startsWith(argument);
+                comparator = new StringComparator() {
+                    public boolean compare(String subject) {
+                        return subject == null ? false : subject.startsWith(argument);
+                    }
                 };
                 break;
             case "END_WITH":
             case "ENDSWITH":
-                comparator = (String subject) -> {
-                    return subject == null ? false : subject.endsWith(argument);
+                comparator = new StringComparator() {
+                    public boolean compare(String subject) {
+                        return subject == null ? false : subject.endsWith(argument);
+                    }
                 };
                 break;
             case "INCLUDE":
             case "CONTAINS":
-                comparator = (String subject) -> {
-                    return subject == null ? false : subject.contains(argument);
+                comparator = new StringComparator() {
+                    public boolean compare(String subject) {
+                        return subject == null ? false : subject.contains(argument);
+                    }
                 };
                 break;
             case "IS NULL":
-                comparator = (String subject) -> {
-                    return subject == null;
+                comparator = new StringComparator() {
+                    public boolean compare(String subject) {
+                        return subject == null;
+                    }
                 };
                 break;
             case "IS NOT NULL":
-                comparator = (String subject) -> {
-                    return subject != null;
+                comparator = new StringComparator() {
+                    public boolean compare(String subject) {
+                        return subject != null;
+                    }
                 };
                 break;
             case "!=":
-                comparator = (String subject) -> {
-                    return subject == null ? true : !subject.equals(argument);
+                comparator = new StringComparator() {
+                    public boolean compare(String subject) {
+                        return subject == null ? true : !subject.equals(argument);
+                    }
                 };
                 break;
             default: // case "==":
-                comparator = (String subject) -> {
-                    return subject == null ? false : subject.equals(argument);
+                comparator = new StringComparator() {
+                    public boolean compare(String subject) {
+                        return subject == null ? false : subject.equals(argument);
+                    }
                 };
                 break;
         }
         this.comparator = comparator;
-        if (not) this.comparator = (String subject) -> { return !comparator.compare(subject); };
+        if (not) {
+            this.comparator = new StringComparator() {
+                public boolean compare(String subject) {
+                    return !comparator.compare(subject);
+                }
+            };
+        }
     }
 
     public boolean compare(String subject) {

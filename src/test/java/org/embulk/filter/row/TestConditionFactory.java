@@ -71,14 +71,14 @@ public class TestConditionFactory
 
         config = new DefaultConditionConfig() {
             public Optional<String> getOperator() { return Optional.of("=="); }
-            public Optional<Object> getArgument() { return Optional.of(new Boolean(true)); }
+            public Optional<Object> getArgument() { return Optional.of((Object)new Boolean(true)); }
         };
         condition = (BooleanCondition)new ConditionFactory(jruby, column, config).createCondition();
         assertTrue(condition.compare(new Boolean(true)));
 
         config = new DefaultConditionConfig() {
             public Optional<String> getOperator() { return Optional.of("=="); }
-            public Optional<Object> getArgument() { return Optional.of(new Long(10)); }
+            public Optional<Object> getArgument() { return Optional.of((Object)new Long(10)); }
         };
         try {
             condition = (BooleanCondition)new ConditionFactory(jruby, column, config).createCondition();
@@ -111,14 +111,14 @@ public class TestConditionFactory
 
         config = new DefaultConditionConfig() {
             public Optional<String> getOperator() { return Optional.of("=="); }
-            public Optional<Object> getArgument() { return Optional.of(new Double(10)); }
+            public Optional<Object> getArgument() { return Optional.of((Object)new Double(10)); }
         };
         condition = (DoubleCondition)new ConditionFactory(jruby, column, config).createCondition();
         assertTrue(condition.compare(new Double(10)));
 
         config = new DefaultConditionConfig() {
             public Optional<String> getOperator() { return Optional.of("=="); }
-            public Optional<Object> getArgument() { return Optional.of(new Boolean(true)); }
+            public Optional<Object> getArgument() { return Optional.of((Object)new Boolean(true)); }
         };
         try {
             condition = (DoubleCondition)new ConditionFactory(jruby, column, config).createCondition();
@@ -151,14 +151,14 @@ public class TestConditionFactory
 
         config = new DefaultConditionConfig() {
             public Optional<String> getOperator() { return Optional.of("=="); }
-            public Optional<Object> getArgument() { return Optional.of(new Long(10)); }
+            public Optional<Object> getArgument() { return Optional.of((Object)new Long(10)); }
         };
         condition = (LongCondition)new ConditionFactory(jruby, column, config).createCondition();
         assertTrue(condition.compare(new Long(10)));
 
         config = new DefaultConditionConfig() {
             public Optional<String> getOperator() { return Optional.of("=="); }
-            public Optional<Object> getArgument() { return Optional.of(new Boolean(true)); }
+            public Optional<Object> getArgument() { return Optional.of((Object)new Boolean(true)); }
         };
         try {
             condition = (LongCondition)new ConditionFactory(jruby, column, config).createCondition();
@@ -191,14 +191,14 @@ public class TestConditionFactory
 
         config = new DefaultConditionConfig() {
             public Optional<String> getOperator() { return Optional.of("=="); }
-            public Optional<Object> getArgument() { return Optional.of("foo"); }
+            public Optional<Object> getArgument() { return Optional.of((Object)"foo"); }
         };
         condition = (StringCondition)new ConditionFactory(jruby, column, config).createCondition();
         assertTrue(condition.compare("foo"));
 
         config = new DefaultConditionConfig() {
             public Optional<String> getOperator() { return Optional.of("=="); }
-            public Optional<Object> getArgument() { return Optional.of(new Boolean(true)); }
+            public Optional<Object> getArgument() { return Optional.of((Object)new Boolean(true)); }
         };
         try {
             condition = (StringCondition)new ConditionFactory(jruby, column, config).createCondition();
@@ -232,14 +232,14 @@ public class TestConditionFactory
         //ToDo: How to create jruby object correctly?
         //config = new DefaultConditionConfig() {
         //    public Optional<String> getOperator() { return Optional.of("=="); }
-        //    public Optional<Object> getArgument() { return Optional.of("2015-07-15"); }
+        //    public Optional<Object> getArgument() { return Optional.of((Object)"2015-07-15"); }
         //    public Optional<String> getFormat()   { return Optional.of("%Y-%m-%d"); }
         //};
         //condition = (TimestampCondition)new ConditionFactory(jruby, column, config).createCondition();
 
         config = new DefaultConditionConfig() {
             public Optional<String> getOperator() { return Optional.of("=="); }
-            public Optional<Object> getArgument() { return Optional.of(new Boolean(true)); }
+            public Optional<Object> getArgument() { return Optional.of((Object)new Boolean(true)); }
         };
         try {
             condition = (TimestampCondition)new ConditionFactory(jruby, column, config).createCondition();
