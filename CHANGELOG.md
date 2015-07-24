@@ -1,3 +1,9 @@
+# 0.1.3
+
+Fixes:
+
+* Remove debug print
+
 # 0.1.2
 
 Enhancements:
