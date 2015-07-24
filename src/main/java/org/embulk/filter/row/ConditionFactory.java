@@ -44,7 +44,6 @@ public class ConditionFactory
         this.columnType      = column.getType();
         this.conditionConfig = conditionConfig;
         this.operator        = conditionConfig.getOperator().get().toUpperCase(); // default: ==
-        System.out.println(conditionConfig.getNot().get().getClass());
         this.not             = conditionConfig.getNot().get().booleanValue(); // default: false
     }
 

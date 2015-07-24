@@ -67,7 +67,7 @@ public class RowFilterPlugin implements FilterPlugin
     }
 
     @Override
-    public PageOutput open(TaskSource taskSource, final Schema inputSchema,
+    public PageOutput open(final TaskSource taskSource, final Schema inputSchema,
             final Schema outputSchema, final PageOutput output)
     {
         PluginTask task = taskSource.loadTask(PluginTask.class);
