@@ -30,7 +30,7 @@ A filter plugin for Embulk to filter out rows
       * "IS NOT NULL"
   * **argument**: argument for the operation (string, required for non-unary operators)
   * **not**: not (boolean, optional, default: false)
-  * **format**: special option for timestamp column, specify the format of timestamp argument (string, default is `%Y-%m-%d %H:%M:%S.%N %z`)
+  * **format**: special option for timestamp column, specify the format of timestamp argument, parsed argument is compared with the column value as Timestamp object (string, default is `%Y-%m-%d %H:%M:%S.%N %z`)
   * **timezone**: special option for timestamp column, specify the timezone of timestamp argument (string, default is `UTC`)
 
 NOTE: column type is automatically retrieved from input data (inputSchema)
