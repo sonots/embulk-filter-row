@@ -61,8 +61,12 @@ public class RowFilterPlugin implements FilterPlugin
     {
         PluginTask task = config.loadConfig(PluginTask.class);
 
-        Schema outputSchema = inputSchema;
+        for (ConditionConfig conditionConfig : task.getConditions()) {
+            String columnName = conditionConfig.getColumn();
+            inputSchema.lookupColumn(columnName); // throw SchemaConfigException if not found
+        }
 
+        Schema outputSchema = inputSchema;
         control.run(task.dump(), outputSchema);
     }
 
