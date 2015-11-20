@@ -1,3 +1,9 @@
+# 0.1.4
+
+Fixes:
+
+* raise SchemaConfigException if column name is not found
+
 # 0.1.3
 
 Fixes:
