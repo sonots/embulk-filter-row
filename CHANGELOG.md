@@ -1,3 +1,9 @@
+# 0.2.0 (2015-12-05)
+
+Enhancements:
+
+* Support OR condition
+
 # 0.1.4
 
 Fixes:
