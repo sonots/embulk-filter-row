@@ -7,7 +7,7 @@
 #     score: integer
 in:
   type: file
-  path_prefix: example.csv
+  path_prefix: example/example.csv
   parser:
     type: csv
     charset: UTF-8

@@ -6,7 +6,8 @@ A filter plugin for Embulk to filter out rows
 
 ## Configuration
 
-* **conditions**: select only rows which matches with conditions. (support only **AND** conditions)
+* **condition**: AND or OR (string, default: AND).
+* **conditions**: select only rows which matches with conditions.
   * **column**: column name (string, required)
   * **operator** operator (string, optional, default: ==)
     * boolean operator
@@ -35,11 +36,12 @@ A filter plugin for Embulk to filter out rows
 
 NOTE: column type is automatically retrieved from input data (inputSchema)
 
-## Example
+## Example (AND)
 
 ```yaml
 filters:
   - type: row
+    condition: AND
     conditions:
       - {column: foo,  operator: "IS NOT NULL"}
       - {column: id,   operator: ">=", argument: 10}
@@ -48,13 +50,41 @@ filters:
       - {column: time, operator: "==", argument: "2015-07-13", format: "%Y-%m-%d"}
 ```
 
-NOTE: column type is automatically retrieved from input data (inputSchema)
+## Example (OR)
 
-## ToDo
+```yaml
+filters:
+  - type: row
+    condition: OR
+    conditions:
+      - {column: a, operator: "IS NOT NULL"}
+      - {column: b, operator: "IS NOT NULL"}
+```
 
-* Support OR condition
-  * It should be better to think using Query engine like [Apache Drill](https://drill.apache.org/) or [Presto](https://prestodb.io/)
-  * With them, it is possible to send a query to local files, even to S3 files.
+## Example (AND of OR)
+
+embulk-output-row does not directly supports complex conditions such as `((A OR B) AND (C OR D))`, but you should be able to express most of complex conditions by combining multiple filters like
+
+```yaml
+filters:
+  - type: row
+    condition: OR
+    conditions:
+      - {column: a, operator: "IS NOT NULL"}
+      - {column: b, operator: "IS NOT NULL"}
+  - type: row
+    condition: OR
+    conditions:
+      - {column: c, operator: "IS NOT NULL"}
+      - {column: d, operator: "IS NOT NULL"}
+```
+
+This is equivalent with `((A OR B) AND (C OR D))`.
+
+## Not Supported:  More Complex Conditions
+
+* It should be better to think using Query engine like [Apache Drill](https://drill.apache.org/) or [Presto](https://prestodb.io/)
+* With them, it is possible to send a query to local files, even to S3 files.
 
 ## ChangeLog
 
@@ -66,7 +96,7 @@ Run example:
 
 ```
 $ ./gradlew classpath
-$ embulk run -I lib example.yml
+$ embulk run -I lib example/and.yml
 ```
 
 Run test:

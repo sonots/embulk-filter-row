@@ -4,6 +4,7 @@ import org.embulk.config.Config;
 import org.embulk.config.ConfigDefault;
 import org.embulk.config.ConfigDiff;
 import org.embulk.config.ConfigSource;
+import org.embulk.config.ConfigException;
 import org.embulk.config.Task;
 import org.embulk.config.TaskSource;
 
@@ -51,6 +52,10 @@ public class RowFilterPlugin implements FilterPlugin
 
     public interface PluginTask extends Task, TimestampParser.Task
     {
+        @Config("condition")
+        @ConfigDefault("\"AND\"")
+        public String getCondition();
+
         @Config("conditions")
         public List<ConditionConfig> getConditions();
     }
@@ -66,6 +71,11 @@ public class RowFilterPlugin implements FilterPlugin
             inputSchema.lookupColumn(columnName); // throw SchemaConfigException if not found
         }
 
+        String condition = task.getCondition().toLowerCase();
+        if (!condition.equals("or") && !condition.equals("and")) {
+            throw new ConfigException("condition must be either of \"or\" or \"and\".");
+        }
+
         Schema outputSchema = inputSchema;
         control.run(task.dump(), outputSchema);
     }
@@ -75,6 +85,8 @@ public class RowFilterPlugin implements FilterPlugin
             final Schema outputSchema, final PageOutput output)
     {
         PluginTask task = taskSource.loadTask(PluginTask.class);
+
+        final boolean orCondition = task.getCondition().toLowerCase().equals("or");
 
         final HashMap<String, List<Condition>> conditionMap = new HashMap<String, List<Condition>>();
         for (Column column : outputSchema.getColumns()) {
@@ -97,7 +109,8 @@ public class RowFilterPlugin implements FilterPlugin
         return new PageOutput() {
             private PageReader pageReader = new PageReader(inputSchema);
             private PageBuilder pageBuilder = new PageBuilder(Exec.getBufferAllocator(), outputSchema, output);
-            private boolean shouldAddRecord = true;
+            private boolean shouldAddRecord;
+            private ColumnVisitor visitor = orCondition ? new ColumnVisitorOrImpl(pageBuilder) : new ColumnVisitorAndImpl(pageBuilder);
 
             @Override
             public void finish() {
@@ -113,18 +126,125 @@ public class RowFilterPlugin implements FilterPlugin
             public void add(Page page) {
                 pageReader.setPage(page);
 
-                ColumnVisitorImpl visitor = new ColumnVisitorImpl(pageBuilder);
                 while (pageReader.nextRecord()) {
-                    shouldAddRecord = true;
+                    shouldAddRecord = orCondition ? false : true;
                     inputSchema.visitColumns(visitor);
                     if (shouldAddRecord) pageBuilder.addRecord();
                 }
             }
 
-            class ColumnVisitorImpl implements ColumnVisitor {
+            class ColumnVisitorOrImpl implements ColumnVisitor {
                 private final PageBuilder pageBuilder;
 
-                ColumnVisitorImpl(PageBuilder pageBuilder) {
+                ColumnVisitorOrImpl(PageBuilder pageBuilder) {
+                    this.pageBuilder = pageBuilder;
+                }
+
+                @Override
+                public void booleanColumn(Column column) {
+                    if (pageReader.isNull(column)) {
+                        pageBuilder.setNull(column);
+                    } else {
+                        pageBuilder.setBoolean(column, pageReader.getBoolean(column));
+                    }
+                    if (shouldAddRecord) return;
+                    List<Condition> conditionList = conditionMap.get(column.getName());
+                    for (Condition _condition : conditionList) {
+                        BooleanCondition condition = (BooleanCondition)_condition;
+                        if (pageReader.isNull(column)) {
+                            if (condition.compare(null)) { shouldAddRecord = true; break; }
+                        } else {
+                            boolean subject = pageReader.getBoolean(column);
+                            if (condition.compare(subject)) { shouldAddRecord = true; break; }
+                        }
+                    }
+                }
+
+                @Override
+                public void longColumn(Column column) {
+                    if (pageReader.isNull(column)) {
+                        pageBuilder.setNull(column);
+                    } else {
+                        pageBuilder.setLong(column, pageReader.getLong(column));
+                    }
+                    if (shouldAddRecord) return;
+                    List<Condition> conditionList = conditionMap.get(column.getName());
+                    for (Condition _condition : conditionList) {
+                        LongCondition condition = (LongCondition)_condition;
+                        if (pageReader.isNull(column)) {
+                            if (condition.compare(null)) { shouldAddRecord = true; break; }
+                        } else {
+                            long subject = pageReader.getLong(column);
+                            if (condition.compare(subject)) { shouldAddRecord = true; break; }
+                        }
+                    }
+                }
+
+                @Override
+                public void doubleColumn(Column column) {
+                    if (pageReader.isNull(column)) {
+                        pageBuilder.setNull(column);
+                    } else {
+                        pageBuilder.setDouble(column, pageReader.getDouble(column));
+                    }
+                    if (shouldAddRecord) return;
+                    List<Condition> conditionList = conditionMap.get(column.getName());
+                    for (Condition _condition : conditionList) {
+                        DoubleCondition condition = (DoubleCondition)_condition;
+                        if (pageReader.isNull(column)) {
+                            if (condition.compare(null)) { shouldAddRecord = true; break; }
+                        } else {
+                            double subject = pageReader.getDouble(column);
+                            if (condition.compare(subject)) { shouldAddRecord = true; break; }
+                        }
+                    }
+                }
+
+                @Override
+                public void stringColumn(Column column) {
+                    if (pageReader.isNull(column)) {
+                        pageBuilder.setNull(column);
+                    } else {
+                        pageBuilder.setString(column, pageReader.getString(column));
+                    }
+                    if (shouldAddRecord) return;
+                    List<Condition> conditionList = conditionMap.get(column.getName());
+                    for (Condition _condition : conditionList) {
+                        StringCondition condition = (StringCondition)_condition;
+                        if (pageReader.isNull(column)) {
+                            if (condition.compare(null)) { shouldAddRecord = true; break; }
+                        } else {
+                            String subject = pageReader.getString(column);
+                            if (condition.compare(subject)) { shouldAddRecord = true; break; }
+                        }
+                    }
+                }
+
+                @Override
+                public void timestampColumn(Column column) {
+                    if (pageReader.isNull(column)) {
+                        pageBuilder.setNull(column);
+                    } else {
+                        pageBuilder.setTimestamp(column, pageReader.getTimestamp(column));
+                    }
+                    if (shouldAddRecord) return;
+                    List<Condition> conditionList = conditionMap.get(column.getName());
+                    for (Condition _condition : conditionList) {
+                        TimestampCondition condition = (TimestampCondition)_condition;
+                        if (pageReader.isNull(column)) {
+                            if (condition.compare(null)) { shouldAddRecord = true; break; }
+                        } else {
+                            Timestamp subject = pageReader.getTimestamp(column);
+                            if (condition.compare(subject)) { shouldAddRecord = true; break; }
+                        }
+                    }
+                }
+            }
+
+            class ColumnVisitorAndImpl implements ColumnVisitor {
+                private final PageBuilder pageBuilder;
+
+                ColumnVisitorAndImpl(PageBuilder pageBuilder) {
                     this.pageBuilder = pageBuilder;
                 }
 
