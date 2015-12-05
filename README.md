@@ -63,7 +63,7 @@ filters:
 
 ## Example (AND of OR)
 
-embulk-output-row does not directly supports complex conditions such as `((A OR B) AND (C OR D))`, but you should be able to express most of complex conditions by combining multiple filters like
+embulk-filter-row does not directly supports complex conditions such as `((A OR B) AND (C OR D))`, but you should be able to express most of complex conditions by combining multiple filters like
 
 ```yaml
 filters:
