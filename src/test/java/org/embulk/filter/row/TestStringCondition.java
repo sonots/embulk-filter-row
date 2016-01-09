@@ -1,30 +1,34 @@
 package org.embulk.filter.row;
 
-import org.embulk.filter.row.StringCondition;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class TestStringCondition
 {
     @Test
-    public void testIsNull() {
+    public void testIsNull()
+    {
         StringCondition condition = new StringCondition("IS NULL", null, false);
         assertTrue(condition.compare(null));
         assertFalse(condition.compare("foo"));
     }
 
     @Test
-    public void testIsNotNull() {
+    public void testIsNotNull()
+    {
         StringCondition condition = new StringCondition("IS NOT NULL", null, false);
         assertFalse(condition.compare(null));
         assertTrue(condition.compare("foo"));
     }
 
     @Test
-    public void testEquals() {
+    public void testEquals()
+    {
         StringCondition condition = new StringCondition("==", "foo", false);
         assertFalse(condition.compare(null));
-        assertTrue( condition.compare("foo"));
+        assertTrue(condition.compare("foo"));
         assertFalse(condition.compare("bar"));
 
         // Prohibited by Factory
@@ -32,66 +36,74 @@ public class TestStringCondition
     }
 
     @Test
-    public void testNotEquals() {
+    public void testNotEquals()
+    {
         StringCondition condition = new StringCondition("!=", "foo", false);
-        assertTrue( condition.compare(null));
+        assertTrue(condition.compare(null));
         assertFalse(condition.compare("foo"));
-        assertTrue( condition.compare("bar"));
+        assertTrue(condition.compare("bar"));
     }
 
     @Test
-    public void testStartWith() {
+    public void testStartWith()
+    {
         StringCondition condition = new StringCondition("start_with", "f", false);
         assertFalse(condition.compare(null));
-        assertTrue( condition.compare("foo"));
+        assertTrue(condition.compare("foo"));
         assertFalse(condition.compare("bar"));
     }
 
     @Test
-    public void testStartsWith() {
+    public void testStartsWith()
+    {
         StringCondition condition = new StringCondition("startsWith", "f", false);
         assertFalse(condition.compare(null));
-        assertTrue( condition.compare("foo"));
+        assertTrue(condition.compare("foo"));
         assertFalse(condition.compare("bar"));
     }
 
     @Test
-    public void testEndWith() {
+    public void testEndWith()
+    {
         StringCondition condition = new StringCondition("end_with", "o", false);
         assertFalse(condition.compare(null));
-        assertTrue( condition.compare("foo"));
+        assertTrue(condition.compare("foo"));
         assertFalse(condition.compare("bar"));
     }
 
     @Test
-    public void testEndsWith() {
+    public void testEndsWith()
+    {
         StringCondition condition = new StringCondition("endsWith", "o", false);
         assertFalse(condition.compare(null));
-        assertTrue( condition.compare("foo"));
+        assertTrue(condition.compare("foo"));
         assertFalse(condition.compare("bar"));
     }
 
     @Test
-    public void testInclude() {
+    public void testInclude()
+    {
         StringCondition condition = new StringCondition("include", "o", false);
         assertFalse(condition.compare(null));
-        assertTrue( condition.compare("foo"));
+        assertTrue(condition.compare("foo"));
         assertFalse(condition.compare("bar"));
     }
 
     @Test
-    public void testContains() {
+    public void testContains()
+    {
         StringCondition condition = new StringCondition("contains", "o", false);
         assertFalse(condition.compare(null));
-        assertTrue( condition.compare("foo"));
+        assertTrue(condition.compare("foo"));
         assertFalse(condition.compare("bar"));
     }
 
     @Test
-    public void testNot() {
+    public void testNot()
+    {
         StringCondition condition = new StringCondition("include", "o", true);
-        assertTrue( condition.compare(null));
+        assertTrue(condition.compare(null));
         assertFalse(condition.compare("foo"));
-        assertTrue( condition.compare("bar"));
+        assertTrue(condition.compare("bar"));
     }
 }
