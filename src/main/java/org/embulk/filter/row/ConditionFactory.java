@@ -1,29 +1,20 @@
 package org.embulk.filter.row;
 
-import org.embulk.config.Task;
-import org.embulk.spi.Exec;
-import org.embulk.spi.Column;
-import org.embulk.spi.type.Type;
-import org.embulk.spi.type.BooleanType;
-import org.embulk.spi.type.LongType;
-import org.embulk.spi.type.DoubleType;
-import org.embulk.spi.type.StringType;
-import org.embulk.spi.type.TimestampType;
-import org.embulk.config.ConfigException;
-
-import org.joda.time.DateTimeZone;
-import org.embulk.spi.time.Timestamp;
-import org.embulk.spi.time.TimestampParser;
-import org.embulk.spi.time.TimestampParseException;
 import com.google.common.base.Throwables;
 
-import org.embulk.filter.row.ConditionConfig;
-import org.embulk.filter.row.Condition;
-import org.embulk.filter.row.BooleanCondition;
-import org.embulk.filter.row.LongCondition;
-import org.embulk.filter.row.DoubleCondition;
-import org.embulk.filter.row.StringCondition;
-import org.embulk.filter.row.TimestampCondition;
+import org.embulk.config.ConfigException;
+import org.embulk.spi.Column;
+import org.embulk.spi.time.Timestamp;
+import org.embulk.spi.time.TimestampParseException;
+import org.embulk.spi.time.TimestampParser;
+import org.embulk.spi.type.BooleanType;
+import org.embulk.spi.type.DoubleType;
+import org.embulk.spi.type.LongType;
+import org.embulk.spi.type.StringType;
+import org.embulk.spi.type.TimestampType;
+import org.embulk.spi.type.Type;
+
+import org.joda.time.DateTimeZone;
 import org.jruby.embed.ScriptingContainer;
 
 public class ConditionFactory
@@ -64,7 +55,7 @@ public class ConditionFactory
         else if (columnType instanceof TimestampType) {
             return createTimestampCondition();
         }
-        assert(false);
+        assert false;
         return null;
     }
 
@@ -77,7 +68,7 @@ public class ConditionFactory
             throw new ConfigException(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
         }
         else if (conditionConfig.getArgument().get() instanceof Boolean) {
-            Boolean argument = (Boolean)conditionConfig.getArgument().get();
+            Boolean argument = (Boolean) conditionConfig.getArgument().get();
             return new BooleanCondition(operator, argument, not);
         }
         else {
@@ -128,7 +119,7 @@ public class ConditionFactory
             throw new ConfigException(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
         }
         else if (conditionConfig.getArgument().get() instanceof String) {
-            String argument = (String)conditionConfig.getArgument().get();
+            String argument = (String) conditionConfig.getArgument().get();
             return new StringCondition(operator, argument, not);
         }
         else {
@@ -145,15 +136,16 @@ public class ConditionFactory
             throw new ConfigException(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
         }
         else if (conditionConfig.getArgument().get() instanceof String) {
-            String argument        = (String)conditionConfig.getArgument().get();
-            String format          = (String)conditionConfig.getFormat().get();
-            DateTimeZone timezone  = DateTimeZone.forID((String)conditionConfig.getTimezone().get());
+            String argument        = (String) conditionConfig.getArgument().get();
+            String format          = (String) conditionConfig.getFormat().get();
+            DateTimeZone timezone  = DateTimeZone.forID((String) conditionConfig.getTimezone().get());
 
             TimestampParser parser = new TimestampParser(jruby, format, timezone);
             try {
                 Timestamp timestamp = parser.parse(argument);
                 return new TimestampCondition(operator, timestamp, not);
-            } catch(TimestampParseException ex) {
+            }
+            catch (TimestampParseException ex) {
                 throw Throwables.propagate(ex);
             }
         }
