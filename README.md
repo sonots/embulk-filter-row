@@ -105,6 +105,12 @@ Run test:
 $ ./gradlew test
 ```
 
+Run checkstyle:
+
+```
+$ ./gradlew check
+```
+
 Release gem:
 
 ```
