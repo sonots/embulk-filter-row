@@ -1,9 +1,9 @@
 package org.embulk.filter.row;
 
+import com.google.common.base.Optional;
 import org.embulk.config.Config;
 import org.embulk.config.ConfigDefault;
 import org.embulk.config.Task;
-import com.google.common.base.Optional;
 
 public interface ConditionConfig extends Task
 {

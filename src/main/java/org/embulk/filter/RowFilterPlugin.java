@@ -2,45 +2,37 @@ package org.embulk.filter;
 
 import org.embulk.config.Config;
 import org.embulk.config.ConfigDefault;
-import org.embulk.config.ConfigDiff;
-import org.embulk.config.ConfigSource;
 import org.embulk.config.ConfigException;
+import org.embulk.config.ConfigSource;
 import org.embulk.config.Task;
 import org.embulk.config.TaskSource;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import com.google.common.collect.ImmutableList;
-import org.slf4j.Logger;
+import org.embulk.filter.row.BooleanCondition;
+import org.embulk.filter.row.Condition;
+import org.embulk.filter.row.ConditionConfig;
+import org.embulk.filter.row.ConditionFactory;
+import org.embulk.filter.row.DoubleCondition;
+import org.embulk.filter.row.LongCondition;
+import org.embulk.filter.row.StringCondition;
+import org.embulk.filter.row.TimestampCondition;
 
-import org.embulk.spi.type.Type;
-import org.embulk.spi.type.BooleanType;
-import org.embulk.spi.type.LongType;
-import org.embulk.spi.type.DoubleType;
-import org.embulk.spi.type.StringType;
-import org.embulk.spi.type.TimestampType;
-import org.embulk.spi.time.Timestamp;
-
-import org.embulk.spi.FilterPlugin;
+import org.embulk.spi.Column;
+import org.embulk.spi.ColumnVisitor;
 import org.embulk.spi.Exec;
+import org.embulk.spi.FilterPlugin;
 import org.embulk.spi.Page;
 import org.embulk.spi.PageBuilder;
 import org.embulk.spi.PageOutput;
 import org.embulk.spi.PageReader;
 import org.embulk.spi.Schema;
-import org.embulk.spi.SchemaConfig;
-import org.embulk.spi.Column;
-import org.embulk.spi.ColumnVisitor;
+import org.embulk.spi.time.Timestamp;
 import org.embulk.spi.time.TimestampParser;
-import org.embulk.filter.row.ConditionConfig;
-import org.embulk.filter.row.Condition;
-import org.embulk.filter.row.BooleanCondition;
-import org.embulk.filter.row.LongCondition;
-import org.embulk.filter.row.DoubleCondition;
-import org.embulk.filter.row.StringCondition;
-import org.embulk.filter.row.TimestampCondition;
-import org.embulk.filter.row.ConditionFactory;
+
+import org.slf4j.Logger;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class RowFilterPlugin implements FilterPlugin
 {
@@ -113,237 +105,356 @@ public class RowFilterPlugin implements FilterPlugin
             private ColumnVisitor visitor = orCondition ? new ColumnVisitorOrImpl(pageBuilder) : new ColumnVisitorAndImpl(pageBuilder);
 
             @Override
-            public void finish() {
+            public void finish()
+            {
                 pageBuilder.finish();
             }
 
             @Override
-            public void close() {
+            public void close()
+            {
                 pageBuilder.close();
             }
 
             @Override
-            public void add(Page page) {
+            public void add(Page page)
+            {
                 pageReader.setPage(page);
 
                 while (pageReader.nextRecord()) {
                     shouldAddRecord = orCondition ? false : true;
                     inputSchema.visitColumns(visitor);
-                    if (shouldAddRecord) pageBuilder.addRecord();
+                    if (shouldAddRecord) {
+                        pageBuilder.addRecord();
+                    }
                 }
             }
 
-            class ColumnVisitorOrImpl implements ColumnVisitor {
+            class ColumnVisitorOrImpl implements ColumnVisitor
+            {
                 private final PageBuilder pageBuilder;
 
-                ColumnVisitorOrImpl(PageBuilder pageBuilder) {
+                ColumnVisitorOrImpl(PageBuilder pageBuilder)
+                {
                     this.pageBuilder = pageBuilder;
                 }
 
                 @Override
-                public void booleanColumn(Column column) {
+                public void booleanColumn(Column column)
+                {
                     if (pageReader.isNull(column)) {
                         pageBuilder.setNull(column);
-                    } else {
+                    }
+                    else {
                         pageBuilder.setBoolean(column, pageReader.getBoolean(column));
                     }
-                    if (shouldAddRecord) return;
+                    if (shouldAddRecord) {
+                        return;
+                    }
                     List<Condition> conditionList = conditionMap.get(column.getName());
-                    for (Condition _condition : conditionList) {
-                        BooleanCondition condition = (BooleanCondition)_condition;
+                    for (Condition tempCondition : conditionList) {
+                        BooleanCondition condition = (BooleanCondition) tempCondition;
                         if (pageReader.isNull(column)) {
-                            if (condition.compare(null)) { shouldAddRecord = true; break; }
-                        } else {
+                            if (condition.compare(null)) {
+                                shouldAddRecord = true;
+                                break;
+                            }
+                        }
+                        else {
                             boolean subject = pageReader.getBoolean(column);
-                            if (condition.compare(subject)) { shouldAddRecord = true; break; }
+                            if (condition.compare(subject)) {
+                                shouldAddRecord = true;
+                                break;
+                            }
                         }
                     }
                 }
 
                 @Override
-                public void longColumn(Column column) {
+                public void longColumn(Column column)
+                {
                     if (pageReader.isNull(column)) {
                         pageBuilder.setNull(column);
-                    } else {
+                    }
+                    else {
                         pageBuilder.setLong(column, pageReader.getLong(column));
                     }
-                    if (shouldAddRecord) return;
+                    if (shouldAddRecord) {
+                        return;
+                    }
                     List<Condition> conditionList = conditionMap.get(column.getName());
-                    for (Condition _condition : conditionList) {
-                        LongCondition condition = (LongCondition)_condition;
+                    for (Condition tempCondition : conditionList) {
+                        LongCondition condition = (LongCondition) tempCondition;
                         if (pageReader.isNull(column)) {
-                            if (condition.compare(null)) { shouldAddRecord = true; break; }
-                        } else {
+                            if (condition.compare(null)) {
+                                shouldAddRecord = true;
+                                break;
+                            }
+                        }
+                        else {
                             long subject = pageReader.getLong(column);
-                            if (condition.compare(subject)) { shouldAddRecord = true; break; }
+                            if (condition.compare(subject)) {
+                                shouldAddRecord = true;
+                                break;
+                            }
                         }
                     }
                 }
 
                 @Override
-                public void doubleColumn(Column column) {
+                public void doubleColumn(Column column)
+                {
                     if (pageReader.isNull(column)) {
                         pageBuilder.setNull(column);
-                    } else {
+                    }
+                    else {
                         pageBuilder.setDouble(column, pageReader.getDouble(column));
                     }
-                    if (shouldAddRecord) return;
+                    if (shouldAddRecord) {
+                        return;
+                    }
                     List<Condition> conditionList = conditionMap.get(column.getName());
-                    for (Condition _condition : conditionList) {
-                        DoubleCondition condition = (DoubleCondition)_condition;
+                    for (Condition tempCondition : conditionList) {
+                        DoubleCondition condition = (DoubleCondition) tempCondition;
                         if (pageReader.isNull(column)) {
-                            if (condition.compare(null)) { shouldAddRecord = true; break; }
-                        } else {
+                            if (condition.compare(null)) {
+                                shouldAddRecord = true;
+                                break;
+                            }
+                        }
+                        else {
                             double subject = pageReader.getDouble(column);
-                            if (condition.compare(subject)) { shouldAddRecord = true; break; }
+                            if (condition.compare(subject)) {
+                                shouldAddRecord = true;
+                                break;
+                            }
                         }
                     }
                 }
 
                 @Override
-                public void stringColumn(Column column) {
+                public void stringColumn(Column column)
+                {
                     if (pageReader.isNull(column)) {
                         pageBuilder.setNull(column);
-                    } else {
+                    }
+                    else {
                         pageBuilder.setString(column, pageReader.getString(column));
                     }
-                    if (shouldAddRecord) return;
+                    if (shouldAddRecord) {
+                        return;
+                    }
                     List<Condition> conditionList = conditionMap.get(column.getName());
-                    for (Condition _condition : conditionList) {
-                        StringCondition condition = (StringCondition)_condition;
+                    for (Condition tempCondition : conditionList) {
+                        StringCondition condition = (StringCondition) tempCondition;
                         if (pageReader.isNull(column)) {
-                            if (condition.compare(null)) { shouldAddRecord = true; break; }
-                        } else {
+                            if (condition.compare(null)) {
+                                shouldAddRecord = true;
+                                break;
+                            }
+                        }
+                        else {
                             String subject = pageReader.getString(column);
-                            if (condition.compare(subject)) { shouldAddRecord = true; break; }
+                            if (condition.compare(subject)) {
+                                shouldAddRecord = true;
+                                break;
+                            }
                         }
                     }
                 }
 
                 @Override
-                public void timestampColumn(Column column) {
+                public void timestampColumn(Column column)
+                {
                     if (pageReader.isNull(column)) {
                         pageBuilder.setNull(column);
-                    } else {
+                    }
+                    else {
                         pageBuilder.setTimestamp(column, pageReader.getTimestamp(column));
                     }
-                    if (shouldAddRecord) return;
+                    if (shouldAddRecord) {
+                        return;
+                    }
                     List<Condition> conditionList = conditionMap.get(column.getName());
-                    for (Condition _condition : conditionList) {
-                        TimestampCondition condition = (TimestampCondition)_condition;
+                    for (Condition tempCondition : conditionList) {
+                        TimestampCondition condition = (TimestampCondition) tempCondition;
                         if (pageReader.isNull(column)) {
-                            if (condition.compare(null)) { shouldAddRecord = true; break; }
-                        } else {
+                            if (condition.compare(null)) {
+                                shouldAddRecord = true;
+                                break;
+                            }
+                        }
+                        else {
                             Timestamp subject = pageReader.getTimestamp(column);
-                            if (condition.compare(subject)) { shouldAddRecord = true; break; }
+                            if (condition.compare(subject)) {
+                                shouldAddRecord = true;
+                                break;
+                            }
                         }
                     }
                 }
             }
 
-            class ColumnVisitorAndImpl implements ColumnVisitor {
+            class ColumnVisitorAndImpl implements ColumnVisitor
+            {
                 private final PageBuilder pageBuilder;
 
-                ColumnVisitorAndImpl(PageBuilder pageBuilder) {
+                ColumnVisitorAndImpl(PageBuilder pageBuilder)
+                {
                     this.pageBuilder = pageBuilder;
                 }
 
                 @Override
-                public void booleanColumn(Column column) {
-                    if (!shouldAddRecord) return;
+                public void booleanColumn(Column column)
+                {
+                    if (!shouldAddRecord) {
+                        return;
+                    }
                     List<Condition> conditionList = conditionMap.get(column.getName());
-                    for (Condition _condition : conditionList) {
-                        BooleanCondition condition = (BooleanCondition)_condition;
+                    for (Condition tempCondition : conditionList) {
+                        BooleanCondition condition = (BooleanCondition) tempCondition;
                         if (pageReader.isNull(column)) {
-                            if (!condition.compare(null)) { shouldAddRecord = false; break; }
-                        } else {
+                            if (!condition.compare(null)) {
+                                shouldAddRecord = false;
+                                break;
+                            }
+                        }
+                        else {
                             boolean subject = pageReader.getBoolean(column);
-                            if (!condition.compare(subject)) { shouldAddRecord = false; break; }
+                            if (!condition.compare(subject)) {
+                                shouldAddRecord = false;
+                                break;
+                            }
                         }
                     }
                     if (pageReader.isNull(column)) {
                         pageBuilder.setNull(column);
-                    } else {
+                    }
+                    else {
                         pageBuilder.setBoolean(column, pageReader.getBoolean(column));
                     }
                 }
 
                 @Override
-                public void longColumn(Column column) {
-                    if (!shouldAddRecord) return;
+                public void longColumn(Column column)
+                {
+                    if (!shouldAddRecord) {
+                        return;
+                    }
                     List<Condition> conditionList = conditionMap.get(column.getName());
-                    for (Condition _condition : conditionList) {
-                        LongCondition condition = (LongCondition)_condition;
+                    for (Condition tempCondition : conditionList) {
+                        LongCondition condition = (LongCondition) tempCondition;
                         if (pageReader.isNull(column)) {
-                            if (!condition.compare(null)) { shouldAddRecord = false; break; }
-                        } else {
+                            if (!condition.compare(null)) {
+                                shouldAddRecord = false;
+                                break;
+                            }
+                        }
+                        else {
                             long subject = pageReader.getLong(column);
-                            if (!condition.compare(subject)) { shouldAddRecord = false; break; }
+                            if (!condition.compare(subject)) {
+                                shouldAddRecord = false;
+                                break;
+                            }
                         }
                     }
                     if (pageReader.isNull(column)) {
                         pageBuilder.setNull(column);
-                    } else {
+                    }
+                    else {
                         pageBuilder.setLong(column, pageReader.getLong(column));
                     }
                 }
 
                 @Override
-                public void doubleColumn(Column column) {
-                    if (!shouldAddRecord) return;
+                public void doubleColumn(Column column)
+                {
+                    if (!shouldAddRecord) {
+                        return;
+                    }
                     List<Condition> conditionList = conditionMap.get(column.getName());
-                    for (Condition _condition : conditionList) {
-                        DoubleCondition condition = (DoubleCondition)_condition;
+                    for (Condition tempCondition : conditionList) {
+                        DoubleCondition condition = (DoubleCondition) tempCondition;
                         if (pageReader.isNull(column)) {
-                            if (!condition.compare(null)) { shouldAddRecord = false; break; }
-                        } else {
+                            if (!condition.compare(null)) {
+                                shouldAddRecord = false;
+                                break;
+                            }
+                        }
+                        else {
                             double subject = pageReader.getDouble(column);
-                            if (!condition.compare(subject)) { shouldAddRecord = false; break; }
+                            if (!condition.compare(subject)) {
+                                shouldAddRecord = false;
+                                break;
+                            }
                         }
                     }
                     if (pageReader.isNull(column)) {
                         pageBuilder.setNull(column);
-                    } else {
+                    }
+                    else {
                         pageBuilder.setDouble(column, pageReader.getDouble(column));
                     }
                 }
 
                 @Override
-                public void stringColumn(Column column) {
-                    if (!shouldAddRecord) return;
+                public void stringColumn(Column column)
+                {
+                    if (!shouldAddRecord) {
+                        return;
+                    }
                     List<Condition> conditionList = conditionMap.get(column.getName());
-                    for (Condition _condition : conditionList) {
-                        StringCondition condition = (StringCondition)_condition;
+                    for (Condition tempCondition : conditionList) {
+                        StringCondition condition = (StringCondition) tempCondition;
                         if (pageReader.isNull(column)) {
-                            if (!condition.compare(null)) { shouldAddRecord = false; break; }
-                        } else {
+                            if (!condition.compare(null)) {
+                                shouldAddRecord = false;
+                                break;
+                            }
+                        }
+                        else {
                             String subject = pageReader.getString(column);
-                            if (!condition.compare(subject)) { shouldAddRecord = false; break; }
+                            if (!condition.compare(subject)) {
+                                shouldAddRecord = false;
+                                break;
+                            }
                         }
                     }
                     if (pageReader.isNull(column)) {
                         pageBuilder.setNull(column);
-                    } else {
+                    }
+                    else {
                         pageBuilder.setString(column, pageReader.getString(column));
                     }
                 }
 
                 @Override
-                public void timestampColumn(Column column) {
-                    if (!shouldAddRecord) return;
+                public void timestampColumn(Column column)
+                {
+                    if (!shouldAddRecord) {
+                        return;
+                    }
                     List<Condition> conditionList = conditionMap.get(column.getName());
-                    for (Condition _condition : conditionList) {
-                        TimestampCondition condition = (TimestampCondition)_condition;
+                    for (Condition tempCondition : conditionList) {
+                        TimestampCondition condition = (TimestampCondition) tempCondition;
                         if (pageReader.isNull(column)) {
-                            if (!condition.compare(null)) { shouldAddRecord = false; break; }
-                        } else {
+                            if (!condition.compare(null)) {
+                                shouldAddRecord = false;
+                                break;
+                            }
+                        }
+                        else {
                             Timestamp subject = pageReader.getTimestamp(column);
-                            if (!condition.compare(subject)) { shouldAddRecord = false; break; }
+                            if (!condition.compare(subject)) {
+                                shouldAddRecord = false;
+                                break;
+                            }
                         }
                     }
                     if (pageReader.isNull(column)) {
                         pageBuilder.setNull(column);
-                    } else {
+                    }
+                    else {
                         pageBuilder.setTimestamp(column, pageReader.getTimestamp(column));
                     }
                 }

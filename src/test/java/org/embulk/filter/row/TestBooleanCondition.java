@@ -1,13 +1,15 @@
 package org.embulk.filter.row;
 
-import org.embulk.filter.row.BooleanCondition;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class TestBooleanCondition
 {
     @Test
-    public void testIsNull() {
+    public void testIsNull()
+    {
         BooleanCondition condition = new BooleanCondition("IS NULL", null, false);
         assertTrue(condition.compare(null));
         assertFalse(condition.compare(new Boolean(true)));
@@ -15,7 +17,8 @@ public class TestBooleanCondition
     }
 
     @Test
-    public void testIsNotNull() {
+    public void testIsNotNull()
+    {
         BooleanCondition condition = new BooleanCondition("IS NOT NULL", null, false);
         assertFalse(condition.compare(null));
         assertTrue(condition.compare(new Boolean(true)));
@@ -23,7 +26,8 @@ public class TestBooleanCondition
     }
 
     @Test
-    public void testNot() {
+    public void testNot()
+    {
         BooleanCondition condition = new BooleanCondition("IS NOT NULL", null, true);
         assertTrue(condition.compare(null));
         assertFalse(condition.compare(new Boolean(true)));
@@ -31,7 +35,8 @@ public class TestBooleanCondition
     }
 
     @Test
-    public void testEquals() {
+    public void testEquals()
+    {
         BooleanCondition condition = new BooleanCondition("==", new Boolean(true), false);
         assertTrue(condition.compare(new Boolean(true)));
         assertFalse(condition.compare(new Boolean(false)));
@@ -47,7 +52,8 @@ public class TestBooleanCondition
     }
 
     @Test
-    public void testNotEquals() {
+    public void testNotEquals()
+    {
         BooleanCondition condition = new BooleanCondition("!=", new Boolean(true), false);
         assertFalse(condition.compare(new Boolean(true)));
         assertTrue(condition.compare(new Boolean(false)));
