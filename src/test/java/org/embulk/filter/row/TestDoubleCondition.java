@@ -30,6 +30,8 @@ public class TestDoubleCondition
         assertFalse(condition.compare(null));
         assertTrue(condition.compare(new Double(10)));
         assertFalse(condition.compare(new Double(11)));
+        assertTrue(condition.compare(new Double(10.0)));
+        assertFalse(condition.compare(new Double(11.0)));
 
         // Prohibited by Factory
         // DoubleCondition condition = new DoubleCondition("==", null, false);
@@ -42,6 +44,8 @@ public class TestDoubleCondition
         assertTrue(condition.compare(null));
         assertFalse(condition.compare(new Double(10)));
         assertTrue(condition.compare(new Double(11)));
+        assertFalse(condition.compare(new Double(10.0)));
+        assertTrue(condition.compare(new Double(11.0)));
     }
 
     @Test
@@ -51,6 +55,8 @@ public class TestDoubleCondition
         assertFalse(condition.compare(null));
         assertFalse(condition.compare(new Double(10)));
         assertTrue(condition.compare(new Double(11)));
+        assertFalse(condition.compare(new Double(10.0)));
+        assertTrue(condition.compare(new Double(11.0)));
     }
 
     @Test
@@ -60,6 +66,8 @@ public class TestDoubleCondition
         assertFalse(condition.compare(null));
         assertFalse(condition.compare(new Double(10)));
         assertTrue(condition.compare(new Double(11)));
+        assertFalse(condition.compare(new Double(10.0)));
+        assertTrue(condition.compare(new Double(11.0)));
     }
 
     @Test
@@ -69,6 +77,8 @@ public class TestDoubleCondition
         assertFalse(condition.compare(null));
         assertFalse(condition.compare(new Double(11)));
         assertTrue(condition.compare(new Double(10)));
+        assertFalse(condition.compare(new Double(11.0)));
+        assertTrue(condition.compare(new Double(10.0)));
     }
 
     @Test
@@ -78,6 +88,8 @@ public class TestDoubleCondition
         assertFalse(condition.compare(null));
         assertFalse(condition.compare(new Double(12)));
         assertTrue(condition.compare(new Double(11)));
+        assertFalse(condition.compare(new Double(12.0)));
+        assertTrue(condition.compare(new Double(11.0)));
     }
 
     @Test
@@ -87,5 +99,7 @@ public class TestDoubleCondition
         assertTrue(condition.compare(null));
         assertTrue(condition.compare(new Double(12)));
         assertFalse(condition.compare(new Double(11)));
+        assertTrue(condition.compare(new Double(12.0)));
+        assertFalse(condition.compare(new Double(11.0)));
     }
 }

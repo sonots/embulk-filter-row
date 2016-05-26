@@ -2,6 +2,7 @@ package org.embulk.filter.row;
 
 import com.google.common.base.Throwables;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.embulk.config.ConfigException;
 import org.embulk.spi.Column;
 import org.embulk.spi.time.Timestamp;
@@ -13,7 +14,6 @@ import org.embulk.spi.type.LongType;
 import org.embulk.spi.type.StringType;
 import org.embulk.spi.type.TimestampType;
 import org.embulk.spi.type.Type;
-
 import org.joda.time.DateTimeZone;
 import org.jruby.embed.ScriptingContainer;
 
@@ -101,7 +101,7 @@ public class ConditionFactory
         else if (!conditionConfig.getArgument().isPresent()) {
             throw new ConfigException(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
         }
-        else if (conditionConfig.getArgument().get() instanceof Number) {
+        else if (NumberUtils.isNumber(conditionConfig.getArgument().get().toString())) {
             Double argument = new Double(conditionConfig.getArgument().get().toString());
             return new DoubleCondition(operator, argument, not);
         }
