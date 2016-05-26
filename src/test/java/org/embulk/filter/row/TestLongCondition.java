@@ -26,7 +26,7 @@ public class TestLongCondition
     @Test
     public void testEquals()
     {
-        LongCondition condition = new LongCondition("==", new Long(10), false);
+        LongCondition condition = new LongCondition("==", new Double(10), false);
         assertFalse(condition.compare(null));
         assertTrue(condition.compare(new Long(10)));
         assertFalse(condition.compare(new Long(11)));
@@ -38,7 +38,7 @@ public class TestLongCondition
     @Test
     public void testNotEquals()
     {
-        LongCondition condition = new LongCondition("!=", new Long(10), false);
+        LongCondition condition = new LongCondition("!=", new Double(10), false);
         assertTrue(condition.compare(null));
         assertFalse(condition.compare(new Long(10)));
         assertTrue(condition.compare(new Long(11)));
@@ -47,7 +47,7 @@ public class TestLongCondition
     @Test
     public void testGreaterThan()
     {
-        LongCondition condition = new LongCondition(">", new Long(10), false);
+        LongCondition condition = new LongCondition(">", new Double(10), false);
         assertFalse(condition.compare(null));
         assertFalse(condition.compare(new Long(10)));
         assertTrue(condition.compare(new Long(11)));
@@ -56,7 +56,7 @@ public class TestLongCondition
     @Test
     public void testGreaterEqual()
     {
-        LongCondition condition = new LongCondition(">=", new Long(11), false);
+        LongCondition condition = new LongCondition(">=", new Double(11), false);
         assertFalse(condition.compare(null));
         assertFalse(condition.compare(new Long(10)));
         assertTrue(condition.compare(new Long(11)));
@@ -65,7 +65,7 @@ public class TestLongCondition
     @Test
     public void testLessThan()
     {
-        LongCondition condition = new LongCondition("<", new Long(11), false);
+        LongCondition condition = new LongCondition("<", new Double(11), false);
         assertFalse(condition.compare(null));
         assertFalse(condition.compare(new Long(11)));
         assertTrue(condition.compare(new Long(10)));
@@ -74,7 +74,7 @@ public class TestLongCondition
     @Test
     public void testLessEqual()
     {
-        LongCondition condition = new LongCondition("<=", new Long(11), false);
+        LongCondition condition = new LongCondition("<=", new Double(11), false);
         assertFalse(condition.compare(null));
         assertFalse(condition.compare(new Long(12)));
         assertTrue(condition.compare(new Long(11)));
@@ -83,7 +83,70 @@ public class TestLongCondition
     @Test
     public void testNot()
     {
-        LongCondition condition = new LongCondition("<=", new Long(11), true);
+        LongCondition condition = new LongCondition("<=", new Double(11), true);
+        assertTrue(condition.compare(null));
+        assertTrue(condition.compare(new Long(12)));
+        assertFalse(condition.compare(new Long(11)));
+    }
+
+    @Test
+    public void testDoubleOperatorEquals()
+    {
+        LongCondition condition = new LongCondition("==", new Double(10.0), false);
+        assertFalse(condition.compare(null));
+        assertTrue(condition.compare(new Long(10)));
+        assertFalse(condition.compare(new Long(11)));
+    }
+
+    @Test
+    public void testDoubleOperatorNotEquals()
+    {
+        LongCondition condition = new LongCondition("!=", new Double(10.0), false);
+        assertTrue(condition.compare(null));
+        assertFalse(condition.compare(new Long(10)));
+        assertTrue(condition.compare(new Long(11)));
+    }
+
+    @Test
+    public void testDoubleOperatorGreaterThan()
+    {
+        LongCondition condition = new LongCondition(">", new Double(10.0), false);
+        assertFalse(condition.compare(null));
+        assertFalse(condition.compare(new Long(10)));
+        assertTrue(condition.compare(new Long(11)));
+    }
+
+    @Test
+    public void testDoubleOperatorGreaterEqual()
+    {
+        LongCondition condition = new LongCondition(">=", new Double(11.0), false);
+        assertFalse(condition.compare(null));
+        assertFalse(condition.compare(new Long(10)));
+        assertTrue(condition.compare(new Long(11)));
+    }
+
+    @Test
+    public void testDoubleOperatorLessThan()
+    {
+        LongCondition condition = new LongCondition("<", new Double(11.0), false);
+        assertFalse(condition.compare(null));
+        assertFalse(condition.compare(new Long(11)));
+        assertTrue(condition.compare(new Long(10)));
+    }
+
+    @Test
+    public void testDoubleOperatorLessEqual()
+    {
+        LongCondition condition = new LongCondition("<=", new Double(11.0), false);
+        assertFalse(condition.compare(null));
+        assertFalse(condition.compare(new Long(12)));
+        assertTrue(condition.compare(new Long(11)));
+    }
+
+    @Test
+    public void testDoubleOperatorNot()
+    {
+        LongCondition condition = new LongCondition("<=", new Double(11.0), true);
         assertTrue(condition.compare(null));
         assertTrue(condition.compare(new Long(12)));
         assertFalse(condition.compare(new Long(11)));

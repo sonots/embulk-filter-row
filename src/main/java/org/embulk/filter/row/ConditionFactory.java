@@ -84,8 +84,8 @@ public class ConditionFactory
         else if (!conditionConfig.getArgument().isPresent()) {
             throw new ConfigException(String.format("RowFilterPlugin: Argument is missing on column: %s", columnName));
         }
-        else if (conditionConfig.getArgument().get() instanceof Number) {
-            Long argument = new Long(conditionConfig.getArgument().get().toString()).longValue();
+        else if (NumberUtils.isNumber(conditionConfig.getArgument().get().toString())) {
+            Double argument = new Double(conditionConfig.getArgument().get().toString());
             return new LongCondition(operator, argument, not);
         }
         else {

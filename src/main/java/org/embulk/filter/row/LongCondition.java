@@ -1,5 +1,6 @@
 package org.embulk.filter.row;
 
+
 public class LongCondition implements Condition
 {
     private LongComparator comparator;
@@ -10,7 +11,7 @@ public class LongCondition implements Condition
         boolean compare(Long subject);
     }
 
-    public LongCondition(final String operator, final Long argument, final boolean not)
+    public LongCondition(final String operator, final Double argument, final boolean not)
     {
         final LongComparator comparator;
         switch (operator.toUpperCase()) {
@@ -34,7 +35,7 @@ public class LongCondition implements Condition
                 comparator = new LongComparator() {
                     public boolean compare(Long subject)
                     {
-                        return subject == null ? false : subject.compareTo(argument) > 0;
+                        return subject == null ? false : new Double(subject).compareTo(argument) > 0;
                     }
                 };
                 break;
@@ -42,7 +43,7 @@ public class LongCondition implements Condition
                 comparator = new LongComparator() {
                     public boolean compare(Long subject)
                     {
-                        return subject == null ? false : subject.compareTo(argument) >= 0;
+                        return subject == null ? false : new Double(subject).compareTo(argument) >= 0;
                     }
                 };
                 break;
@@ -50,7 +51,7 @@ public class LongCondition implements Condition
                 comparator = new LongComparator() {
                     public boolean compare(Long subject)
                     {
-                        return subject == null ? false : subject.compareTo(argument) < 0;
+                        return subject == null ? false : new Double(subject).compareTo(argument) < 0;
                     }
                 };
                 break;
@@ -58,7 +59,7 @@ public class LongCondition implements Condition
                 comparator = new LongComparator() {
                     public boolean compare(Long subject)
                     {
-                        return subject == null ? false : subject.compareTo(argument) <= 0;
+                        return subject == null ? false : new Double(subject).compareTo(argument) <= 0;
                     }
                 };
                 break;
@@ -66,7 +67,7 @@ public class LongCondition implements Condition
                 comparator = new LongComparator() {
                     public boolean compare(Long subject)
                     {
-                        return subject == null ? true : !subject.equals(argument);
+                        return subject == null ? true : !new Double(subject).equals(argument);
                     }
                 };
                 break;
@@ -74,7 +75,7 @@ public class LongCondition implements Condition
                 comparator = new LongComparator() {
                     public boolean compare(Long subject)
                     {
-                        return subject == null ? false : subject.equals(argument);
+                        return subject == null ? false : new Double(subject).equals(argument);
                     }
                 };
                 break;
