@@ -1,3 +1,9 @@
+# 0.2.1 (2016-06-27)
+
+Enhancements:
+
+* Add a workaround to treat `0.x` argument as a double which is treated as a String by sanekyaml (thanks to @toyama0919)
+
 # 0.2.0 (2015-12-05)
 
 Enhancements:
