@@ -96,7 +96,7 @@ Run example:
 
 ```
 $ ./gradlew classpath
-$ embulk run -I lib example/and.yml
+$ embulk preview -I lib example/example.yml
 ```
 
 Run test:

@@ -1,4 +1,5 @@
-package org.embulk.filter.row;
+package org.embulk.filter.row.condition;
+
 import org.embulk.spi.time.Timestamp;
 
 public class TimestampCondition implements Condition

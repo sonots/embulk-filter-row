@@ -1,4 +1,4 @@
-package org.embulk.filter;
+package org.embulk.filter.row;
 
 import org.embulk.config.Config;
 import org.embulk.config.ConfigDefault;
@@ -7,14 +7,14 @@ import org.embulk.config.ConfigSource;
 import org.embulk.config.Task;
 import org.embulk.config.TaskSource;
 
-import org.embulk.filter.row.BooleanCondition;
-import org.embulk.filter.row.Condition;
-import org.embulk.filter.row.ConditionConfig;
-import org.embulk.filter.row.ConditionFactory;
-import org.embulk.filter.row.DoubleCondition;
-import org.embulk.filter.row.LongCondition;
-import org.embulk.filter.row.StringCondition;
-import org.embulk.filter.row.TimestampCondition;
+import org.embulk.filter.row.condition.BooleanCondition;
+import org.embulk.filter.row.condition.Condition;
+import org.embulk.filter.row.condition.ConditionConfig;
+import org.embulk.filter.row.condition.ConditionFactory;
+import org.embulk.filter.row.condition.DoubleCondition;
+import org.embulk.filter.row.condition.LongCondition;
+import org.embulk.filter.row.condition.StringCondition;
+import org.embulk.filter.row.condition.TimestampCondition;
 
 import org.embulk.spi.Column;
 import org.embulk.spi.ColumnVisitor;
