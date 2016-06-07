@@ -1,4 +1,4 @@
-package org.embulk.filter.row;
+package org.embulk.filter.row.condition;
 
 import com.google.common.base.Optional;
 

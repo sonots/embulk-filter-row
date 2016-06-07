@@ -1,4 +1,4 @@
-package org.embulk.filter.row;
+package org.embulk.filter.row.condition;
 
 import org.junit.Test;
 
