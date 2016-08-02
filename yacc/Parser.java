@@ -13,7 +13,6 @@
 
 
 
-package org.embulk.filter.row;
 
 
 
@@ -333,11 +332,16 @@ final static String yyrule[] = {
 
 String ins;
 StringTokenizer st;
-static HashMap<String, Object> values;
+HashMap<String, Object> values;
 
 void yyerror(String s)
 {
     System.out.println("par:"+s);
+}
+
+void setValues(HashMap<String, Object> values)
+{
+    this.values = values;
 }
 
 boolean newline;
@@ -357,7 +361,19 @@ int yylex()
     }
     s = st.nextToken();
     System.out.println("token:"+s);
-    if (s.equals("=")) {
+    if (s.equals("(")) {
+        token = s.charAt(0);
+    }
+    else if (s.equals(")")) {
+        token = s.charAt(0);
+    }
+    else if (s.equals("AND")) {
+        token = AND;
+    }
+    else if (s.equals("OR")) {
+        token = OR;
+    }
+    else if (s.equals("=")) {
         token = EQ;
     }
     else if (s.equals("<>")) {
@@ -440,14 +456,15 @@ void dotest()
 public static void main(String args[])
 {
     Parser par = new Parser(false);
-    values = new HashMap<String, Object>();
+    HashMap<String, Object> values = new HashMap<String, Object>();
     values.put("boolean", Boolean.TRUE);
     values.put("integer", new Long(1));
     values.put("float", new Double(1.5));
     values.put("string", "string");
+    par.setValues(values);
     par.dotest();
 }
-//#line 378 "Parser.java"
+//#line 396 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -681,7 +698,7 @@ case 23:
 //#line 63 "parse.y"
 { yyval = val_peek(1); }
 break;
-//#line 607 "Parser.java"
+//#line 625 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
@@ -740,7 +757,24 @@ public void run()
 
 
 //## Constructors ###############################################
-//## The -Jnoconstruct option was used ##
+/**
+ * Default constructor.  Turn off with -Jnoconstruct .
+
+ */
+public Parser()
+{
+  //nothing to do
+}
+
+
+/**
+ * Create a parser, setting the debug to true or false.
+ * @param debugMe true for debugging, false for no debug.
+ */
+public Parser(boolean debugMe)
+{
+  yydebug=debugMe;
+}
 //###############################################################
 
 

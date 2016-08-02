@@ -66,11 +66,16 @@ exp: term { $$ = $1; }
 
 String ins;
 StringTokenizer st;
-static HashMap<String, Object> values;
+HashMap<String, Object> values;
 
 void yyerror(String s)
 {
     System.out.println("par:"+s);
+}
+
+void setValues(HashMap<String, Object> values)
+{
+    this.values = values;
 }
 
 boolean newline;
@@ -90,7 +95,19 @@ int yylex()
     }
     s = st.nextToken();
     System.out.println("token:"+s);
-    if (s.equals("=")) {
+    if (s.equals("(")) {
+        token = s.charAt(0);
+    }
+    else if (s.equals(")")) {
+        token = s.charAt(0);
+    }
+    else if (s.equals("AND")) {
+        token = AND;
+    }
+    else if (s.equals("OR")) {
+        token = OR;
+    }
+    else if (s.equals("=")) {
         token = EQ;
     }
     else if (s.equals("<>")) {
@@ -173,10 +190,11 @@ void dotest()
 public static void main(String args[])
 {
     Parser par = new Parser(false);
-    values = new HashMap<String, Object>();
+    HashMap<String, Object> values = new HashMap<String, Object>();
     values.put("boolean", Boolean.TRUE);
     values.put("integer", new Long(1));
     values.put("float", new Double(1.5));
     values.put("string", "string");
+    par.setValues(values);
     par.dotest();
 }
