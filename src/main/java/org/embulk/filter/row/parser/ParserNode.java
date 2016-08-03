@@ -1,4 +1,4 @@
-//package org.embulk.filter.row.parser;
+package org.embulk.filter.row.parser;
 
 import java.util.HashMap;
 

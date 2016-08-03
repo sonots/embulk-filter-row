@@ -1,6 +1,6 @@
 #!/bin/bash -e
 ROOT_PATH=$(cd $(dirname $0); cd ..; pwd)
-SRC_DIR="src/main/java/org/embulk/filter/row"
+SRC_DIR="src/main/java/org/embulk/filter/row/parser"
 
 if [ $(uname) = "Darwin" ]; then
   platform="macosx"
@@ -15,6 +15,5 @@ if [ ! -f "$ROOT_PATH/script/yacc" ]; then
 fi
 
 # ./yacc.macosx -J -Jclass=Parser -Jval=Foo -Jnoconstruct parse.y
-$ROOT_PATH/script/yacc -J -Jclass=Parser -Jpackage=org.embulk.filter.row "$SRC_DIR/parse.y"
-mv Parser.java $SRC_DIR/Parser.java
-rm -f ParserVal.java
+$ROOT_PATH/script/yacc -J -Jclass=Parser -Jpackage=org.embulk.filter.row.parser "$SRC_DIR/Parser.y"
+mv Parser.java ParserVal.java $SRC_DIR/
