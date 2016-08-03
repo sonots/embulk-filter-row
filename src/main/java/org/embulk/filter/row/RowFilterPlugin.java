@@ -1,5 +1,7 @@
 package org.embulk.filter.row;
 
+import com.google.common.base.Optional;
+
 import org.embulk.config.Config;
 import org.embulk.config.ConfigDefault;
 import org.embulk.config.ConfigException;
@@ -9,7 +11,6 @@ import org.embulk.config.TaskSource;
 
 import org.embulk.filter.row.condition.ConditionConfig;
 
-import org.embulk.spi.ColumnVisitor;
 import org.embulk.spi.Exec;
 import org.embulk.spi.FilterPlugin;
 import org.embulk.spi.Page;
@@ -26,6 +27,7 @@ import java.util.List;
 public class RowFilterPlugin implements FilterPlugin
 {
     private static final Logger logger = Exec.getLogger(RowFilterPlugin.class);
+    private Parser parser = null;
 
     public RowFilterPlugin() {}
 
@@ -37,6 +39,9 @@ public class RowFilterPlugin implements FilterPlugin
 
         @Config("conditions")
         public List<ConditionConfig> getConditions();
+
+        @Config("where")
+        public Optional<String> getWhere();
     }
 
     @Override
@@ -61,6 +66,13 @@ public class RowFilterPlugin implements FilterPlugin
         String condition = task.getCondition().toLowerCase();
         if (!condition.equals("or") && !condition.equals("and")) {
             throw new ConfigException("condition must be either of \"or\" or \"and\".");
+        }
+
+        if (task.getWhere().isPresent()) {
+            String where = task.getWhere().get();
+            parser = new Parser();
+            parser.set
+
         }
     }
 
