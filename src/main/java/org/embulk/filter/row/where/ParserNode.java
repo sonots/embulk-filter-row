@@ -1,4 +1,4 @@
-package org.embulk.filter.row.parser;
+package org.embulk.filter.row.where;
 
 import java.util.HashMap;
 
@@ -222,6 +222,26 @@ class LogicalOpExp extends ParserExp
             assert(false);
             return false;
         }
+    }
+}
+
+class NegateOpExp extends ParserExp
+{
+    ParserExp exp;
+
+    public NegateOpExp(ParserExp exp)
+    {
+        this.exp = exp;
+    }
+
+    public NegateOpExp(ParserVal exp)
+    {
+        this((ParserExp)(exp.obj));
+    }
+
+    public boolean eval(HashMap<String, Object> variables)
+    {
+        return ! exp.eval(variables);
     }
 }
 

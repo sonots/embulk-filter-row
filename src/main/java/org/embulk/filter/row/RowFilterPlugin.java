@@ -10,7 +10,7 @@ import org.embulk.config.Task;
 import org.embulk.config.TaskSource;
 
 import org.embulk.filter.row.condition.ConditionConfig;
-import org.embulk.filter.row.parser.Parser;
+import org.embulk.filter.row.where.Parser;
 
 import org.embulk.spi.Exec;
 import org.embulk.spi.FilterPlugin;
