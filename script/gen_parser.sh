@@ -26,7 +26,4 @@ $ROOT_PATH/script/yacc -J -Jclass=Parser -Jpackage=org.embulk.filter.row.where "
 mv Parser.java ParserVal.java $SRC_DIR/
 
 # flex
-$ROOT_PATH/script/jflex/bin/jflex -d build/tmp/ "$SRC_DIR/where.flex"
-echo -e "package org.embulk.filter.row.where;\n" > "$SRC_DIR/Yylex.java"
-cat build/tmp/Yylex.java >> "$SRC_DIR/Yylex.java"
-echo "Move to $SRC_DIR/Yylex.java"
+$ROOT_PATH/script/jflex/bin/jflex -d $SRC_DIR "$SRC_DIR/where.flex"

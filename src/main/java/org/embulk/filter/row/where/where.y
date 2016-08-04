@@ -79,18 +79,17 @@ ParserVal root;
 private int yylex () {
     int token = -1;
     try {
-        yylval = new ParserVal();
-        token = lexer.yylex();
+        token = lexer.yylex(); // next token
     }
     catch (IOException e) {
-        System.err.println("yylex: " + e);
+        e.printStackTrace(); // should not happen
     }
     return token;
 }
 
 void yyerror(String s)
 {
-    System.err.println("yyerror: " + s);
+    throw new RuntimeException("yyerror: " + s);
 }
 
 public ParserExp parse(String str)

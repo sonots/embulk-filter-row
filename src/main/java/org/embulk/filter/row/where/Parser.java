@@ -359,18 +359,17 @@ ParserVal root;
 private int yylex () {
     int token = -1;
     try {
-        yylval = new ParserVal();
-        token = lexer.yylex();
+        token = lexer.yylex(); // next token
     }
     catch (IOException e) {
-        System.err.println("yylex: " + e);
+        e.printStackTrace(); // should not happen
     }
     return token;
 }
 
 void yyerror(String s)
 {
-    System.err.println("yyerror: " + s);
+    throw new RuntimeException("yyerror: " + s);
 }
 
 public ParserExp parse(String str)
@@ -388,7 +387,7 @@ public ParserExp parse(String str)
     variables.put("boolean", Boolean.TRUE);
     System.out.println("ans: " + exp.eval(variables));
 }*/
-//#line 319 "Parser.java"
+//#line 318 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -674,7 +673,7 @@ case 34:
 //#line 72 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = val_peek(1); }
 break;
-//#line 600 "Parser.java"
+//#line 599 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

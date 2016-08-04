@@ -33,9 +33,9 @@ abstract class ParserExp extends ParserNode
 
 abstract class BinaryOpExp extends ParserExp
 {
-    ParserLiteral left;
-    ParserLiteral right;
-    int operator;
+    protected ParserLiteral left;
+    protected ParserLiteral right;
+    protected int operator;
 
     public BinaryOpExp(ParserLiteral left, ParserLiteral right, int operator)
     {
@@ -160,8 +160,8 @@ class StringOpExp extends BinaryOpExp
 
 class NullOpExp extends ParserExp
 {
-    ParserLiteral val;
-    int operator;
+    protected ParserLiteral val;
+    protected int operator;
 
     public NullOpExp(ParserLiteral val, int operator)
     {
@@ -192,9 +192,9 @@ class NullOpExp extends ParserExp
 
 class LogicalOpExp extends ParserExp
 {
-    ParserExp left;
-    ParserExp right;
-    int operator;
+    protected ParserExp left;
+    protected ParserExp right;
+    protected int operator;
 
     public LogicalOpExp(ParserExp left, ParserExp right, int operator)
     {
@@ -227,7 +227,7 @@ class LogicalOpExp extends ParserExp
 
 class NegateOpExp extends ParserExp
 {
-    ParserExp exp;
+    protected ParserExp exp;
 
     public NegateOpExp(ParserExp exp)
     {
@@ -262,11 +262,16 @@ class BooleanLiteral extends ParserLiteral
 
 class NumberLiteral extends ParserLiteral
 {
-    public double val;
+    protected double val;
 
     public NumberLiteral(double val)
     {
         this.val = val;
+    }
+
+    public NumberLiteral(String str)
+    {
+        this.val = Double.parseDouble(str);
     }
 
     public double doubleValue(HashMap<String, Object> variables)
@@ -277,7 +282,7 @@ class NumberLiteral extends ParserLiteral
 
 class StringLiteral extends ParserLiteral
 {
-    public String val;
+    protected String val;
 
     public StringLiteral(String val)
     {
@@ -292,7 +297,7 @@ class StringLiteral extends ParserLiteral
 
 class IdentifierLiteral extends ParserLiteral
 {
-    public String name;
+    protected String name;
 
     public IdentifierLiteral(String name)
     {
