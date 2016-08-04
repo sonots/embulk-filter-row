@@ -77,115 +77,37 @@ exp: IDENTIFIER EQ BOOLEAN      { $$ = new ParserVal(new BooleanOpExp($1, $3, EQ
  ;
 %%
 
-StringTokenizer st;
+private Yylex lexer;
 ParserVal root;
 
-void yyerror(String s)
-{
-    System.out.println("par:"+s);
-}
-
-boolean newline;
-int yylex()
-{
-    String s;
-    int token;
-    if (!st.hasMoreTokens()) {
-        if (!newline) {
-            newline=true;
-            return '\n'; //So we look like classic YACC example
-        }
-        else {
-            return 0;
-        }
+private int yylex () {
+    int token = -1;
+    try {
+        token = lexer.yylex();
     }
-    s = st.nextToken();
-    if (s.equals("(")) {
-        token = '(';
+    catch (IOException e) {
+        System.err.println("yylex: " + e);
     }
-    else if (s.equals(")")) {
-        token = ')';
-    }
-    else if (s.equals("AND")) {
-        token = AND;
-    }
-    else if (s.equals("OR")) {
-        token = OR;
-    }
-    else if (s.equals("=")) {
-        token = EQ;
-    }
-    else if (s.equals("<>") || s.equals("!=")) {
-        token = NEQ;
-    }
-    else if (s.equals(">")) {
-        token = GT;
-    }
-    else if (s.equals(">=")) {
-        token = GE;
-    }
-    else if (s.equals("<")) {
-        token = LT;
-    }
-    else if (s.equals("<=")) {
-        token = LE;
-    }
-    else if (s.equals("START_WITH")) {
-        token = START_WITH;
-    }
-    else if (s.equals("END_WITH")) {
-        token = END_WITH;
-    }
-    else if (s.equals("INCLUDE")) {
-        token = INCLUDE;
-    }
-    else if (s.equals("IS")) {
-        token = IS;
-    }
-    else if (s.equals("NOT")) {
-        token = NOT;
-    }
-    else if (s.equals("NULL")) {
-        token = NULL;
-    }
-    else if (s.equals("true") || s.equals("TRUE")) {
-        token = BOOLEAN;
-        yylval = new ParserVal(new BooleanLiteral(true));
-    }
-    else if (s.equals("false") || s.equals("FALSE")) {
-        token = BOOLEAN;
-        yylval = new ParserVal(new BooleanLiteral(false));
-    }
-    else if (s.startsWith("'") && s.endsWith("'")) { // ' for quoting string values
-        token = STRING;
-        yylval = new ParserVal(new StringLiteral(s.substring(1, s.length() - 1)));
-    }
-    else {
-        try {
-            Double d = Double.valueOf(s); // this may fail
-            token = NUMBER;
-            yylval = new ParserVal(new NumberLiteral(d.doubleValue()));
-        } catch (Exception e) {
-            token = IDENTIFIER;
-            if (s.startsWith("\"") && s.endsWith("\"")) {
-                yylval = new ParserVal(new IdentifierLiteral(s.substring(1, s.length() - 1)));
-            }
-            else {
-                yylval = new ParserVal(new IdentifierLiteral(s));
-            }
-        }
-    }
-    //System.out.println(String.format("token: %s %d", s, token));
-    //if (yylval != null) {
-    //    System.out.println(String.format("yylval: %s", yylval.obj.toString()));
-    //}
     return token;
 }
 
-public ParserExp parse(String ins)
+void yyerror(String s)
 {
-    st = new StringTokenizer(ins);
-    newline = false;
+    System.err.println("yyerror: " + s);
+}
+
+public ParserExp parse(String str)
+{
+    lexer = new Yylex(str, this);
     yyparse();
     return ((ParserExp)(root.obj));
 }
+
+/*public static void main(String args[])
+{
+    Parser yyparser = new Parser();
+    ParserExp exp = yyparser.parse("boolean = true");
+    HashMap<String, Object> variables = new HashMap<>();
+    variables.put("boolean", Boolean.TRUE);
+    System.out.println("ans: " + exp.eval(variables));
+}*/

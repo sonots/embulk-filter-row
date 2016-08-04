@@ -14,6 +14,7 @@ if [ ! -f "$ROOT_PATH/script/yacc" ]; then
   chmod a+x $ROOT_PATH/script/yacc
 fi
 
-# ./yacc.macosx -J -Jclass=Parser -Jval=Foo -Jnoconstruct Parser.y
-$ROOT_PATH/script/yacc -J -Jclass=Parser "$SRC_DIR/Parser.y"
-javac Parser.java ParserVal.java ParserNode.java
+# ./yacc.macosx -J -Jclass=Parser -Jval=Foo -Jnoconstruct where.y
+$ROOT_PATH/script/yacc -J -Jclass=Parser "$SRC_DIR/where.y"
+java -jar ~/bin/jflex-1.6.1.jar where.flex
+javac Parser.java ParserVal.java ParserNode.java Yylex.java

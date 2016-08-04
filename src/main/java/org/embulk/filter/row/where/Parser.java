@@ -17,7 +17,7 @@ package org.embulk.filter.row.where;
 
 
 
-//#line 2 "src/main/java/org/embulk/filter/row/where/Parser.y"
+//#line 2 "src/main/java/org/embulk/filter/row/where/where.y"
 import java.lang.Math;
 import java.io.*;
 import java.util.StringTokenizer;
@@ -180,62 +180,62 @@ public final static short NUMBER=273;
 public final static short IDENTIFIER=274;
 public final static short YYERRCODE=256;
 final static short yylhs[] = {                           -1,
-    0,    0,    1,    1,    2,    2,    2,    2,    2,    2,
-    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
-    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
-    2,    2,    2,    2,    2,    2,
+    0,    0,    1,    1,    1,    1,    1,    1,    1,    1,
+    1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+    1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+    1,    1,    1,    1,
 };
 final static short yylen[] = {                            2,
-    0,    2,    1,    2,    3,    3,    3,    3,    3,    3,
+    0,    1,    3,    3,    3,    3,    3,    3,    3,    3,
     3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
-    3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
-    3,    4,    3,    3,    2,    3,
+    3,    3,    3,    3,    3,    3,    3,    3,    3,    4,
+    3,    3,    2,    3,
 };
-final static short yydefred[] = {                         1,
-    0,    0,    0,    0,    0,    0,    3,    0,    2,    0,
-   35,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+final static short yydefred[] = {                         0,
+    0,    0,    0,    0,    0,    0,    0,    0,   33,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    4,    7,    8,
-   26,   27,   28,   29,   30,   15,   16,   17,   18,   19,
-   20,    5,   21,    9,    6,   22,   10,   11,   12,   13,
-   14,   23,   24,   25,    0,   31,   36,   34,    0,   32,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    5,    6,   24,   25,   26,
+   27,   28,   13,   14,   15,   16,   17,   18,    3,   19,
+    7,    4,   20,    8,    9,   10,   11,   12,   21,   22,
+   23,    0,   29,   34,   32,    0,   30,
 };
-final static short yydgoto[] = {                          1,
-    9,   10,
+final static short yydgoto[] = {                          7,
+    8,
 };
-final static short yysindex[] = {                         0,
-  -10,  -38, -223, -232, -216, -245,    0,  -38,    0,   -9,
-    0, -271, -266, -265, -238, -236, -227, -226, -225, -224,
- -222, -221, -220, -219, -249, -244, -217, -215, -214, -213,
- -211, -210, -209, -260,  -37,  -38,  -38,    0,    0,    0,
+final static short yysindex[] = {                       -40,
+  -40, -252, -238, -229, -248,  -40,    0, -234,    0, -231,
+ -230, -228, -227, -226, -225, -224, -223, -222, -221, -220,
+ -219, -218, -250, -233, -249, -232, -216, -215, -213, -212,
+ -211, -263,  -39,  -40,  -40,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0, -206,    0,    0,    0, -203,    0,
+    0, -208,    0,    0,    0, -205,    0,
 };
-final static short yyrindex[] = {                         0,
+final static short yyrindex[] = {                        45,
+    0,    0,    0,    0,    0,    0,    0,   64,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,   -4,    0,
+    0,    0,    0,    0,    0,    1,    0,
 };
 final static short yygindex[] = {                         0,
-    0,    3,
+    2,
 };
-final static int YYTABLESIZE=265;
+final static int YYTABLESIZE=270;
 static short yytable[];
 static { yytable();}
 static void yytable(){
-yytable = new short[]{                          7,
-   38,    8,   39,   67,   11,   33,   65,   40,   41,   66,
-   35,   25,   26,   27,   28,   29,   30,   31,   32,   33,
-   34,   52,   53,   54,   14,   15,   55,   56,   57,    8,
-   16,   17,   18,   12,   13,   42,   33,   43,   68,   69,
-   19,   20,   21,   22,   23,   24,   44,   45,   46,   47,
-    0,   48,   49,   50,   51,   58,    0,   59,   60,   61,
-   62,   63,   64,   70,   36,    0,    0,    0,    0,    0,
+yytable = new short[]{                          6,
+   31,   64,    9,   62,   10,   11,   63,   33,   23,   24,
+   25,   26,   27,   28,   29,   30,   31,   32,   12,   13,
+   49,   50,   51,   55,   14,   15,   16,   17,   18,   19,
+   20,   21,   22,   34,   35,   65,   66,   52,   53,   54,
+   56,   31,   36,   37,    1,   38,   39,   40,   41,   42,
+   43,   44,   45,   46,   47,   48,   57,   58,   59,   60,
+   61,   67,   34,    2,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -251,24 +251,24 @@ yytable = new short[]{                          7,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    2,    0,
-   36,   37,    3,    4,    5,    6,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    1,    0,   34,   35,
+    2,    3,    4,    5,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    2,    0,   36,   37,
-    3,    4,    5,    6,   33,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,   31,
 };
 }
 static short yycheck[];
 static { yycheck(); }
 static void yycheck() {
-yycheck = new short[] {                         10,
-   10,   40,  274,   41,    2,   10,  267,  274,  274,  270,
-    8,  257,  258,  259,  260,  261,  262,  263,  264,  265,
-  266,  271,  272,  273,  257,  258,  271,  272,  273,   40,
-  263,  264,  265,  257,  258,  274,   41,  274,   36,   37,
-  257,  258,  259,  260,  261,  262,  274,  274,  274,  274,
-   -1,  274,  274,  274,  274,  273,   -1,  273,  273,  273,
-  272,  272,  272,  270,  268,   -1,   -1,   -1,   -1,   -1,
+yycheck = new short[] {                         40,
+    0,   41,    1,  267,  257,  258,  270,    6,  257,  258,
+  259,  260,  261,  262,  263,  264,  265,  266,  257,  258,
+  271,  272,  273,  273,  263,  264,  265,  257,  258,  259,
+  260,  261,  262,  268,  269,   34,   35,  271,  272,  273,
+  273,   41,  274,  274,    0,  274,  274,  274,  274,  274,
+  274,  274,  274,  274,  274,  274,  273,  273,  272,  272,
+  272,  270,  268,    0,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
@@ -283,22 +283,20 @@ yycheck = new short[] {                         10,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  267,   -1,
-  268,  269,  271,  272,  273,  274,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,  267,   -1,  268,  269,
-  271,  272,  273,  274,  269,
+  271,  272,  273,  274,   -1,   -1,   -1,   -1,   -1,   -1,
+   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
+   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
+   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  269,
 };
 }
-final static short YYFINAL=1;
+final static short YYFINAL=7;
 final static short YYMAXTOKEN=274;
 final static String yyname[] = {
-"end-of-file",null,null,null,null,null,null,null,null,null,"'\\n'",null,null,
+"end-of-file",null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
-null,null,null,null,null,null,null,null,null,null,null,"'('","')'",null,null,
-null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
-null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
+null,null,null,null,null,null,null,null,null,null,"'('","')'",null,null,null,
 null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
@@ -310,15 +308,15 @@ null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
-null,null,null,null,null,"EQ","NEQ","GT","GE","LT","LE","START_WITH","END_WITH",
+null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
+null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
+null,null,null,null,"EQ","NEQ","GT","GE","LT","LE","START_WITH","END_WITH",
 "INCLUDE","IS","NOT","AND","OR","NULL","BOOLEAN","STRING","NUMBER","IDENTIFIER",
 };
 final static String yyrule[] = {
 "$accept : input",
 "input :",
-"input : input line",
-"line : '\\n'",
-"line : exp '\\n'",
+"input : exp",
 "exp : IDENTIFIER EQ BOOLEAN",
 "exp : IDENTIFIER NEQ BOOLEAN",
 "exp : BOOLEAN EQ IDENTIFIER",
@@ -353,121 +351,44 @@ final static String yyrule[] = {
 "exp : '(' exp ')'",
 };
 
-//#line 79 "src/main/java/org/embulk/filter/row/where/Parser.y"
+//#line 75 "src/main/java/org/embulk/filter/row/where/where.y"
 
-StringTokenizer st;
+private Yylex lexer;
 ParserVal root;
 
-void yyerror(String s)
-{
-    System.out.println("par:"+s);
-}
-
-boolean newline;
-int yylex()
-{
-    String s;
-    int token;
-    if (!st.hasMoreTokens()) {
-        if (!newline) {
-            newline=true;
-            return '\n'; //So we look like classic YACC example
-        }
-        else {
-            return 0;
-        }
+private int yylex () {
+    int token = -1;
+    try {
+        yylval = new ParserVal();
+        token = lexer.yylex();
     }
-    s = st.nextToken();
-    if (s.equals("(")) {
-        token = '(';
+    catch (IOException e) {
+        System.err.println("yylex: " + e);
     }
-    else if (s.equals(")")) {
-        token = ')';
-    }
-    else if (s.equals("AND")) {
-        token = AND;
-    }
-    else if (s.equals("OR")) {
-        token = OR;
-    }
-    else if (s.equals("=")) {
-        token = EQ;
-    }
-    else if (s.equals("<>") || s.equals("!=")) {
-        token = NEQ;
-    }
-    else if (s.equals(">")) {
-        token = GT;
-    }
-    else if (s.equals(">=")) {
-        token = GE;
-    }
-    else if (s.equals("<")) {
-        token = LT;
-    }
-    else if (s.equals("<=")) {
-        token = LE;
-    }
-    else if (s.equals("START_WITH")) {
-        token = START_WITH;
-    }
-    else if (s.equals("END_WITH")) {
-        token = END_WITH;
-    }
-    else if (s.equals("INCLUDE")) {
-        token = INCLUDE;
-    }
-    else if (s.equals("IS")) {
-        token = IS;
-    }
-    else if (s.equals("NOT")) {
-        token = NOT;
-    }
-    else if (s.equals("NULL")) {
-        token = NULL;
-    }
-    else if (s.equals("true") || s.equals("TRUE")) {
-        token = BOOLEAN;
-        yylval = new ParserVal(new BooleanLiteral(true));
-    }
-    else if (s.equals("false") || s.equals("FALSE")) {
-        token = BOOLEAN;
-        yylval = new ParserVal(new BooleanLiteral(false));
-    }
-    else if (s.startsWith("'") && s.endsWith("'")) { // ' for quoting string values
-        token = STRING;
-        yylval = new ParserVal(new StringLiteral(s.substring(1, s.length() - 1)));
-    }
-    else {
-        try {
-            Double d = Double.valueOf(s); // this may fail
-            token = NUMBER;
-            yylval = new ParserVal(new NumberLiteral(d.doubleValue()));
-        } catch (Exception e) {
-            token = IDENTIFIER;
-            if (s.startsWith("\"") && s.endsWith("\"")) {
-                yylval = new ParserVal(new IdentifierLiteral(s.substring(1, s.length() - 1)));
-            }
-            else {
-                yylval = new ParserVal(new IdentifierLiteral(s));
-            }
-        }
-    }
-    //System.out.println(String.format("token: %s %d", s, token));
-    //if (yylval != null) {
-    //    System.out.println(String.format("yylval: %s", yylval.obj.toString()));
-    //}
     return token;
 }
 
-public ParserExp parse(String ins)
+void yyerror(String s)
 {
-    st = new StringTokenizer(ins);
-    newline = false;
+    System.err.println("yyerror: " + s);
+}
+
+public ParserExp parse(String str)
+{
+    lexer = new Yylex(str, this);
     yyparse();
     return ((ParserExp)(root.obj));
 }
-//#line 398 "Parser.java"
+
+/*public static void main(String args[])
+{
+    Parser yyparser = new Parser();
+    ParserExp exp = yyparser.parse("boolean = true");
+    HashMap<String, Object> variables = new HashMap<>();
+    variables.put("boolean", Boolean.TRUE);
+    System.out.println("ans: " + exp.eval(variables));
+}*/
+//#line 319 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -621,139 +542,139 @@ boolean doaction;
     switch(yyn)
       {
 //########## USER-SUPPLIED ACTIONS ##########
+case 2:
+//#line 38 "src/main/java/org/embulk/filter/row/where/where.y"
+{ root = val_peek(0); }
+break;
+case 3:
+//#line 41 "src/main/java/org/embulk/filter/row/where/where.y"
+{ yyval = new ParserVal(new BooleanOpExp(val_peek(2), val_peek(0), EQ)); }
+break;
 case 4:
-//#line 42 "src/main/java/org/embulk/filter/row/where/Parser.y"
-{ root = val_peek(1); }
+//#line 42 "src/main/java/org/embulk/filter/row/where/where.y"
+{ yyval = new ParserVal(new BooleanOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 5:
-//#line 45 "src/main/java/org/embulk/filter/row/where/Parser.y"
+//#line 43 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new BooleanOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 6:
-//#line 46 "src/main/java/org/embulk/filter/row/where/Parser.y"
+//#line 44 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new BooleanOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 7:
-//#line 47 "src/main/java/org/embulk/filter/row/where/Parser.y"
-{ yyval = new ParserVal(new BooleanOpExp(val_peek(2), val_peek(0), EQ)); }
+//#line 45 "src/main/java/org/embulk/filter/row/where/where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 8:
-//#line 48 "src/main/java/org/embulk/filter/row/where/Parser.y"
-{ yyval = new ParserVal(new BooleanOpExp(val_peek(2), val_peek(0), NEQ)); }
+//#line 46 "src/main/java/org/embulk/filter/row/where/where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 9:
-//#line 49 "src/main/java/org/embulk/filter/row/where/Parser.y"
-{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), EQ)); }
+//#line 47 "src/main/java/org/embulk/filter/row/where/where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), GT)); }
 break;
 case 10:
-//#line 50 "src/main/java/org/embulk/filter/row/where/Parser.y"
-{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), NEQ)); }
+//#line 48 "src/main/java/org/embulk/filter/row/where/where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), GE)); }
 break;
 case 11:
-//#line 51 "src/main/java/org/embulk/filter/row/where/Parser.y"
-{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), GT)); }
+//#line 49 "src/main/java/org/embulk/filter/row/where/where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), LT)); }
 break;
 case 12:
-//#line 52 "src/main/java/org/embulk/filter/row/where/Parser.y"
-{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), GE)); }
+//#line 50 "src/main/java/org/embulk/filter/row/where/where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), LE)); }
 break;
 case 13:
-//#line 53 "src/main/java/org/embulk/filter/row/where/Parser.y"
-{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), LT)); }
-break;
-case 14:
-//#line 54 "src/main/java/org/embulk/filter/row/where/Parser.y"
-{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), LE)); }
-break;
-case 15:
-//#line 55 "src/main/java/org/embulk/filter/row/where/Parser.y"
+//#line 51 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
-case 16:
-//#line 56 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 14:
+//#line 52 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
-case 17:
-//#line 57 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 15:
+//#line 53 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), GT)); }
 break;
-case 18:
-//#line 58 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 16:
+//#line 54 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), GE)); }
 break;
-case 19:
-//#line 59 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 17:
+//#line 55 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), LT)); }
 break;
-case 20:
-//#line 60 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 18:
+//#line 56 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), LE)); }
 break;
-case 21:
-//#line 61 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 19:
+//#line 57 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), EQ)); }
+break;
+case 20:
+//#line 58 "src/main/java/org/embulk/filter/row/where/where.y"
+{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), NEQ)); }
+break;
+case 21:
+//#line 59 "src/main/java/org/embulk/filter/row/where/where.y"
+{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), START_WITH)); }
 break;
 case 22:
-//#line 62 "src/main/java/org/embulk/filter/row/where/Parser.y"
-{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), NEQ)); }
+//#line 60 "src/main/java/org/embulk/filter/row/where/where.y"
+{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), END_WITH)); }
 break;
 case 23:
-//#line 63 "src/main/java/org/embulk/filter/row/where/Parser.y"
-{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), START_WITH)); }
+//#line 61 "src/main/java/org/embulk/filter/row/where/where.y"
+{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), INCLUDE)); }
 break;
 case 24:
-//#line 64 "src/main/java/org/embulk/filter/row/where/Parser.y"
-{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), END_WITH)); }
-break;
-case 25:
-//#line 65 "src/main/java/org/embulk/filter/row/where/Parser.y"
-{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), INCLUDE)); }
-break;
-case 26:
-//#line 66 "src/main/java/org/embulk/filter/row/where/Parser.y"
+//#line 62 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
-case 27:
-//#line 67 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 25:
+//#line 63 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
-case 28:
-//#line 68 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 26:
+//#line 64 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), START_WITH)); }
 break;
-case 29:
-//#line 69 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 27:
+//#line 65 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), END_WITH)); }
 break;
-case 30:
-//#line 70 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 28:
+//#line 66 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), INCLUDE)); }
 break;
-case 31:
-//#line 71 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 29:
+//#line 67 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new NullOpExp(val_peek(2), EQ)); }
 break;
-case 32:
-//#line 72 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 30:
+//#line 68 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new NullOpExp(val_peek(3), NEQ)); }
 break;
-case 33:
-//#line 73 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 31:
+//#line 69 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new LogicalOpExp(val_peek(2), val_peek(0), OR)); }
 break;
-case 34:
-//#line 74 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 32:
+//#line 70 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new LogicalOpExp(val_peek(2), val_peek(0), AND)); }
 break;
-case 35:
-//#line 75 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 33:
+//#line 71 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = new ParserVal(new NegateOpExp(val_peek(0))); }
 break;
-case 36:
-//#line 76 "src/main/java/org/embulk/filter/row/where/Parser.y"
+case 34:
+//#line 72 "src/main/java/org/embulk/filter/row/where/where.y"
 { yyval = val_peek(1); }
 break;
-//#line 679 "Parser.java"
+//#line 600 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

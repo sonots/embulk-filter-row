@@ -16,7 +16,7 @@
 
 
 
-//#line 2 "./Parser.y"
+//#line 2 "./where.y"
 import java.lang.Math;
 import java.io.*;
 import java.util.StringTokenizer;
@@ -182,34 +182,34 @@ final static short yylhs[] = {                           -1,
     0,    0,    1,    1,    2,    2,    2,    2,    2,    2,
     2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
     2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
-    2,    2,    2,    2,    2,
+    2,    2,    2,    2,    2,    2,
 };
 final static short yylen[] = {                            2,
     0,    2,    1,    2,    3,    3,    3,    3,    3,    3,
     3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
     3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
-    3,    4,    3,    3,    3,
+    3,    4,    3,    3,    2,    3,
 };
 final static short yydefred[] = {                         1,
-    0,    0,    0,    0,    0,    3,    0,    2,    0,    0,
+    0,    0,    0,    0,    0,    0,    3,    0,    2,    0,
+   35,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    4,    7,    8,   26,   27,
-   28,   29,   30,   15,   16,   17,   18,   19,   20,    5,
-   21,    9,    6,   22,   10,   11,   12,   13,   14,   23,
-   24,   25,    0,   31,   35,   34,    0,   32,
+    0,    0,    0,    0,    0,    0,    0,    4,    7,    8,
+   26,   27,   28,   29,   30,   15,   16,   17,   18,   19,
+   20,    5,   21,    9,    6,   22,   10,   11,   12,   13,
+   14,   23,   24,   25,    0,   31,   36,   34,    0,   32,
 };
 final static short yydgoto[] = {                          1,
-    8,    9,
+    9,   10,
 };
 final static short yysindex[] = {                         0,
-  -10, -213, -240, -219, -250,    0,  -38,    0,   -9, -271,
- -254, -253, -243, -228, -227, -226, -225, -224, -223, -222,
- -221, -220, -245, -237, -244, -218, -217, -216, -214, -212,
- -211, -248,  -37,  -38,  -38,    0,    0,    0,    0,    0,
+  -10,  -38, -223, -232, -216, -245,    0,  -38,    0,   -9,
+    0, -271, -266, -265, -238, -236, -227, -226, -225, -224,
+ -222, -221, -220, -219, -249, -244, -217, -215, -214, -213,
+ -211, -210, -209, -260,  -37,  -38,  -38,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0, -208,    0,    0,    0, -209,    0,
+    0,    0,    0,    0, -206,    0,    0,    0, -203,    0,
 };
 final static short yyrindex[] = {                         0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -218,23 +218,23 @@ final static short yyrindex[] = {                         0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,   -4,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,   -4,    0,
 };
 final static short yygindex[] = {                         0,
-    0,   -2,
+    0,    3,
 };
 final static int YYTABLESIZE=265;
 static short yytable[];
 static { yytable();}
 static void yytable(){
-yytable = new short[]{                          6,
-   36,    7,   37,   65,   33,   33,   23,   24,   25,   26,
-   27,   28,   29,   30,   31,   32,   12,   13,   63,   38,
-   39,   64,   14,   15,   16,   50,   51,   52,   56,    7,
-   40,   66,   67,   53,   54,   55,   33,   17,   18,   19,
-   20,   21,   22,   10,   11,   41,   42,   43,   44,   45,
-   46,   47,   48,   49,   57,   58,   59,   60,   34,   61,
-   62,   68,    0,    0,    0,    0,    0,    0,    0,    0,
+yytable = new short[]{                          7,
+   38,    8,   39,   67,   11,   33,   65,   40,   41,   66,
+   35,   25,   26,   27,   28,   29,   30,   31,   32,   33,
+   34,   52,   53,   54,   14,   15,   55,   56,   57,    8,
+   16,   17,   18,   12,   13,   42,   33,   43,   68,   69,
+   19,   20,   21,   22,   23,   24,   44,   45,   46,   47,
+    0,   48,   49,   50,   51,   58,    0,   59,   60,   61,
+   62,   63,   64,   70,   36,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -250,24 +250,24 @@ yytable = new short[]{                          6,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    2,    0,
+   36,   37,    3,    4,    5,    6,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-   34,   35,    2,    3,    4,    5,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,   34,   35,
-    2,    3,    4,    5,   33,
+    0,    0,    0,    0,    0,    0,    2,    0,   36,   37,
+    3,    4,    5,    6,   33,
 };
 }
 static short yycheck[];
 static { yycheck(); }
 static void yycheck() {
 yycheck = new short[] {                         10,
-   10,   40,  274,   41,    7,   10,  257,  258,  259,  260,
-  261,  262,  263,  264,  265,  266,  257,  258,  267,  274,
-  274,  270,  263,  264,  265,  271,  272,  273,  273,   40,
-  274,   34,   35,  271,  272,  273,   41,  257,  258,  259,
-  260,  261,  262,  257,  258,  274,  274,  274,  274,  274,
-  274,  274,  274,  274,  273,  273,  273,  272,  268,  272,
-  272,  270,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
+   10,   40,  274,   41,    2,   10,  267,  274,  274,  270,
+    8,  257,  258,  259,  260,  261,  262,  263,  264,  265,
+  266,  271,  272,  273,  257,  258,  271,  272,  273,   40,
+  263,  264,  265,  257,  258,  274,   41,  274,   36,   37,
+  257,  258,  259,  260,  261,  262,  274,  274,  274,  274,
+   -1,  274,  274,  274,  274,  273,   -1,  273,  273,  273,
+  272,  272,  272,  270,  268,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
@@ -283,10 +283,10 @@ yycheck = new short[] {                         10,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
+   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  267,   -1,
   268,  269,  271,  272,  273,  274,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  268,  269,
+   -1,   -1,   -1,   -1,   -1,   -1,  267,   -1,  268,  269,
   271,  272,  273,  274,  269,
 };
 }
@@ -348,139 +348,47 @@ final static String yyrule[] = {
 "exp : IDENTIFIER IS NOT NULL",
 "exp : exp OR exp",
 "exp : exp AND exp",
+"exp : NOT exp",
 "exp : '(' exp ')'",
 };
 
-//#line 77 "./Parser.y"
+//#line 79 "./where.y"
 
-String ins;
-StringTokenizer st;
+private Yylex lexer;
 ParserVal root;
 
-void yyerror(String s)
-{
-    System.out.println("par:"+s);
-}
-
-boolean newline;
-int yylex()
-{
-    String s;
-    int token;
-    if (!st.hasMoreTokens()) {
-        if (!newline) {
-            newline=true;
-            return '\n'; //So we look like classic YACC example
-        }
-        else {
-            return 0;
-        }
+private int yylex () {
+    int token = -1;
+    try {
+        token = lexer.yylex();
     }
-    s = st.nextToken();
-    System.out.println("token:"+s);
-    if (s.equals("(")) {
-        token = '(';
-    }
-    else if (s.equals(")")) {
-        token = ')';
-    }
-    else if (s.equals("AND")) {
-        token = AND;
-    }
-    else if (s.equals("OR")) {
-        token = OR;
-    }
-    else if (s.equals("=")) {
-        token = EQ;
-    }
-    else if (s.equals("<>")) {
-        token = NEQ;
-    }
-    else if (s.equals(">")) {
-        token = GT;
-    }
-    else if (s.equals(">=")) {
-        token = GE;
-    }
-    else if (s.equals("<")) {
-        token = LT;
-    }
-    else if (s.equals("<=")) {
-        token = LE;
-    }
-    else if (s.equals("START_WITH")) {
-        token = START_WITH;
-    }
-    else if (s.equals("END_WITH")) {
-        token = END_WITH;
-    }
-    else if (s.equals("INCLUDE")) {
-        token = INCLUDE;
-    }
-    else if (s.equals("IS")) {
-        token = IS;
-    }
-    else if (s.equals("NOT")) {
-        token = NOT;
-    }
-    else if (s.equals("NULL")) {
-        token = NULL;
-    }
-    else if (s.equals("true") || s.equals("TRUE")) {
-        token = BOOLEAN;
-        yylval.obj = new BooleanLiteral(true);
-    }
-    else if (s.equals("false") || s.equals("FALSE")) {
-        token = BOOLEAN;
-        yylval.obj = new BooleanLiteral(false);
-    }
-    else if (s.startsWith("'") && s.endsWith("'")) { // ' for quoting string values
-        token = STRING;
-        yylval.obj = new StringLiteral(s.substring(1, s.length() - 2));
-    }
-    else {
-        try {
-            Double d = Double.valueOf(s); // this may fail
-            token = NUMBER;
-            yylval.obj = new NumberLiteral(d.doubleValue());
-        } catch (Exception e) {
-            token = IDENTIFIER;
-            yylval.obj = new IdentifierLiteral(s);
-        }
+    catch (IOException e) {
+        System.err.println("Error yylex: " + e);
     }
     return token;
 }
 
-void dotest(HashMap<String, Object> variables)
+void yyerror(String s)
 {
-    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-    System.out.println("BYACC/J Calculator Demo");
-    while (true) {
-        System.out.print("expression:");
-        try {
-            ins = in.readLine();
-        }
-        catch (Exception e) {
-        }
-        st = new StringTokenizer(ins);
-        newline = false;
-        yyparse();
-        ParserExp exp = ((ParserExp)root.obj);
-        System.out.println("result: " + exp.eval(variables));
-    }
+    System.out.println("Error: " + s);
+}
+
+public ParserExp parse(String ins)
+{
+    lexer = new Yylex(ins, this);
+    yyparse();
+    return ((ParserExp)(root.obj));
 }
 
 public static void main(String args[])
 {
-    Parser par = new Parser(false);
-    HashMap<String, Object> variables = new HashMap<String, Object>();
+    Parser yyparser = new Parser();
+    ParserExp exp = yyparser.parse("boolean = true");
+    HashMap<String, Object> variables = new HashMap<>();
     variables.put("boolean", Boolean.TRUE);
-    variables.put("integer", new Long(1));
-    variables.put("float", new Double(1.5));
-    variables.put("string", "string");
-    par.dotest(variables);
+    System.out.println("ans: " + exp.eval(variables));
 }
-//#line 412 "Parser.java"
+//#line 320 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -635,134 +543,138 @@ boolean doaction;
       {
 //########## USER-SUPPLIED ACTIONS ##########
 case 4:
-//#line 41 "./Parser.y"
+//#line 42 "./where.y"
 { root = val_peek(1); }
 break;
 case 5:
-//#line 44 "./Parser.y"
-{ yyval.obj = new BooleanOpExp(val_peek(2), val_peek(0), EQ); }
+//#line 45 "./where.y"
+{ yyval = new ParserVal(new BooleanOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 6:
-//#line 45 "./Parser.y"
-{ yyval.obj = new BooleanOpExp(val_peek(2), val_peek(0), NEQ); }
+//#line 46 "./where.y"
+{ yyval = new ParserVal(new BooleanOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 7:
-//#line 46 "./Parser.y"
-{ yyval.obj = new BooleanOpExp(val_peek(2), val_peek(0), EQ); }
+//#line 47 "./where.y"
+{ yyval = new ParserVal(new BooleanOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 8:
-//#line 47 "./Parser.y"
-{ yyval.obj = new BooleanOpExp(val_peek(2), val_peek(0), NEQ); }
+//#line 48 "./where.y"
+{ yyval = new ParserVal(new BooleanOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 9:
-//#line 48 "./Parser.y"
-{ yyval.obj = new NumberOpExp(val_peek(2), val_peek(0), EQ); }
+//#line 49 "./where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 10:
-//#line 49 "./Parser.y"
-{ yyval.obj = new NumberOpExp(val_peek(2), val_peek(0), NEQ); }
+//#line 50 "./where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 11:
-//#line 50 "./Parser.y"
-{ yyval.obj = new NumberOpExp(val_peek(2), val_peek(0), GT); }
+//#line 51 "./where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), GT)); }
 break;
 case 12:
-//#line 51 "./Parser.y"
-{ yyval.obj = new NumberOpExp(val_peek(2), val_peek(0), GE); }
+//#line 52 "./where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), GE)); }
 break;
 case 13:
-//#line 52 "./Parser.y"
-{ yyval.obj = new NumberOpExp(val_peek(2), val_peek(0), LT); }
+//#line 53 "./where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), LT)); }
 break;
 case 14:
-//#line 53 "./Parser.y"
-{ yyval.obj = new NumberOpExp(val_peek(2), val_peek(0), LE); }
+//#line 54 "./where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), LE)); }
 break;
 case 15:
-//#line 54 "./Parser.y"
-{ yyval.obj = new NumberOpExp(val_peek(2), val_peek(0), EQ); }
+//#line 55 "./where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 16:
-//#line 55 "./Parser.y"
-{ yyval.obj = new NumberOpExp(val_peek(2), val_peek(0), NEQ); }
+//#line 56 "./where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 17:
-//#line 56 "./Parser.y"
-{ yyval.obj = new NumberOpExp(val_peek(2), val_peek(0), GT); }
+//#line 57 "./where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), GT)); }
 break;
 case 18:
-//#line 57 "./Parser.y"
-{ yyval.obj = new NumberOpExp(val_peek(2), val_peek(0), GE); }
+//#line 58 "./where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), GE)); }
 break;
 case 19:
-//#line 58 "./Parser.y"
-{ yyval.obj = new NumberOpExp(val_peek(2), val_peek(0), LT); }
+//#line 59 "./where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), LT)); }
 break;
 case 20:
-//#line 59 "./Parser.y"
-{ yyval.obj = new NumberOpExp(val_peek(2), val_peek(0), LE); }
+//#line 60 "./where.y"
+{ yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), LE)); }
 break;
 case 21:
-//#line 60 "./Parser.y"
-{ yyval.obj = new StringOpExp(val_peek(2), val_peek(0), EQ); }
+//#line 61 "./where.y"
+{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 22:
-//#line 61 "./Parser.y"
-{ yyval.obj = new StringOpExp(val_peek(2), val_peek(0), NEQ); }
+//#line 62 "./where.y"
+{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 23:
-//#line 62 "./Parser.y"
-{ yyval.obj = new StringOpExp(val_peek(2), val_peek(0), START_WITH); }
+//#line 63 "./where.y"
+{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), START_WITH)); }
 break;
 case 24:
-//#line 63 "./Parser.y"
-{ yyval.obj = new StringOpExp(val_peek(2), val_peek(0), END_WITH); }
+//#line 64 "./where.y"
+{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), END_WITH)); }
 break;
 case 25:
-//#line 64 "./Parser.y"
-{ yyval.obj = new StringOpExp(val_peek(2), val_peek(0), INCLUDE); }
+//#line 65 "./where.y"
+{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), INCLUDE)); }
 break;
 case 26:
-//#line 65 "./Parser.y"
-{ yyval.obj = new StringOpExp(val_peek(2), val_peek(0), EQ); }
+//#line 66 "./where.y"
+{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 27:
-//#line 66 "./Parser.y"
-{ yyval.obj = new StringOpExp(val_peek(2), val_peek(0), NEQ); }
+//#line 67 "./where.y"
+{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 28:
-//#line 67 "./Parser.y"
-{ yyval.obj = new StringOpExp(val_peek(2), val_peek(0), START_WITH); }
+//#line 68 "./where.y"
+{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), START_WITH)); }
 break;
 case 29:
-//#line 68 "./Parser.y"
-{ yyval.obj = new StringOpExp(val_peek(2), val_peek(0), END_WITH); }
+//#line 69 "./where.y"
+{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), END_WITH)); }
 break;
 case 30:
-//#line 69 "./Parser.y"
-{ yyval.obj = new StringOpExp(val_peek(2), val_peek(0), INCLUDE); }
+//#line 70 "./where.y"
+{ yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), INCLUDE)); }
 break;
 case 31:
-//#line 70 "./Parser.y"
-{ yyval.obj = new NullOpExp(val_peek(2), EQ); }
+//#line 71 "./where.y"
+{ yyval = new ParserVal(new NullOpExp(val_peek(2), EQ)); }
 break;
 case 32:
-//#line 71 "./Parser.y"
-{ yyval.obj = new NullOpExp(val_peek(3), NEQ); }
+//#line 72 "./where.y"
+{ yyval = new ParserVal(new NullOpExp(val_peek(3), NEQ)); }
 break;
 case 33:
-//#line 72 "./Parser.y"
-{ yyval.obj = new LogicalOpExp(val_peek(2), val_peek(0), OR); }
+//#line 73 "./where.y"
+{ yyval = new ParserVal(new LogicalOpExp(val_peek(2), val_peek(0), OR)); }
 break;
 case 34:
-//#line 73 "./Parser.y"
-{ yyval.obj = new LogicalOpExp(val_peek(2), val_peek(0), AND); }
+//#line 74 "./where.y"
+{ yyval = new ParserVal(new LogicalOpExp(val_peek(2), val_peek(0), AND)); }
 break;
 case 35:
-//#line 74 "./Parser.y"
+//#line 75 "./where.y"
+{ yyval = new ParserVal(new NegateOpExp(val_peek(0))); }
+break;
+case 36:
+//#line 76 "./where.y"
 { yyval = val_peek(1); }
 break;
-//#line 689 "Parser.java"
+//#line 601 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
