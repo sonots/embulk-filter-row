@@ -22,8 +22,8 @@ if [ ! -L "$ROOT_PATH/script/jflex" ]; then
 fi
 
 # yacc
-$ROOT_PATH/script/yacc -J -Jclass=Parser -Jpackage=org.embulk.filter.row.where "$SRC_DIR/where.y"
+$ROOT_PATH/script/yacc -J -Jclass=Parser -Jpackage=org.embulk.filter.row.where "$SRC_DIR/Parser.y"
 mv Parser.java ParserVal.java $SRC_DIR/
 
 # flex
-$ROOT_PATH/script/jflex/bin/jflex -d $SRC_DIR "$SRC_DIR/where.flex"
+$ROOT_PATH/script/jflex/bin/jflex -d $SRC_DIR "$SRC_DIR/Yylex.flex"
