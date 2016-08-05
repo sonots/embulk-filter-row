@@ -15,6 +15,7 @@ in:
       - {name: flag,  type: boolean}
       - {name: id,    type: long}
       - {name: name,  type: string}
+      - {name: json,  type: json}
       - {name: score, type: double}
 filters:
   - type: row
@@ -22,7 +23,7 @@ filters:
     conditions:
       - {column: name,  operator: ==, argument: "Vqjht6YEUBsMPXmoW1iOGFROZF27pBzz0TUkOKeDXEY"}
       - {column: score, operator: ==, argument: 43}
-      - {column: id,    operator: ==, argument: 97}
+      - {column: id,    operator: ==, argument: 9}
       - {column: flag,  operator: ==, argument: false}
 out:
   type: stdout

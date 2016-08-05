@@ -194,4 +194,18 @@ class ColumnVisitorOrImpl extends AbstractColumnVisitor
             }
         }
     }
+
+    @Override
+    public void jsonColumn(Column column)
+    {
+        if (!shouldAddRecord) {
+            return;
+        }
+        if (pageReader.isNull(column)) {
+            pageBuilder.setNull(column);
+        }
+        else {
+            pageBuilder.setJson(column, pageReader.getJson(column));
+        }
+    }
 }

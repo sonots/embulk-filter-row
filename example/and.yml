@@ -12,7 +12,7 @@ in:
     type: csv
     charset: UTF-8
     newline: CRLF
-    null_string: 'NULL'
+    null_string: "NULL"
     skip_header_lines: 1
     comment_line_marker: '#'
     columns:
@@ -22,17 +22,16 @@ in:
       - {name: flag,  type: boolean}
       - {name: id,    type: long}
       - {name: name,  type: string}
+      - {name: json,  type: json}
       - {name: score, type: double}
 filters:
   - type: row
     conditions:
-      - {column: flag,  operator: ==,  argument: true}
-      - {column: foo,   operator: "IS NULL"}
-      - {column: id,    operator: ==,  argument: 97}
-      - {column: name,  operator: ==,  argument: "xxxx", not: true}
+      - {column: time,  operator: ==,  argument: "2015-07-13", format: "%Y-%m-%d"}
+      - {column: foo,   operator: "IS NULL" }
+      - {column: bar,   operator: ==,  argument: "bar"}
       - {column: score, operator: ">", argument: 2000}
       - {column: score, operator: "<", argument: 6000}
-      - {column: time,  operator: ==,  argument: "2015-07-13", format: "%Y-%m-%d"}
       # - {column: missing, operator: "==", argument: 6000}
 out:
   type: stdout
