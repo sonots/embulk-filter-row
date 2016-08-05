@@ -9,32 +9,37 @@ import org.embulk.filter.row.condition.StringCondition;
 import org.embulk.filter.row.condition.TimestampCondition;
 
 import org.embulk.spi.Column;
+import org.embulk.spi.ColumnVisitor;
 import org.embulk.spi.Exec;
-import org.embulk.spi.PageBuilder;
 import org.embulk.spi.PageReader;
 import org.embulk.spi.Schema;
 import org.embulk.spi.time.Timestamp;
 
 import org.slf4j.Logger;
 
+import java.util.HashMap;
 import java.util.List;
 
-class ColumnVisitorAndImpl extends AbstractColumnVisitor
+class GuardColumnVisitorAndImpl
+        extends AbstractGuardColumnVisitor
+        implements ColumnVisitor
 {
     private static final Logger logger = Exec.getLogger(RowFilterPlugin.class);
     private boolean shouldAddRecord;
+    private HashMap<String, List<Condition>> conditionMap;
 
-    ColumnVisitorAndImpl(PluginTask task, Schema inputSchema, Schema outputSchema, PageReader pageReader, PageBuilder pageBuilder)
+    GuardColumnVisitorAndImpl(PluginTask task, Schema inputSchema, Schema outputSchema, PageReader pageReader)
     {
-        super(task, inputSchema, outputSchema, pageReader, pageBuilder);
+        super(task, inputSchema, outputSchema, pageReader);
+        this.conditionMap = buildConditionMap(task, outputSchema);
     }
 
-    public boolean visitColumns(Schema schema)
+    public boolean visitColumns(Schema inputSchema)
     {
         //Visitor objects are created for each thread :)
         //System.out.println(String.format("thread_id:%d object_id:%d", Thread.currentThread().getId(), this.hashCode()));
         shouldAddRecord = true;
-        for (Column column : schema.getColumns()) {
+        for (Column column : inputSchema.getColumns()) {
             column.visit(this);
         }
         return shouldAddRecord;
@@ -63,12 +68,6 @@ class ColumnVisitorAndImpl extends AbstractColumnVisitor
                 }
             }
         }
-        if (pageReader.isNull(column)) {
-            pageBuilder.setNull(column);
-        }
-        else {
-            pageBuilder.setBoolean(column, pageReader.getBoolean(column));
-        }
     }
 
     @Override
@@ -93,12 +92,6 @@ class ColumnVisitorAndImpl extends AbstractColumnVisitor
                     break;
                 }
             }
-        }
-        if (pageReader.isNull(column)) {
-            pageBuilder.setNull(column);
-        }
-        else {
-            pageBuilder.setLong(column, pageReader.getLong(column));
         }
     }
 
@@ -125,12 +118,6 @@ class ColumnVisitorAndImpl extends AbstractColumnVisitor
                 }
             }
         }
-        if (pageReader.isNull(column)) {
-            pageBuilder.setNull(column);
-        }
-        else {
-            pageBuilder.setDouble(column, pageReader.getDouble(column));
-        }
     }
 
     @Override
@@ -155,12 +142,6 @@ class ColumnVisitorAndImpl extends AbstractColumnVisitor
                     break;
                 }
             }
-        }
-        if (pageReader.isNull(column)) {
-            pageBuilder.setNull(column);
-        }
-        else {
-            pageBuilder.setString(column, pageReader.getString(column));
         }
     }
 
@@ -187,25 +168,10 @@ class ColumnVisitorAndImpl extends AbstractColumnVisitor
                 }
             }
         }
-        if (pageReader.isNull(column)) {
-            pageBuilder.setNull(column);
-        }
-        else {
-            pageBuilder.setTimestamp(column, pageReader.getTimestamp(column));
-        }
     }
 
     @Override
     public void jsonColumn(Column column)
     {
-        if (!shouldAddRecord) {
-            return;
-        }
-        if (pageReader.isNull(column)) {
-            pageBuilder.setNull(column);
-        }
-        else {
-            pageBuilder.setJson(column, pageReader.getJson(column));
-        }
     }
 }

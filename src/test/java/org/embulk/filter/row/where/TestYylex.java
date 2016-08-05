@@ -1,19 +1,25 @@
 package org.embulk.filter.row.where;
 
+import org.embulk.spi.Schema;
+import org.embulk.spi.SchemaConfigException;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static org.embulk.spi.type.Types.BOOLEAN;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestYylex
 {
     Parser yyparser;
     Yylex lexer;
 
-    public TestYylex()
+    @Before
+    public void setUp()
     {
-        yyparser = new Parser(false);
+        yyparser = new Parser(Schema.builder().build());
     }
 
     void assertNextToken(int token)
@@ -53,6 +59,15 @@ public class TestYylex
     @Test
     public void testIdentifier()
     {
+        Schema schema = Schema.builder()
+                .add("foobar", BOOLEAN)
+                .add("foo bar", BOOLEAN)
+                .add("foo\"bar", BOOLEAN)
+                .add("$.foo.bar", BOOLEAN) // Support JSONPath someday
+                .add("$['foo'][0:4][*]", BOOLEAN) // Support JSONPath someday
+                .build();
+        yyparser = new Parser(schema);
+
         lexer = new Yylex("foobar", yyparser);
         assertNextToken(Parser.IDENTIFIER);
         assertIdentifier("foobar");
@@ -77,9 +92,27 @@ public class TestYylex
         assertNextToken(Parser.IDENTIFIER);
         assertIdentifier("$.foo.bar");
 
-        lexer = new Yylex("$['foo'][0:4][*]", yyparser);
+        lexer = new Yylex("\"$['foo'][0:4][*]\"", yyparser);
         assertNextToken(Parser.IDENTIFIER);
         assertIdentifier("$['foo'][0:4][*]");
+
+        try {
+            lexer = new Yylex("$['foo'][0:4][*]", yyparser);
+            assertNextToken(Parser.IDENTIFIER);
+            assertTrue(false);
+        }
+        catch (SchemaConfigException e) {
+            assertTrue(true);
+        }
+
+        try {
+            lexer = new Yylex("unknown", yyparser);
+            assertNextToken(Parser.IDENTIFIER);
+            assertTrue(false);
+        }
+        catch (SchemaConfigException e) {
+            assertTrue(true);
+        }
     }
 
     void assertBoolean(boolean val)
@@ -157,12 +190,18 @@ public class TestYylex
 
         lexer = new Yylex("'foo\\'bar'", yyparser);
         assertNextToken(Parser.STRING);
-        assertString("foo\"bar");
+        assertString("foo\'bar");
     }
 
     @Test
     public void testComplex()
     {
+        Schema schema = Schema.builder()
+                .add("true", BOOLEAN)
+                .add("foobar", BOOLEAN)
+                .build();
+        yyparser = new Parser(schema);
+
         lexer = new Yylex("( \"true\" = true OR \"true\" = false ) AND foobar = false", yyparser);
         assertNextToken('(');
         assertNextToken(Parser.IDENTIFIER);

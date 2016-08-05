@@ -1,16 +1,20 @@
 package org.embulk.filter.row.where;
+
+import org.embulk.spi.Schema;
 %%
 
 %byaccj
 
 %{
-  StringBuffer string = new StringBuffer();
+  private StringBuffer string = new StringBuffer();
 
-  private Parser yyparser;
+  protected Parser yyparser;
+  protected Schema schema;
 
   public Yylex(String str, Parser yyparser) {
     this(new java.io.StringReader(str));
     this.yyparser = yyparser;
+    this.schema = yyparser.schema;
   }
 %}
 
@@ -19,7 +23,7 @@ package org.embulk.filter.row.where;
 
 Number = -?[0-9]+(\.[0-9]+)?
 QuotedIdentifierChar = [^\r\n\"\\]
-NonQuotedIdentifier = [a-zA-Z$][^\r\n \t]*
+NonQuotedIdentifier = [a-zA-Z$][a-zA-z0-9\.\-_]*
 StringChar = [^\r\n\'\\]+
 
 %%
@@ -52,7 +56,7 @@ StringChar = [^\r\n\'\\]+
   {Number}                   { yyparser.yylval = new ParserVal(new NumberLiteral(yytext())); return Parser.NUMBER; }
   
   /* identifier literal */
-  {NonQuotedIdentifier}      { yyparser.yylval = new ParserVal(new IdentifierLiteral(yytext())); return Parser.IDENTIFIER; }
+  {NonQuotedIdentifier}      { yyparser.yylval = new ParserVal(new IdentifierLiteral(yytext(), schema)); return Parser.IDENTIFIER; }
   \"                         { yybegin(IDENTIFIER); string.setLength(0); }
 
   /* string literal */
@@ -63,7 +67,7 @@ StringChar = [^\r\n\'\\]+
 }
 
 <IDENTIFIER> {
-  \"                         { yybegin(YYINITIAL); yyparser.yylval = new ParserVal(new IdentifierLiteral(string.toString())); return Parser.IDENTIFIER; }
+  \"                         { yybegin(YYINITIAL); yyparser.yylval = new ParserVal(new IdentifierLiteral(string.toString(), schema)); return Parser.IDENTIFIER; }
 
   {QuotedIdentifierChar}+    { string.append( yytext() ); }
 

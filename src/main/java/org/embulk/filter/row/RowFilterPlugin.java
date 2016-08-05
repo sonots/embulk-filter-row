@@ -11,6 +11,7 @@ import org.embulk.config.TaskSource;
 
 import org.embulk.filter.row.condition.ConditionConfig;
 import org.embulk.filter.row.where.Parser;
+import org.embulk.filter.row.where.ParserExp;
 
 import org.embulk.spi.Exec;
 import org.embulk.spi.FilterPlugin;
@@ -28,7 +29,7 @@ import java.util.List;
 public class RowFilterPlugin implements FilterPlugin
 {
     private static final Logger logger = Exec.getLogger(RowFilterPlugin.class);
-    private Parser parser = null;
+    private ParserExp parserExp = null;
 
     public RowFilterPlugin() {}
 
@@ -39,9 +40,11 @@ public class RowFilterPlugin implements FilterPlugin
         public String getCondition();
 
         @Config("conditions")
-        public List<ConditionConfig> getConditions();
+        @ConfigDefault("null")
+        public Optional<List<ConditionConfig>> getConditions();
 
         @Config("where")
+        @ConfigDefault("null")
         public Optional<String> getWhere();
     }
 
@@ -59,18 +62,24 @@ public class RowFilterPlugin implements FilterPlugin
 
     void configure(PluginTask task, Schema inputSchema) throws ConfigException
     {
-        for (ConditionConfig conditionConfig : task.getConditions()) {
-            String columnName = conditionConfig.getColumn();
-            inputSchema.lookupColumn(columnName); // throw SchemaConfigException if not found
-        }
+        if (task.getConditions().isPresent()) {
+            for (ConditionConfig conditionConfig : task.getConditions().get()) {
+                String columnName = conditionConfig.getColumn();
+                inputSchema.lookupColumn(columnName); // throw SchemaConfigException if not found
+            }
 
-        String condition = task.getCondition().toLowerCase();
-        if (!condition.equals("or") && !condition.equals("and")) {
-            throw new ConfigException("condition must be either of \"or\" or \"and\".");
+            String condition = task.getCondition().toLowerCase();
+            if (!condition.equals("or") && !condition.equals("and")) {
+                throw new ConfigException("condition must be either of \"or\" or \"and\".");
+            }
         }
-
-        if (task.getWhere().isPresent()) {
+        else if (task.getWhere().isPresent()) {
             String where = task.getWhere().get();
+            Parser parser = new Parser(inputSchema);
+            parserExp = parser.parse(where); // throw ConfigException if something wrong
+        }
+        else {
+            throw new ConfigException("Either of `conditions` or `where` must be set.");
         }
     }
 
@@ -80,14 +89,24 @@ public class RowFilterPlugin implements FilterPlugin
     {
         final PluginTask task = taskSource.loadTask(PluginTask.class);
         final boolean orCondition = task.getCondition().toLowerCase().equals("or");
+        final PageReader pageReader = new PageReader(inputSchema);
+        final PageBuilder pageBuilder = new PageBuilder(Exec.getBufferAllocator(), outputSchema, output);
+
+        final AbstractGuardColumnVisitor guradVisitor;
+        if (task.getWhere().isPresent()) {
+            guradVisitor = new GuardColumnVisitorWhereImpl(task, inputSchema, outputSchema, pageReader, parserExp);
+        }
+        else if (orCondition) {
+            guradVisitor = new GuardColumnVisitorOrImpl(task, inputSchema, outputSchema, pageReader);
+        }
+        else {
+            guradVisitor = new GuardColumnVisitorAndImpl(task, inputSchema, outputSchema, pageReader);
+        }
+
+        final BuildColumnVisitorImpl buildVisitor;
+        buildVisitor = new BuildColumnVisitorImpl(task, inputSchema, outputSchema, pageReader, pageBuilder);
 
         return new PageOutput() {
-            private PageReader pageReader = new PageReader(inputSchema);
-            private PageBuilder pageBuilder = new PageBuilder(Exec.getBufferAllocator(), outputSchema, output);
-            private AbstractColumnVisitor visitor = orCondition ?
-                    new ColumnVisitorOrImpl(task, inputSchema, outputSchema, pageReader, pageBuilder) :
-                    new ColumnVisitorAndImpl(task, inputSchema, outputSchema, pageReader, pageBuilder);
-
             @Override
             public void finish()
             {
@@ -106,7 +125,9 @@ public class RowFilterPlugin implements FilterPlugin
                 pageReader.setPage(page);
 
                 while (pageReader.nextRecord()) {
-                    if (visitor.visitColumns(inputSchema)) {
+                    if (guradVisitor.visitColumns(inputSchema)) {
+                        // output.add(page); did not work, double release() error occurred. We need to copy from reader to builder...
+                        outputSchema.visitColumns(buildVisitor);
                         pageBuilder.addRecord();
                     }
                 }

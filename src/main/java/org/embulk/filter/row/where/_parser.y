@@ -1,8 +1,6 @@
 %{
-import java.lang.Math;
-import java.io.*;
-import java.util.StringTokenizer;
-import java.util.HashMap;
+import org.embulk.spi.Column;
+import org.embulk.spi.Schema;
 %}
 
 /* YACC Declarations */
@@ -73,15 +71,34 @@ exp: IDENTIFIER EQ BOOLEAN      { $$ = new ParserVal(new BooleanOpExp($1, $3, EQ
  ;
 %%
 
-private Yylex lexer;
-ParserVal root;
+protected Schema schema;
+protected Yylex lexer;
+protected ParserVal root;
+
+public Parser(final Schema schema)
+{
+    this.schema = schema;
+}
+
+public Parser(final Schema schema, boolean yydebug)
+{
+    this.schema = schema;
+    this.yydebug = yydebug;
+}
+
+public ParserExp parse(String str)
+{
+    lexer = new Yylex(str, this);
+    yyparse();
+    return ((ParserExp)(root.obj));
+}
 
 private int yylex () {
     int token = -1;
     try {
         token = lexer.yylex(); // next token
     }
-    catch (IOException e) {
+    catch (java.io.IOException e) {
         e.printStackTrace(); // should not happen
     }
     return token;
@@ -90,13 +107,6 @@ private int yylex () {
 void yyerror(String s)
 {
     throw new RuntimeException("yyerror: " + s);
-}
-
-public ParserExp parse(String str)
-{
-    lexer = new Yylex(str, this);
-    yyparse();
-    return ((ParserExp)(root.obj));
 }
 
 /*public static void main(String args[])
