@@ -1,6 +1,7 @@
 package org.embulk.filter.row.where;
 
 import org.embulk.EmbulkTestRuntime;
+import org.embulk.config.ConfigException;
 import org.embulk.spi.Page;
 import org.embulk.spi.PageReader;
 import org.embulk.spi.PageTestUtils;
@@ -8,6 +9,8 @@ import org.embulk.spi.Schema;
 import org.embulk.spi.SchemaConfigException;
 import org.embulk.spi.time.Timestamp;
 
+import org.embulk.spi.time.TimestampParseException;
+import org.jruby.embed.ScriptingContainer;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,6 +31,7 @@ import static org.junit.Assert.assertTrue;
 public class TestParser
 {
     private static EmbulkTestRuntime runtime = new EmbulkTestRuntime(); // very slow
+    private static ScriptingContainer jruby = new ScriptingContainer();
 
     private static PageReader buildPageReader(Schema schema, final Object... objects)
     {
@@ -46,6 +50,8 @@ public class TestParser
     @BeforeClass
     public static void setupBeforeClass()
     {
+        ParserLiteral.setJRuby(jruby);
+
         // {"k1":{"k1":"v"},"k2":{"k2":"v"}}
         Value k1 = ValueFactory.newString("k1");
         Value k2 = ValueFactory.newString("k2");
@@ -66,7 +72,7 @@ public class TestParser
                 .build();
 
         reader = buildPageReader(schema,
-                Timestamp.ofEpochSecond(0),
+                Timestamp.ofEpochSecond(1, 500000000),
                 "string",
                 true,
                 1L,
@@ -94,7 +100,6 @@ public class TestParser
             assertTrue(false);
         }
         catch (SchemaConfigException e) {
-            assertTrue(true);
         }
     }
 
@@ -116,6 +121,13 @@ public class TestParser
 
         exp = parser.parse("true = boolean");
         assertTrue(exp.eval(reader));
+
+        try {
+            exp = parser.parse("timestamp = true");
+            assertTrue(false);
+        }
+        catch (ConfigException e) {
+        }
     }
 
     @Test
@@ -156,6 +168,13 @@ public class TestParser
 
         exp = parser.parse("1.5 = double");
         assertTrue(exp.eval(reader));
+
+        try {
+            exp = parser.parse("timestamp = 1.5");
+            assertTrue(false);
+        }
+        catch (ConfigException e) {
+        }
     }
 
     @Test
@@ -196,6 +215,113 @@ public class TestParser
 
         exp = parser.parse("'string' = string");
         assertTrue(exp.eval(reader));
+
+        try {
+            exp = parser.parse("timestamp = 'string'");
+            assertTrue(false);
+        }
+        catch (ConfigException e) {
+        }
+    }
+
+    @Test
+    public void testTimestampOpExpWithNumber()
+    {
+        Parser parser = new Parser(schema);
+        ParserExp exp;
+
+        exp = parser.parse("timestamp = TIMESTAMP 1.5");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("timestamp = TIMESTAMP 1.0");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("timestamp != TIMESTAMP 1.0");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("timestamp != TIMESTAMP 1.5");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("timestamp > TIMESTAMP 1.0");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("timestamp > TIMESTAMP 1.5");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("timestamp >= TIMESTAMP 1.5");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("timestamp >= TIMESTAMP 2.0");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("timestamp < TIMESTAMP 2.0");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("timestamp < TIMESTAMP 1.5");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("timestamp <= TIMESTAMP 1.5");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("timestamp <= TIMESTAMP 1.0");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("TIMESTAMP 1.5 = timestamp");
+        assertTrue(exp.eval(reader));
+    }
+
+    @Test
+    public void testTimestampOpExpWithString()
+    {
+        Parser parser = new Parser(schema);
+        ParserExp exp;
+
+        exp = parser.parse("timestamp = TIMESTAMP '1970-01-01 09:00:01.5 +0900'");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("timestamp = TIMESTAMP '1970-01-01 09:00:01.0 +09:00'");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("timestamp != TIMESTAMP '1970-01-01 09:00:01.0 +0900'");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("timestamp != TIMESTAMP '1970-01-01 09:00:01.5 +0900'");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("timestamp >  TIMESTAMP '1970-01-01 09:00:01.0 +0900'");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("timestamp >  TIMESTAMP '1970-01-01 09:00:01.5 +0900'");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("timestamp >= TIMESTAMP '1970-01-01 09:00:01.5 +09:00'");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("timestamp >= TIMESTAMP '1970-01-01 09:00:02.0 +09:00'");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("timestamp <  TIMESTAMP '1970-01-01 09:00:02.0 +09:00'");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("timestamp <  TIMESTAMP '1970-01-01 09:00:01.5 +09:00'");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("timestamp <= TIMESTAMP '1970-01-01 09:00:01.5 +09:00'");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("timestamp <= TIMESTAMP '1970-01-01 09:00:01.0 +09:00'");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("TIMESTAMP '1970-01-01 09:00:01.5 +09:00' = timestamp");
+        assertTrue(exp.eval(reader));
+
+        exp = parser.parse("timestamp = TIMESTAMP '1970-01-01 09:00:01.5 +0900'");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("timestamp = TIMESTAMP '1970-01-01 00:00:01.5'");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("timestamp = TIMESTAMP '1970-01-01 09:00:01 +09:00'");
+        assertFalse(exp.eval(reader));
+        exp = parser.parse("timestamp = TIMESTAMP '1970-01-01 00:00:01'");
+        assertFalse(exp.eval(reader));
+        exp = parser.parse("timestamp = TIMESTAMP '1970-01-01 +09:00'");
+        assertFalse(exp.eval(reader));
+        exp = parser.parse("timestamp = TIMESTAMP '1970-01-01'");
+        assertFalse(exp.eval(reader));
+
+        try {
+            parser.parse("timestamp = TIMESTAMP '1970:01:01'");
+            assertTrue(false);
+        }
+        catch (TimestampParseException ex) {
+        }
     }
 
     @Test

@@ -2,6 +2,7 @@ package org.embulk.filter.row.where;
 
 import org.embulk.spi.Schema;
 import org.embulk.spi.SchemaConfigException;
+import org.embulk.spi.time.Timestamp;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -102,7 +103,6 @@ public class TestYylex
             assertTrue(false);
         }
         catch (SchemaConfigException e) {
-            assertTrue(true);
         }
 
         try {
@@ -111,7 +111,6 @@ public class TestYylex
             assertTrue(false);
         }
         catch (SchemaConfigException e) {
-            assertTrue(true);
         }
     }
 
@@ -191,6 +190,20 @@ public class TestYylex
         lexer = new Yylex("'foo\\'bar'", yyparser);
         assertNextToken(Parser.STRING);
         assertString("foo\'bar");
+    }
+
+    @Test
+    public void testTimestamp()
+    {
+        lexer = new Yylex("TIMESTAMP 1.5", yyparser);
+        assertNextToken(Parser.TIMESTAMP);
+        assertNextToken(Parser.NUMBER);
+        assertNumber(1.5);
+
+        lexer = new Yylex("TIMESTAMP '2015-01-01'", yyparser);
+        assertNextToken(Parser.TIMESTAMP);
+        assertNextToken(Parser.STRING);
+        assertString("2015-01-01");
     }
 
     @Test

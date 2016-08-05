@@ -47,6 +47,7 @@ StringChar = [^\r\n\'\\]+
   "IS"                       { return Parser.IS; }
   "NOT"                      { return Parser.NOT; }
   "NULL"                     { return Parser.NULL; }
+  "TIMESTAMP"                { return Parser.TIMESTAMP; }
 
   /* boolean literal */
   "true" | "TRUE"            { yyparser.yylval = new ParserVal(new BooleanLiteral(true)); return Parser.BOOLEAN; }

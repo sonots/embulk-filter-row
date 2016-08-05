@@ -1,6 +1,8 @@
 package org.embulk.filter.row.where;
 
+import org.embulk.config.ConfigException;
 import org.embulk.spi.PageReader;
+import org.embulk.spi.time.Timestamp;
 
 // Operation Node of AST (Abstract Syntax Tree)
 public abstract class ParserExp extends ParserNode
@@ -32,11 +34,17 @@ class BooleanOpExp extends BinaryOpExp
     public BooleanOpExp(ParserLiteral left, ParserLiteral right, int operator)
     {
         super(left, right, operator);
+        if (! left.isBoolean()) {
+            throw new ConfigException(String.format("\"%s\" is not a Boolean column", ((IdentifierLiteral)left).name));
+        }
+        if (! right.isBoolean()) {
+            throw new ConfigException(String.format("\"%s\" is not a Boolean column", ((IdentifierLiteral)right).name));
+        }
     }
 
     public BooleanOpExp(ParserVal left, ParserVal right, int operator)
     {
-        super(left, right, operator);
+        this((ParserLiteral)(left.obj), (ParserLiteral)(right.obj), operator);
     }
 
     public boolean eval(PageReader pageReader)
@@ -61,11 +69,17 @@ class NumberOpExp extends BinaryOpExp
     public NumberOpExp(ParserLiteral left, ParserLiteral right, int operator)
     {
         super(left, right, operator);
+        if (! left.isNumber()) {
+            throw new ConfigException(String.format("\"%s\" is not a Number column", ((IdentifierLiteral)left).name));
+        }
+        if (! right.isNumber()) {
+            throw new ConfigException(String.format("\"%s\" is not a Number column", ((IdentifierLiteral)right).name));
+        }
     }
 
     public NumberOpExp(ParserVal left, ParserVal right, int operator)
     {
-        super(left, right, operator);
+        this((ParserLiteral)(left.obj), (ParserLiteral)(right.obj), operator);
     }
 
     public boolean eval(PageReader pageReader)
@@ -97,16 +111,69 @@ class NumberOpExp extends BinaryOpExp
     }
 }
 
+class TimestampOpExp extends BinaryOpExp
+{
+    public TimestampOpExp(ParserLiteral left, ParserLiteral right, int operator)
+    {
+        super(left, right, operator);
+        if (! left.isTimestamp()) {
+            throw new ConfigException(String.format("\"%s\" is not a Timestamp column", ((IdentifierLiteral)left).name));
+        }
+        if (! right.isTimestamp()) {
+            throw new ConfigException(String.format("\"%s\" is not a Timestamp column", ((IdentifierLiteral)right).name));
+        }
+    }
+
+    public TimestampOpExp(ParserVal left, ParserVal right, int operator)
+    {
+        this((ParserLiteral)(left.obj), (ParserLiteral)(right.obj), operator);
+    }
+
+    public boolean eval(PageReader pageReader)
+    {
+        Timestamp l = left.getTimestamp(pageReader);
+        Timestamp r = right.getTimestamp(pageReader);
+        if (operator == Parser.EQ) {
+            return l.equals(r);
+        }
+        else if (operator == Parser.NEQ) {
+            return ! l.equals(r);
+        }
+        else if (operator == Parser.GT) {
+            return l.compareTo(r) > 0;
+        }
+        else if (operator == Parser.GE) {
+            return l.compareTo(r) >= 0;
+        }
+        else if (operator == Parser.LT) {
+            return l.compareTo(r) < 0;
+        }
+        else if (operator == Parser.LE) {
+            return l.compareTo(r) <= 0;
+        }
+        else {
+            assert(false);
+            return false;
+        }
+    }
+}
+
 class StringOpExp extends BinaryOpExp
 {
     public StringOpExp(ParserLiteral left, ParserLiteral right, int operator)
     {
         super(left, right, operator);
+        if (! left.isString()) {
+            throw new ConfigException(String.format("\"%s\" is not a String column", ((IdentifierLiteral)left).name));
+        }
+        if (! right.isString()) {
+            throw new ConfigException(String.format("\"%s\" is not a String column", ((IdentifierLiteral)right).name));
+        }
     }
 
     public StringOpExp(ParserVal left, ParserVal right, int operator)
     {
-        super(left, right, operator);
+        this((ParserLiteral)(left.obj), (ParserLiteral)(right.obj), operator);
     }
 
     public boolean eval(PageReader pageReader)

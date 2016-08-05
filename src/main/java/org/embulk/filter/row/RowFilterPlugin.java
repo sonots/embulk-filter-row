@@ -13,6 +13,7 @@ import org.embulk.filter.row.condition.ConditionConfig;
 import org.embulk.filter.row.where.Parser;
 import org.embulk.filter.row.where.ParserExp;
 
+import org.embulk.filter.row.where.ParserLiteral;
 import org.embulk.spi.Exec;
 import org.embulk.spi.FilterPlugin;
 import org.embulk.spi.Page;
@@ -53,6 +54,7 @@ public class RowFilterPlugin implements FilterPlugin
             FilterPlugin.Control control)
     {
         PluginTask task = config.loadConfig(PluginTask.class);
+        ParserLiteral.setJRuby(task.getJRuby());
 
         configure(task, inputSchema);
         Schema outputSchema = inputSchema;
