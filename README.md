@@ -33,6 +33,7 @@ A filter plugin for Embulk to filter out rows
   * **not**: not (boolean, optional, default: false)
   * **format**: special option for timestamp column, specify the format of timestamp argument, parsed argument is compared with the column value as Timestamp object (string, default is `%Y-%m-%d %H:%M:%S.%N %z`)
   * **timezone**: special option for timestamp column, specify the timezone of timestamp argument (string, default is `UTC`)
+* **where** (experimental): Write conditions with SQL-like syntax. See [SQL-like Syntax](#sql-like-syntax)
 
 NOTE: column type is automatically retrieved from input data (inputSchema)
 
@@ -63,7 +64,7 @@ filters:
 
 ## Example (AND of OR)
 
-embulk-filter-row does not directly supports complex conditions such as `((A OR B) AND (C OR D))`, but you should be able to express most of complex conditions by combining multiple filters like
+You can express a condition such as `(A OR B) AND (C OR D)` by combining multiple filters like
 
 ```yaml
 filters:
@@ -81,10 +82,125 @@ filters:
 
 This is equivalent with `((A OR B) AND (C OR D))`.
 
-## Not Supported:  More Complex Conditions
+## Example (WHERE) (Experimental)
 
-* It should be better to think using Query engine like [Apache Drill](https://drill.apache.org/) or [Presto](https://prestodb.io/)
-* With them, it is possible to send a query to local files, even to S3 files.
+Versions >= 0.3.0 suppors SQL-like syntax like
+
+```yaml
+filters:
+  - type: row
+    where: |-
+      (
+        string START_WITH 'str' AND
+        number > 1.0
+      )
+      OR
+      (
+        time = TIMESTAMP '2016-01-01 +0900' AND
+        "true" = true
+      )
+```
+
+See [SQL-like Syntax](#sql-like-syntax) for more details
+
+# SQL-like Syntax
+
+Versions >= 0.3.0 suppors SQL-like syntax as:
+
+```
+    where: |-
+      (
+        string START_WITH 'str' AND
+        number > 1.0
+      )
+      OR
+      (
+        time = TIMESTAMP '2016-01-01 +0900' AND
+        "true" = true
+      )
+```
+
+## Literals
+
+### Boolean Literal
+
+`true` or `TRUE` or `false` or `FALSE` are considered as a boolean literal
+
+### Number Literal
+
+Characters matching with a regular expression `-?[0-9]+(\.[0-9]+)?` is considered as a number literal
+
+### String Literal
+
+Characters surrounded by `'` such as `'foo'` is considered as a string literal
+
+### Timestamp Literal
+
+`TIMESTAMP ( NumberLiteral | StringLiteral )` such as `TIMESTAMP 1470433087.747123` or `TIMESTAMP '2016-08-06 06:38:07.747123 +0900'` is considered as a timestamp literal
+
+Number is a epoch time since 1970-01-01 UTC with nano time resolution.
+
+String is a timestamp string which matches with one of following format:
+
+* `%Y-%m-%d %H:%M:%S.%N %z`
+* `%Y-%m-%d %H:%M:%S.%N`
+* `%Y-%m-%d %H:%M:%S %z`
+* `%Y-%m-%d %H:%M:%S`
+* `%Y-%m-%d %z`
+* `%Y-%m-%d`
+
+The default time zone is UTC, and the time resolution is micro second (caused by limitation of Embulk TimestampParser).
+
+### Json Literal
+
+Not supported yet
+
+### Identifier Literal
+
+Characters matching with a regular expression `[a-zA-Z$][a-zA-z0-9\.\-_]*` such as `foobar`, and characters surrounded by `"` such as `"foo\"bar"` are considred as an identifier literal, that is, embulk's column name.
+
+## Operators
+
+### Boolean Operator
+
+* ==
+* !=
+
+### Number Operator (Long and Double)
+
+* ==
+* !=
+* >
+* >=
+* <=
+* <
+
+### String Operator
+
+* ==
+* !=
+* START_WITH
+* END_WITH
+* INCLUDE
+
+### Timestamp Operator
+
+* ==
+* !=
+* >
+* >=
+* <=
+* <
+
+### Json Operator
+
+Not supported yet
+
+### unary operator
+
+* "xxx IS NULL"
+* "xxx IS NOT NULL"
+* "NOT xxx"
 
 ## ToDo
 
