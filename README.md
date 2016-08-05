@@ -86,6 +86,10 @@ This is equivalent with `((A OR B) AND (C OR D))`.
 * It should be better to think using Query engine like [Apache Drill](https://drill.apache.org/) or [Presto](https://prestodb.io/)
 * With them, it is possible to send a query to local files, even to S3 files.
 
+## ToDo
+
+* Support filtering by values of `type: json` with JSONPath
+
 ## ChangeLog
 
 [CHANGELOG.md](./CHANGELOG.md)
