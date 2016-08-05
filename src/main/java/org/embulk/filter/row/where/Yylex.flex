@@ -19,7 +19,7 @@ package org.embulk.filter.row.where;
 
 Number = -?[0-9]+(\.[0-9]+)?
 QuotedIdentifierChar = [^\r\n\"\\]
-NonQuotedIdentifier = [a-zA-Z][a-zA-Z0-9_]*
+NonQuotedIdentifier = [a-zA-Z$][^\r\n \t]*
 StringChar = [^\r\n\'\\]+
 
 %%

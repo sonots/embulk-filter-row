@@ -75,6 +75,14 @@ public class TestYylex
         lexer = new Yylex(" \"foo\\\"bar\" ", yyparser);
         assertNextToken(Parser.IDENTIFIER);
         assertIdentifier("foo\"bar");
+
+        lexer = new Yylex("$.foo.bar", yyparser);
+        assertNextToken(Parser.IDENTIFIER);
+        assertIdentifier("$.foo.bar");
+
+        lexer = new Yylex("$['foo'][0:4][*]", yyparser);
+        assertNextToken(Parser.IDENTIFIER);
+        assertIdentifier("$['foo'][0:4][*]");
     }
 
     void assertBoolean(boolean val)
