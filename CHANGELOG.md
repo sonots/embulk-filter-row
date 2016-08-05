@@ -1,3 +1,9 @@
+# 0.3.0 (2016-08-06)
+
+Enhancements:
+
+* Support SQL-like Syntax
+
 # 0.2.2 (2016-08-05)
 
 Enhancements:
