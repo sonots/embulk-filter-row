@@ -1,3 +1,9 @@
+# 0.2.2 (2016-08-05)
+
+Enhancements:
+
+* Support `type: json` (not supporting filtering with json yet, though)
+
 # 0.2.1 (2016-06-27)
 
 Enhancements:
