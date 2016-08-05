@@ -25,6 +25,7 @@ Number = -?[0-9]+(\.[0-9]+)?
 QuotedIdentifierChar = [^\r\n\"\\]
 NonQuotedIdentifier = [a-zA-Z$][a-zA-z0-9\.\-_]*
 StringChar = [^\r\n\'\\]+
+Newline = \n|\r|\r\n
 
 %%
 
@@ -65,6 +66,9 @@ StringChar = [^\r\n\'\\]+
 
   /* whitespace */
   [ \t]+ { }
+
+  /* newline */
+  {Newline} { }
 }
 
 <IDENTIFIER> {
