@@ -11,7 +11,7 @@ import org.embulk.spi.Schema;
 
 import org.slf4j.Logger;
 
-public class BuildColumnVisitorImpl
+public class BuilderColumnVisitorImpl
         implements ColumnVisitor
 {
     private static final Logger logger = Exec.getLogger(RowFilterPlugin.class);
@@ -21,7 +21,7 @@ public class BuildColumnVisitorImpl
     private final PageReader pageReader;
     private final PageBuilder pageBuilder;
 
-    BuildColumnVisitorImpl(PluginTask task, Schema inputSchema, Schema outputSchema, PageReader pageReader, PageBuilder pageBuilder)
+    BuilderColumnVisitorImpl(PluginTask task, Schema inputSchema, Schema outputSchema, PageReader pageReader, PageBuilder pageBuilder)
     {
         this.task = task;
         this.inputSchema = inputSchema;

@@ -126,12 +126,3 @@ void yyerror(String s)
 {
     throw new RuntimeException("yyerror: " + s);
 }
-
-/*public static void main(String args[])
-{
-    Parser yyparser = new Parser();
-    ParserExp exp = yyparser.parse("boolean = true");
-    HashMap<String, Object> variables = new HashMap<>();
-    variables.put("boolean", Boolean.TRUE);
-    System.out.println("ans: " + exp.eval(variables));
-}*/

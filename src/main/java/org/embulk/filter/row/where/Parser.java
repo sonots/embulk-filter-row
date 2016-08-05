@@ -412,16 +412,7 @@ void yyerror(String s)
 {
     throw new RuntimeException("yyerror: " + s);
 }
-
-/*public static void main(String args[])
-{
-    Parser yyparser = new Parser();
-    ParserExp exp = yyparser.parse("boolean = true");
-    HashMap<String, Object> variables = new HashMap<>();
-    variables.put("boolean", Boolean.TRUE);
-    System.out.println("ans: " + exp.eval(variables));
-}*/
-//#line 352 "Parser.java"
+//#line 343 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -763,7 +754,7 @@ case 48:
 //#line 88 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = val_peek(1); }
 break;
-//#line 689 "Parser.java"
+//#line 680 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

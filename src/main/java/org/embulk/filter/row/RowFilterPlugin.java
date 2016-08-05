@@ -105,8 +105,8 @@ public class RowFilterPlugin implements FilterPlugin
             guradVisitor = new GuardColumnVisitorAndImpl(task, inputSchema, outputSchema, pageReader);
         }
 
-        final BuildColumnVisitorImpl buildVisitor;
-        buildVisitor = new BuildColumnVisitorImpl(task, inputSchema, outputSchema, pageReader, pageBuilder);
+        final BuilderColumnVisitorImpl builderVisitor;
+        builderVisitor = new BuilderColumnVisitorImpl(task, inputSchema, outputSchema, pageReader, pageBuilder);
 
         return new PageOutput() {
             @Override
@@ -129,7 +129,7 @@ public class RowFilterPlugin implements FilterPlugin
                 while (pageReader.nextRecord()) {
                     if (guradVisitor.visitColumns(inputSchema)) {
                         // output.add(page); did not work, double release() error occurred. We need to copy from reader to builder...
-                        outputSchema.visitColumns(buildVisitor);
+                        outputSchema.visitColumns(builderVisitor);
                         pageBuilder.addRecord();
                     }
                 }
