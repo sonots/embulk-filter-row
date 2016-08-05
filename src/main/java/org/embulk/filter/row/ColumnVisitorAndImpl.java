@@ -194,5 +194,18 @@ class ColumnVisitorAndImpl extends AbstractColumnVisitor
             pageBuilder.setTimestamp(column, pageReader.getTimestamp(column));
         }
     }
-}
 
+    @Override
+    public void jsonColumn(Column column)
+    {
+        if (!shouldAddRecord) {
+            return;
+        }
+        if (pageReader.isNull(column)) {
+            pageBuilder.setNull(column);
+        }
+        else {
+            pageBuilder.setJson(column, pageReader.getJson(column));
+        }
+    }
+}
