@@ -3,6 +3,8 @@ plugins {
     id "com.github.jruby-gradle.base" version "0.1.5"
     id "java"
     id "checkstyle"
+    id "jacoco"
+    id "findbugs"
 }
 import com.github.jrubygradle.JRubyExec
 repositories {
@@ -18,15 +20,24 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
-    compile  "org.embulk:embulk-core:0.8.11"
-    provided "org.embulk:embulk-core:0.8.11"
-    // compile "YOUR_JAR_DEPENDENCY_GROUP:YOUR_JAR_DEPENDENCY_MODULE:YOUR_JAR_DEPENDENCY_VERSION"
+    compile  "org.embulk:embulk-core:0.8.+"
+    provided "org.embulk:embulk-core:0.8.+"
+
     testCompile "junit:junit:4.+"
+    testCompile "org.embulk:embulk-core:0.8.+:tests"
+    testCompile "org.embulk:embulk-standards:0.8.+"
 }
 
 checkstyle {
     toolVersion = '6.7'
 }
+
+task byaccj() {
+    [file("script/byaccj.sh")].execute()
+}
+
+// append dependsOn to compileJava task
+compileJava.dependsOn(byaccj)
 
 task classpath(type: Copy, dependsOn: ["jar"]) {
     doFirst { file("classpath").deleteDir() }

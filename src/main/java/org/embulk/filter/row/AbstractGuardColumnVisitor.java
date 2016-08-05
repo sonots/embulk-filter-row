@@ -6,8 +6,6 @@ import org.embulk.filter.row.condition.Condition;
 import org.embulk.filter.row.condition.ConditionConfig;
 import org.embulk.filter.row.condition.ConditionFactory;
 import org.embulk.spi.Column;
-import org.embulk.spi.ColumnVisitor;
-import org.embulk.spi.PageBuilder;
 import org.embulk.spi.PageReader;
 import org.embulk.spi.Schema;
 
@@ -15,25 +13,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-abstract class AbstractColumnVisitor
-        implements ColumnVisitor
+abstract class AbstractGuardColumnVisitor
 {
-    final PluginTask task;
-    final Schema inputSchema;
-    final Schema outputSchema;
-    final PageReader pageReader;
-    final PageBuilder pageBuilder;
-    HashMap<String, List<Condition>> conditionMap;
+    PluginTask task;
+    Schema inputSchema;
+    Schema outputSchema;
+    PageReader pageReader;
 
-    AbstractColumnVisitor(PluginTask task, Schema inputSchema, Schema outputSchema, PageReader pageReader, PageBuilder pageBuilder)
+    AbstractGuardColumnVisitor(PluginTask task, Schema inputSchema, Schema outputSchema, PageReader pageReader)
     {
         this.task = task;
         this.inputSchema = inputSchema;
         this.outputSchema = outputSchema;
         this.pageReader = pageReader;
-        this.pageBuilder = pageBuilder;
-
-        this.conditionMap = buildConditionMap(task, outputSchema);
     }
 
     static HashMap<String, List<Condition>> buildConditionMap(PluginTask task, Schema outputSchema)
@@ -44,7 +36,7 @@ abstract class AbstractColumnVisitor
             conditionMap.put(columnName, new ArrayList<Condition>());
         }
 
-        for (ConditionConfig conditionConfig : task.getConditions()) {
+        for (ConditionConfig conditionConfig : task.getConditions().get()) {
             String columnName = conditionConfig.getColumn();
             for (Column column : outputSchema.getColumns()) {
                 if (columnName.equals(column.getName())) {
@@ -58,5 +50,5 @@ abstract class AbstractColumnVisitor
         return conditionMap;
     }
 
-    abstract public boolean visitColumns(Schema schema);
+    abstract public boolean visitColumns(Schema inputSchema);
 }

@@ -10,3 +10,6 @@ build/
 .tags
 .ruby-version
 *.iml
+*.class
+script/yacc
+script/jflex*
