@@ -236,3 +236,23 @@ Release gem:
 ```
 $ ./gradlew gemPush
 ```
+
+## Development of SQL-like Syntax
+
+Read the article [Supported SQL-like Syntax with embulk-filter-row using BYACC/J and JFlex](http://blog.livedoor.jp/sonots/archives/48172830.html).
+
+To download BYACC/J and JFlex and run them, you can use:
+
+```
+$ script/byaccj.sh
+```
+
+or
+
+```
+$ ./gradlew byaccj # this runs script/byaccj.sh internally
+```
+
+This generates `src/main/java/org/embulk/filter/row/where/{Parser,ParserVal,Yylex}.java`.
+
+The `byaccj` task of gradle is ran before `compileJava` task (which means to be ran before `classpath` or `test` task also) automatically.
