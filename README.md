@@ -105,17 +105,18 @@ See [SQL-like Syntax](#sql-like-syntax) for more details
 
 Versions >= 0.3.0 suppors SQL-like syntax as:
 
-```
-    where: |-
-      (
-        string START_WITH 'str' AND
-        number > 1.0
-      )
-      OR
-      (
-        time = TIMESTAMP '2016-01-01 +0900' AND
-        "true" = true
-      )
+```sql
+where: |-
+  (
+    string START_WITH 'str' AND
+    number > 1.0
+  
+  )
+  OR
+  (
+    time = TIMESTAMP '2016-01-01 +0900' AND
+    "true" = true
+  )
 ```
 
 ## Literals
@@ -147,7 +148,7 @@ String is a timestamp string which matches with one of following format:
 * `%Y-%m-%d %z`
 * `%Y-%m-%d`
 
-The default time zone is UTC, and the time resolution is micro second (caused by limitation of Embulk TimestampParser).
+The time zone for formats without `%z` is UTC, and the time resolution is micro second (caused by limitation of Embulk TimestampParser).
 
 ### Json Literal
 
