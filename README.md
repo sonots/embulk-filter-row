@@ -80,8 +80,6 @@ filters:
       - {column: d, operator: "IS NOT NULL"}
 ```
 
-This is equivalent with `((A OR B) AND (C OR D))`.
-
 ## Example (WHERE) (Experimental)
 
 Versions >= 0.3.0 suppors SQL-like syntax like
