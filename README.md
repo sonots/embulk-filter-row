@@ -6,8 +6,9 @@ A filter plugin for Embulk to filter out rows
 
 ## Configuration
 
-* **condition**: AND or OR (string, default: AND).
-* **conditions**: select only rows which matches with conditions.
+* **where**: Write conditions with SQL-like syntax. See [SQL-like Syntax](#sql-like-syntax)
+* **condition** (deprecated): AND or OR (string, default: AND).
+* **conditions** (deprecated): select only rows which matches with conditions.
   * **column**: column name (string, required)
   * **operator** operator (string, optional, default: ==)
     * boolean operator
@@ -33,11 +34,12 @@ A filter plugin for Embulk to filter out rows
   * **not**: not (boolean, optional, default: false)
   * **format**: special option for timestamp column, specify the format of timestamp argument, parsed argument is compared with the column value as Timestamp object (string, default is `%Y-%m-%d %H:%M:%S.%N %z`)
   * **timezone**: special option for timestamp column, specify the timezone of timestamp argument (string, default is `UTC`)
-* **where** (experimental): Write conditions with SQL-like syntax. See [SQL-like Syntax](#sql-like-syntax)
 
 NOTE: column type is automatically retrieved from input data (inputSchema)
 
 ## Example (AND)
+
+**Deprecated**
 
 ```yaml
 filters:
@@ -53,6 +55,8 @@ filters:
 
 ## Example (OR)
 
+**Deprecated**
+
 ```yaml
 filters:
   - type: row
@@ -63,6 +67,8 @@ filters:
 ```
 
 ## Example (AND of OR)
+
+**Deprecated**
 
 You can express a condition such as `(A OR B) AND (C OR D)` by combining multiple filters like
 
@@ -80,7 +86,7 @@ filters:
       - {column: d, operator: "IS NOT NULL"}
 ```
 
-## Example (WHERE) (Experimental)
+## Example (WHERE)
 
 Versions >= 0.3.0 suppors SQL-like syntax like
 
