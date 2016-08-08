@@ -37,10 +37,12 @@ public class RowFilterPlugin implements FilterPlugin
     {
         @Config("condition")
         @ConfigDefault("\"AND\"")
+        @Deprecated
         public String getCondition();
 
         @Config("conditions")
         @ConfigDefault("null")
+        @Deprecated
         public Optional<List<ConditionConfig>> getConditions();
 
         @Config("where")
@@ -64,6 +66,7 @@ public class RowFilterPlugin implements FilterPlugin
     void configure(PluginTask task, Schema inputSchema) throws ConfigException
     {
         if (task.getConditions().isPresent()) {
+            logger.warn("embulk-filter-row: \"conditions\" is deprecated, use \"where\" instead.");
             for (ConditionConfig conditionConfig : task.getConditions().get()) {
                 String columnName = conditionConfig.getColumn();
                 inputSchema.lookupColumn(columnName); // throw SchemaConfigException if not found
