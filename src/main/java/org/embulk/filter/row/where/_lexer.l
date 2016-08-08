@@ -1,5 +1,6 @@
 package org.embulk.filter.row.where;
 
+import org.embulk.config.ConfigException;
 import org.embulk.spi.Schema;
 %%
 
@@ -23,7 +24,7 @@ import org.embulk.spi.Schema;
 
 Number = -?[0-9]+(\.[0-9]+)?
 QuotedIdentifierChar = [^\r\n\"\\]
-NonQuotedIdentifier = [a-zA-Z$][a-zA-z0-9\.\-_]*
+NonQuotedIdentifier = [a-zA-Z_][a-zA-z0-9_]*
 StringChar = [^\r\n\'\\]+
 Newline = \n|\r|\r\n
 
@@ -82,7 +83,7 @@ Newline = \n|\r|\r\n
   "\\\\"                     { string.append( '\\' ); }
   
   /* error cases */
-  \\.                        { throw new RuntimeException("yylex: Illegal escape sequence \""+yytext()+"\""); }
+  \\.                        { throw new ConfigException("yylex: Illegal escape sequence \""+yytext()+"\""); }
 }
 
 <STRING> {
@@ -101,8 +102,8 @@ Newline = \n|\r|\r\n
   "\\\\"                     { string.append( '\\' ); }
   
   /* error cases */
-  \\.                        { throw new RuntimeException("yylex: Illegal escape sequence \""+yytext()+"\""); }
+  \\.                        { throw new ConfigException("yylex: Illegal escape sequence \""+yytext()+"\""); }
 }
 
 /* error fallback */
-[^]                          { throw new RuntimeException("yylex: Unexpected character '"+yytext()+"'"); }
+[^]                          { throw new ConfigException("yylex: Unexpected character '"+yytext()+"'"); }

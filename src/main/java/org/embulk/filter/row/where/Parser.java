@@ -18,9 +18,10 @@ package org.embulk.filter.row.where;
 
 
 //#line 2 "src/main/java/org/embulk/filter/row/where/_parser.y"
+import org.embulk.config.ConfigException;
 import org.embulk.spi.Column;
 import org.embulk.spi.Schema;
-//#line 20 "Parser.java"
+//#line 21 "Parser.java"
 
 
 
@@ -373,7 +374,7 @@ final static String yyrule[] = {
 "exp : '(' exp ')'",
 };
 
-//#line 91 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 92 "src/main/java/org/embulk/filter/row/where/_parser.y"
 
 protected Schema schema;
 protected Yylex lexer;
@@ -410,9 +411,9 @@ private int yylex () {
 
 void yyerror(String s)
 {
-    throw new RuntimeException("yyerror: " + s);
+    throw new ConfigException("yyerror: " + s);
 }
-//#line 343 "Parser.java"
+//#line 344 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -567,194 +568,194 @@ boolean doaction;
       {
 //########## USER-SUPPLIED ACTIONS ##########
 case 2:
-//#line 39 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 40 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { root = val_peek(0); }
 break;
 case 3:
-//#line 42 "src/main/java/org/embulk/filter/row/where/_parser.y"
-{ yyval = new ParserVal(new TimestampLiteral(val_peek(0))); }
-break;
-case 4:
 //#line 43 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new TimestampLiteral(val_peek(0))); }
 break;
+case 4:
+//#line 44 "src/main/java/org/embulk/filter/row/where/_parser.y"
+{ yyval = new ParserVal(new TimestampLiteral(val_peek(0))); }
+break;
 case 5:
-//#line 45 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 46 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new BooleanOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 6:
-//#line 46 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 47 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new BooleanOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 7:
-//#line 47 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 48 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new BooleanOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 8:
-//#line 48 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 49 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new BooleanOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 9:
-//#line 49 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 50 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 10:
-//#line 50 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 51 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 11:
-//#line 51 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 52 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), GT)); }
 break;
 case 12:
-//#line 52 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 53 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), GE)); }
 break;
 case 13:
-//#line 53 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 54 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), LT)); }
 break;
 case 14:
-//#line 54 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 55 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), LE)); }
 break;
 case 15:
-//#line 55 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 56 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 16:
-//#line 56 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 57 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 17:
-//#line 57 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 58 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), GT)); }
 break;
 case 18:
-//#line 58 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 59 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), GE)); }
 break;
 case 19:
-//#line 59 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 60 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), LT)); }
 break;
 case 20:
-//#line 60 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 61 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NumberOpExp(val_peek(2), val_peek(0), LE)); }
 break;
 case 21:
-//#line 61 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 62 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 22:
-//#line 62 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 63 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 23:
-//#line 63 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 64 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), START_WITH)); }
 break;
 case 24:
-//#line 64 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 65 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), END_WITH)); }
 break;
 case 25:
-//#line 65 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 66 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), INCLUDE)); }
 break;
 case 26:
-//#line 66 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 67 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 27:
-//#line 67 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 68 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 28:
-//#line 68 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 69 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), START_WITH)); }
 break;
 case 29:
-//#line 69 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 70 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), END_WITH)); }
 break;
 case 30:
-//#line 70 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 71 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new StringOpExp(val_peek(2), val_peek(0), INCLUDE)); }
 break;
 case 31:
-//#line 71 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 72 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new TimestampOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 32:
-//#line 72 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 73 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new TimestampOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 33:
-//#line 73 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 74 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new TimestampOpExp(val_peek(2), val_peek(0), GT)); }
 break;
 case 34:
-//#line 74 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 75 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new TimestampOpExp(val_peek(2), val_peek(0), GE)); }
 break;
 case 35:
-//#line 75 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 76 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new TimestampOpExp(val_peek(2), val_peek(0), LT)); }
 break;
 case 36:
-//#line 76 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 77 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new TimestampOpExp(val_peek(2), val_peek(0), LE)); }
 break;
 case 37:
-//#line 77 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 78 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new TimestampOpExp(val_peek(2), val_peek(0), EQ)); }
 break;
 case 38:
-//#line 78 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 79 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new TimestampOpExp(val_peek(2), val_peek(0), NEQ)); }
 break;
 case 39:
-//#line 79 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 80 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new TimestampOpExp(val_peek(2), val_peek(0), GT)); }
 break;
 case 40:
-//#line 80 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 81 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new TimestampOpExp(val_peek(2), val_peek(0), GE)); }
 break;
 case 41:
-//#line 81 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 82 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new TimestampOpExp(val_peek(2), val_peek(0), LT)); }
 break;
 case 42:
-//#line 82 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 83 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new TimestampOpExp(val_peek(2), val_peek(0), LE)); }
 break;
 case 43:
-//#line 83 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 84 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NullOpExp(val_peek(2), EQ)); }
 break;
 case 44:
-//#line 84 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 85 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NullOpExp(val_peek(3), NEQ)); }
 break;
 case 45:
-//#line 85 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 86 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new LogicalOpExp(val_peek(2), val_peek(0), OR)); }
 break;
 case 46:
-//#line 86 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 87 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new LogicalOpExp(val_peek(2), val_peek(0), AND)); }
 break;
 case 47:
-//#line 87 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 88 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = new ParserVal(new NegateOpExp(val_peek(0))); }
 break;
 case 48:
-//#line 88 "src/main/java/org/embulk/filter/row/where/_parser.y"
+//#line 89 "src/main/java/org/embulk/filter/row/where/_parser.y"
 { yyval = val_peek(1); }
 break;
-//#line 680 "Parser.java"
+//#line 681 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

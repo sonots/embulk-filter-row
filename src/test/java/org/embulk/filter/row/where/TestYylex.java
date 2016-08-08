@@ -1,5 +1,6 @@
 package org.embulk.filter.row.where;
 
+import org.embulk.config.ConfigException;
 import org.embulk.spi.Schema;
 import org.embulk.spi.SchemaConfigException;
 import org.embulk.spi.time.Timestamp;
@@ -62,10 +63,11 @@ public class TestYylex
     {
         Schema schema = Schema.builder()
                 .add("foobar", BOOLEAN)
+                .add("_foobar", BOOLEAN)
                 .add("foo bar", BOOLEAN)
                 .add("foo\"bar", BOOLEAN)
-                .add("$.foo.bar", BOOLEAN) // Support JSONPath someday
-                .add("$['foo'][0:4][*]", BOOLEAN) // Support JSONPath someday
+                .add("$.foo.bar", BOOLEAN)
+                .add("$['foo'][0:4][*]", BOOLEAN)
                 .build();
         yyparser = new Parser(schema);
 
@@ -81,6 +83,10 @@ public class TestYylex
         assertNextToken(Parser.IDENTIFIER);
         assertIdentifier("foobar");
 
+        lexer = new Yylex(" _foobar ", yyparser);
+        assertNextToken(Parser.IDENTIFIER);
+        assertIdentifier("_foobar");
+
         lexer = new Yylex(" \"foo bar\" ", yyparser);
         assertNextToken(Parser.IDENTIFIER);
         assertIdentifier("foo bar");
@@ -89,7 +95,7 @@ public class TestYylex
         assertNextToken(Parser.IDENTIFIER);
         assertIdentifier("foo\"bar");
 
-        lexer = new Yylex("$.foo.bar", yyparser);
+        lexer = new Yylex("\"$.foo.bar\"", yyparser);
         assertNextToken(Parser.IDENTIFIER);
         assertIdentifier("$.foo.bar");
 
@@ -98,11 +104,19 @@ public class TestYylex
         assertIdentifier("$['foo'][0:4][*]");
 
         try {
+            lexer = new Yylex("foo-bar", yyparser);
+            assertNextToken(Parser.IDENTIFIER);
+            assertTrue(false);
+        }
+        catch (ConfigException e) {
+        }
+
+        try {
             lexer = new Yylex("$['foo'][0:4][*]", yyparser);
             assertNextToken(Parser.IDENTIFIER);
             assertTrue(false);
         }
-        catch (SchemaConfigException e) {
+        catch (ConfigException e) {
         }
 
         try {
@@ -110,7 +124,7 @@ public class TestYylex
             assertNextToken(Parser.IDENTIFIER);
             assertTrue(false);
         }
-        catch (SchemaConfigException e) {
+        catch (ConfigException e) {
         }
     }
 
