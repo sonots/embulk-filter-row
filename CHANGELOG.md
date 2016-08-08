@@ -1,3 +1,10 @@
+# 0.3.1 (2016-08-06)
+
+Changes:
+
+* Change identifier syntax from `[a-zA-Z$][a-zA-z0-9\.\-_]*` to `[a-zA-Z_][a-zA-z0-9_]*`
+  * Allow starting _. Disallow staring $. Diallow -. Disallow \.
+
 # 0.3.0 (2016-08-06)
 
 Enhancements:

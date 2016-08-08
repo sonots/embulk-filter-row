@@ -1,4 +1,5 @@
 %{
+import org.embulk.config.ConfigException;
 import org.embulk.spi.Column;
 import org.embulk.spi.Schema;
 %}
@@ -124,5 +125,5 @@ private int yylex () {
 
 void yyerror(String s)
 {
-    throw new RuntimeException("yyerror: " + s);
+    throw new ConfigException("yyerror: " + s);
 }
