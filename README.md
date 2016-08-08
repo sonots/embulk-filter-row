@@ -7,8 +7,11 @@ A filter plugin for Embulk to filter out rows
 ## Configuration
 
 * **where**: Write conditions with SQL-like syntax. See [SQL-like Syntax](#sql-like-syntax)
-* **condition** (deprecated): AND or OR (string, default: AND).
-* **conditions** (deprecated): select only rows which matches with conditions.
+
+Following options are **deprecated**, and will be removed someday.
+
+* **condition**: AND or OR (string, default: AND).
+* **conditions**: select only rows which matches with conditions.
   * **column**: column name (string, required)
   * **operator** operator (string, optional, default: ==)
     * boolean operator
