@@ -6,7 +6,7 @@ A filter plugin for Embulk to filter out rows
 
 ## Configuration
 
-* **where**: Write conditions with SQL-like syntax. See [SQL-like Syntax](#sql-like-syntax)
+* **where**: Select only rows which matches with conditions written in SQL-like syntax. See [SQL-like Syntax](#sql-like-syntax)
 
 Following options are **deprecated**, and will be removed someday.
 
