@@ -30,7 +30,6 @@ import java.util.List;
 public class RowFilterPlugin implements FilterPlugin
 {
     private static final Logger logger = Exec.getLogger(RowFilterPlugin.class);
-    private ParserExp parserExp = null;
 
     public RowFilterPlugin() {}
 
@@ -78,7 +77,8 @@ public class RowFilterPlugin implements FilterPlugin
         else if (task.getWhere().isPresent()) {
             String where = task.getWhere().get();
             Parser parser = new Parser(inputSchema);
-            parserExp = parser.parse(where); // throw ConfigException if something wrong
+            // objects must be created in open since plugin instances in transaction and open are different
+            parser.parse(where); // throws ConfigException if something wrong
         }
         else {
             throw new ConfigException("Either of `conditions` or `where` must be set.");
@@ -96,6 +96,7 @@ public class RowFilterPlugin implements FilterPlugin
 
         final AbstractGuardColumnVisitor guradVisitor;
         if (task.getWhere().isPresent()) {
+            ParserExp parserExp = new Parser(inputSchema).parse(task.getWhere().get());
             guradVisitor = new GuardColumnVisitorWhereImpl(task, inputSchema, outputSchema, pageReader, parserExp);
         }
         else if (orCondition) {
