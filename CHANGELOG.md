@@ -1,3 +1,13 @@
+# 0.3.2 (2016-08-08)
+
+Changes
+
+* `conditions` option is now deprecated. Show deprecation warning messages.
+
+Fxies:
+
+* Fix NullPointerException for `where` option
+
 # 0.3.1 (2016-08-08)
 
 Changes:
