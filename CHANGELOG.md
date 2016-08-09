@@ -1,3 +1,10 @@
+# 0.3.3 (2016-08-09)
+
+Enhancements
+
+* Support REGEXP operator
+* Allow to omit TIMESTAMP keyword
+
 # 0.3.2 (2016-08-08)
 
 Changes
