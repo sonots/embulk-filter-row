@@ -52,8 +52,8 @@ Newline = \n|\r|\r\n
   "TIMESTAMP"                { return Parser.TIMESTAMP; }
 
   /* boolean literal */
-  "true" | "TRUE"            { yyparser.yylval = new ParserVal(new BooleanLiteral(true)); return Parser.BOOLEAN; }
-  "false" | "FALSE"          { yyparser.yylval = new ParserVal(new BooleanLiteral(false)); return Parser.BOOLEAN; }
+  "true" | "TRUE"            { yyparser.yylval = new ParserVal(new BooleanLiteral(yytext())); return Parser.BOOLEAN; }
+  "false" | "FALSE"          { yyparser.yylval = new ParserVal(new BooleanLiteral(yytext())); return Parser.BOOLEAN; }
 
   /* number literal */
   {Number}                   { yyparser.yylval = new ParserVal(new NumberLiteral(yytext())); return Parser.NUMBER; }

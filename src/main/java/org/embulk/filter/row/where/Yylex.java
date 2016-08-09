@@ -62,11 +62,11 @@ class Yylex {
     "\1\1\1\14\1\13\1\15\1\1\1\0\3\4\1\16"+
     "\1\17\1\20\1\21\4\4\1\22\4\4\1\23\1\24"+
     "\1\25\1\26\1\27\1\30\1\31\1\32\1\33\1\2"+
-    "\1\34\1\35\11\4\1\36\1\4\1\37\11\4\1\40"+
-    "\6\4\1\41\3\4\1\42\1\4\1\43\1\44";
+    "\1\34\1\35\11\4\1\36\1\4\1\37\15\4\1\40"+
+    "\3\4\1\41\1\4\1\42\1\43";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[98];
+    int [] result = new int[95];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -101,12 +101,11 @@ class Yylex {
     "\0\212\0\212\0\212\0\u04ac\0\u0114\0\u0114\0\u06d4\0\u0702"+
     "\0\u0730\0\u075e\0\u078c\0\u07ba\0\u07e8\0\u0816\0\u0844\0\u0114"+
     "\0\u0872\0\u0114\0\u08a0\0\u08ce\0\u08fc\0\u092a\0\u0958\0\u0986"+
-    "\0\u09b4\0\u09e2\0\u0a10\0\u0114\0\u0a3e\0\u0a6c\0\u0a9a\0\u0ac8"+
-    "\0\u0af6\0\u0b24\0\u0114\0\u0b52\0\u0b80\0\u0bae\0\u0114\0\u0bdc"+
-    "\0\u0114\0\u0114";
+    "\0\u09b4\0\u09e2\0\u0a10\0\u0a3e\0\u0a6c\0\u0a9a\0\u0ac8\0\u0114"+
+    "\0\u0af6\0\u0b24\0\u0b52\0\u0114\0\u0b80\0\u0114\0\u0114";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[98];
+    int [] result = new int[95];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -185,42 +184,39 @@ class Yylex {
     "\1\10\2\0\3\10\4\0\5\10\4\0\2\10\1\115"+
     "\22\10\2\0\2\10\2\0\1\10\2\0\3\10\4\0"+
     "\5\10\4\0\17\10\1\112\5\10\2\0\2\10\2\0"+
-    "\1\10\2\0\3\10\4\0\5\10\4\0\23\10\1\116"+
+    "\1\10\2\0\3\10\4\0\5\10\4\0\23\10\1\105"+
     "\1\10\2\0\2\10\2\0\1\10\2\0\3\10\4\0"+
-    "\5\10\4\0\1\117\24\10\2\0\2\10\2\0\1\10"+
-    "\2\0\3\10\4\0\5\10\4\0\1\10\1\120\23\10"+
+    "\5\10\4\0\1\101\24\10\2\0\2\10\2\0\1\10"+
+    "\2\0\3\10\4\0\5\10\4\0\1\10\1\116\23\10"+
     "\2\0\2\10\2\0\1\10\2\0\3\10\4\0\5\10"+
-    "\4\0\1\121\24\10\2\0\2\10\2\0\1\10\2\0"+
-    "\3\10\4\0\5\10\4\0\11\10\1\122\13\10\2\0"+
+    "\4\0\1\117\24\10\2\0\2\10\2\0\1\10\2\0"+
+    "\3\10\4\0\5\10\4\0\11\10\1\120\13\10\2\0"+
     "\2\10\2\0\1\10\2\0\3\10\4\0\5\10\4\0"+
-    "\3\10\1\123\21\10\2\0\2\10\2\0\1\10\2\0"+
-    "\3\10\4\0\5\10\4\0\17\10\1\124\5\10\2\0"+
+    "\3\10\1\121\21\10\2\0\2\10\2\0\1\10\2\0"+
+    "\3\10\4\0\5\10\4\0\2\10\1\122\22\10\2\0"+
     "\2\10\2\0\1\10\2\0\3\10\4\0\5\10\4\0"+
-    "\6\10\1\124\16\10\2\0\2\10\2\0\1\10\2\0"+
-    "\3\10\4\0\5\10\4\0\2\10\1\125\22\10\2\0"+
+    "\1\10\1\123\23\10\2\0\2\10\2\0\1\10\2\0"+
+    "\3\10\4\0\2\10\1\124\2\10\4\0\25\10\2\0"+
     "\2\10\2\0\1\10\2\0\3\10\4\0\5\10\4\0"+
-    "\1\10\1\126\23\10\2\0\2\10\2\0\1\10\2\0"+
-    "\3\10\4\0\2\10\1\127\2\10\4\0\25\10\2\0"+
-    "\2\10\2\0\1\10\2\0\3\10\4\0\5\10\4\0"+
-    "\4\10\1\130\20\10\2\0\2\10\2\0\1\10\2\0"+
-    "\3\10\4\0\5\10\4\0\3\10\1\131\21\10\2\0"+
-    "\2\10\2\0\1\10\2\0\3\10\4\0\1\132\4\10"+
+    "\4\10\1\125\20\10\2\0\2\10\2\0\1\10\2\0"+
+    "\3\10\4\0\5\10\4\0\3\10\1\126\21\10\2\0"+
+    "\2\10\2\0\1\10\2\0\3\10\4\0\1\127\4\10"+
     "\4\0\25\10\2\0\2\10\2\0\1\10\2\0\3\10"+
-    "\4\0\5\10\4\0\6\10\1\133\16\10\2\0\2\10"+
+    "\4\0\5\10\4\0\6\10\1\130\16\10\2\0\2\10"+
     "\2\0\1\10\2\0\3\10\4\0\5\10\4\0\1\10"+
-    "\1\134\23\10\2\0\2\10\2\0\1\10\2\0\3\10"+
-    "\4\0\5\10\4\0\4\10\1\135\20\10\2\0\2\10"+
+    "\1\131\23\10\2\0\2\10\2\0\1\10\2\0\3\10"+
+    "\4\0\5\10\4\0\4\10\1\132\20\10\2\0\2\10"+
     "\2\0\1\10\2\0\3\10\4\0\5\10\4\0\12\10"+
-    "\1\136\12\10\2\0\2\10\2\0\1\10\2\0\3\10"+
-    "\4\0\5\10\4\0\5\10\1\137\17\10\2\0\2\10"+
+    "\1\133\12\10\2\0\2\10\2\0\1\10\2\0\3\10"+
+    "\4\0\5\10\4\0\5\10\1\134\17\10\2\0\2\10"+
     "\2\0\1\10\2\0\3\10\4\0\5\10\4\0\1\10"+
-    "\1\140\23\10\2\0\2\10\2\0\1\10\2\0\3\10"+
-    "\4\0\5\10\4\0\13\10\1\141\11\10\2\0\2\10"+
+    "\1\135\23\10\2\0\2\10\2\0\1\10\2\0\3\10"+
+    "\4\0\5\10\4\0\13\10\1\136\11\10\2\0\2\10"+
     "\2\0\1\10\2\0\3\10\4\0\5\10\4\0\5\10"+
-    "\1\142\17\10\2\0\2\10";
+    "\1\137\17\10\2\0\2\10";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[3082];
+    int [] result = new int[2990];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -260,10 +256,10 @@ class Yylex {
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\3\0\1\11\2\1\1\11\1\1\1\11\1\1\2\11"+
     "\3\1\1\11\15\1\1\11\1\1\1\11\1\1\1\0"+
-    "\4\1\3\11\11\1\11\11\47\1";
+    "\4\1\3\11\11\1\11\11\44\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[98];
+    int [] result = new int[95];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -681,147 +677,143 @@ class Yylex {
           case 1: 
             { throw new ConfigException("yylex: Unexpected character '"+yytext()+"'");
             }
-          case 37: break;
+          case 36: break;
           case 2: 
             { yyparser.yylval = new ParserVal(new NumberLiteral(yytext())); return Parser.NUMBER;
             }
-          case 38: break;
+          case 37: break;
           case 3: 
             { yybegin(IDENTIFIER); string.setLength(0);
             }
-          case 39: break;
+          case 38: break;
           case 4: 
             { yyparser.yylval = new ParserVal(new IdentifierLiteral(yytext(), schema)); return Parser.IDENTIFIER;
             }
-          case 40: break;
+          case 39: break;
           case 5: 
             { yybegin(STRING); string.setLength(0);
             }
-          case 41: break;
+          case 40: break;
           case 6: 
             { 
             }
-          case 42: break;
+          case 41: break;
           case 7: 
             { return (int) yycharat(0);
             }
-          case 43: break;
+          case 42: break;
           case 8: 
             { return Parser.EQ;
             }
-          case 44: break;
+          case 43: break;
           case 9: 
             { return Parser.LT;
             }
-          case 45: break;
+          case 44: break;
           case 10: 
             { return Parser.GT;
             }
-          case 46: break;
+          case 45: break;
           case 11: 
             { string.append( yytext() );
             }
-          case 47: break;
+          case 46: break;
           case 12: 
             { yybegin(YYINITIAL); yyparser.yylval = new ParserVal(new StringLiteral(string.toString())); return Parser.STRING;
             }
-          case 48: break;
+          case 47: break;
           case 13: 
             { yybegin(YYINITIAL); yyparser.yylval = new ParserVal(new IdentifierLiteral(string.toString(), schema)); return Parser.IDENTIFIER;
             }
-          case 49: break;
+          case 48: break;
           case 14: 
             { return Parser.OR;
             }
-          case 50: break;
+          case 49: break;
           case 15: 
             { return Parser.LE;
             }
-          case 51: break;
+          case 50: break;
           case 16: 
             { return Parser.NEQ;
             }
-          case 52: break;
+          case 51: break;
           case 17: 
             { return Parser.GE;
             }
-          case 53: break;
+          case 52: break;
           case 18: 
             { return Parser.IS;
             }
-          case 54: break;
+          case 53: break;
           case 19: 
             { throw new ConfigException("yylex: Illegal escape sequence \""+yytext()+"\"");
             }
-          case 55: break;
+          case 54: break;
           case 20: 
             { string.append( '\"' );
             }
-          case 56: break;
+          case 55: break;
           case 21: 
             { string.append( '\\' );
             }
-          case 57: break;
+          case 56: break;
           case 22: 
             { string.append( '\'' );
             }
-          case 58: break;
+          case 57: break;
           case 23: 
             { string.append( '\t' );
             }
-          case 59: break;
+          case 58: break;
           case 24: 
             { string.append( '\r' );
             }
-          case 60: break;
+          case 59: break;
           case 25: 
             { string.append( '\f' );
             }
-          case 61: break;
+          case 60: break;
           case 26: 
             { string.append( '\b' );
             }
-          case 62: break;
+          case 61: break;
           case 27: 
             { string.append( '\n' );
             }
-          case 63: break;
+          case 62: break;
           case 28: 
             { return Parser.AND;
             }
-          case 64: break;
+          case 63: break;
           case 29: 
             { return Parser.NOT;
             }
-          case 65: break;
+          case 64: break;
           case 30: 
             { return Parser.NULL;
             }
-          case 66: break;
+          case 65: break;
           case 31: 
-            { yyparser.yylval = new ParserVal(new BooleanLiteral(true)); return Parser.BOOLEAN;
+            { yyparser.yylval = new ParserVal(new BooleanLiteral(yytext())); return Parser.BOOLEAN;
             }
-          case 67: break;
+          case 66: break;
           case 32: 
-            { yyparser.yylval = new ParserVal(new BooleanLiteral(false)); return Parser.BOOLEAN;
-            }
-          case 68: break;
-          case 33: 
             { return Parser.INCLUDE;
             }
-          case 69: break;
-          case 34: 
+          case 67: break;
+          case 33: 
             { return Parser.END_WITH;
             }
-          case 70: break;
-          case 35: 
+          case 68: break;
+          case 34: 
             { return Parser.TIMESTAMP;
             }
-          case 71: break;
-          case 36: 
+          case 69: break;
+          case 35: 
             { return Parser.START_WITH;
             }
-          case 72: break;
+          case 70: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }
