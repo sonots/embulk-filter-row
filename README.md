@@ -159,6 +159,8 @@ String is a timestamp string which matches with one of following format:
 
 The time zone for formats without `%z` is UTC, and the time resolution is micro second (caused by limitation of Embulk TimestampParser).
 
+It is possible to omit `TIMESTAMP` keyword on comparing with `timestamp` identifier from version >= 0.3.3.
+
 ### Json Literal
 
 Not supported yet
