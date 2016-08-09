@@ -171,12 +171,12 @@ Characters matching with a regular expression `[a-zA-Z_][a-zA-z0-9_]*` such as `
 
 ### Boolean Operator
 
-* ==
+* =
 * !=
 
 ### Number Operator (Long and Double)
 
-* ==
+* =
 * !=
 * >
 * >=
@@ -185,7 +185,7 @@ Characters matching with a regular expression `[a-zA-Z_][a-zA-z0-9_]*` such as `
 
 ### String Operator
 
-* ==
+* =
 * !=
 * START_WITH
 * END_WITH
@@ -193,7 +193,7 @@ Characters matching with a regular expression `[a-zA-Z_][a-zA-z0-9_]*` such as `
 
 ### Timestamp Operator
 
-* ==
+* =
 * !=
 * >
 * >=
