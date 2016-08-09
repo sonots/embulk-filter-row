@@ -46,6 +46,7 @@ Newline = \n|\r|\r\n
   "START_WITH"               { return Parser.START_WITH; }
   "END_WITH"                 { return Parser.END_WITH; }
   "INCLUDE"                  { return Parser.INCLUDE; }
+  "REGEXP"                   { return Parser.REGEXP; }
   "IS"                       { return Parser.IS; }
   "NOT"                      { return Parser.NOT; }
   "NULL"                     { return Parser.NULL; }

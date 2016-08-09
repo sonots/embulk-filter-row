@@ -4,6 +4,9 @@ import org.embulk.config.ConfigException;
 import org.embulk.spi.PageReader;
 import org.embulk.spi.time.Timestamp;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 // Operation Node of AST (Abstract Syntax Tree)
 public abstract class ParserExp extends ParserNode
 {
@@ -215,7 +218,10 @@ class TimestampOpExp extends BinaryOpExp
 
 class StringOpExp extends BinaryOpExp
 {
-    public static int[] operators = {Parser.EQ, Parser.NEQ, Parser.GT, Parser.GE, Parser.LT, Parser.LE, Parser.START_WITH, Parser.END_WITH, Parser.INCLUDE};
+    public static int[] operators = {
+            Parser.EQ, Parser.NEQ, Parser.GT, Parser.GE, Parser.LT, Parser.LE,
+            Parser.START_WITH, Parser.END_WITH, Parser.INCLUDE, Parser.REGEXP
+    };
 
     public StringOpExp(ParserLiteral left, ParserLiteral right, int operator)
     {
@@ -271,6 +277,32 @@ class StringOpExp extends BinaryOpExp
             assert(false);
             return false;
         }
+    }
+}
+
+class RegexpOpExp extends BinaryOpExp
+{
+    Pattern pattern;
+
+    public RegexpOpExp(ParserLiteral left, ParserLiteral right, int operator)
+    {
+        super(left, right, operator);
+        this.pattern = Pattern.compile(((StringLiteral)right).val);
+        if (! left.isString()) {
+            throw new ConfigException(String.format("\"%s\" is not a String column", ((IdentifierLiteral)left).name));
+        }
+    }
+
+    public RegexpOpExp(ParserVal left, ParserVal right, int operator)
+    {
+        this((ParserLiteral)(left.obj), (ParserLiteral)(right.obj), operator);
+    }
+
+    public boolean eval(PageReader pageReader)
+    {
+        String l = left.getString(pageReader);
+        Matcher m = pattern.matcher(l);
+        return m.find();
     }
 }
 

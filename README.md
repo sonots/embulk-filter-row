@@ -124,7 +124,8 @@ where: |-
   OR
   (
     time = TIMESTAMP '2016-01-01 +0900' AND
-    "true" = true
+    "true" = true AND
+    string REGEXP '^reg'
   )
 ```
 
@@ -192,6 +193,7 @@ Characters matching with a regular expression `[a-zA-Z_][a-zA-z0-9_]*` such as `
 * START_WITH
 * END_WITH
 * INCLUDE
+* REGEXP
 
 ### Timestamp Operator
 

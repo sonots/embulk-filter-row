@@ -393,6 +393,40 @@ public class TestParser
     }
 
     @Test
+    public void testRegexpOpExp()
+    {
+        Parser parser = new Parser(schema);
+        ParserExp exp;
+
+        exp = parser.parse("string REGEXP '^st'");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("string REGEXP 'st$'");
+        assertFalse(exp.eval(reader));
+
+        try {
+            // right-side identifier is not allowed
+            parser.parse("'string' REGEXP string");
+            assertTrue(false);
+        }
+        catch (ConfigException e) {
+        }
+
+        try {
+            parser.parse("string REGEXP 1.5");
+            assertTrue(false);
+        }
+        catch (ConfigException e) {
+        }
+
+        try {
+            parser.parse("boolean REGEXP '^st'");
+            assertTrue(false);
+        }
+        catch (ConfigException e) {
+        }
+    }
+
+    @Test
     public void testNullOpExp()
     {
         Parser parser = new Parser(schema);

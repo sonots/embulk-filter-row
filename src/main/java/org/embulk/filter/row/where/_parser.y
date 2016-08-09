@@ -89,6 +89,7 @@ exp: IDENTIFIER EQ BOOLEAN      { $$ = new ParserVal(BinaryOpExp.create($1, $3, 
  | timestamp GE  IDENTIFIER     { $$ = new ParserVal(BinaryOpExp.create($1, $3, GE)); }
  | timestamp LT  IDENTIFIER     { $$ = new ParserVal(BinaryOpExp.create($1, $3, LT)); }
  | timestamp LE  IDENTIFIER     { $$ = new ParserVal(BinaryOpExp.create($1, $3, LE)); }
+ | IDENTIFIER REGEXP STRING     { $$ = new ParserVal(new RegexpOpExp($1, $3, REGEXP)); }
  | IDENTIFIER IS NULL           { $$ = new ParserVal(new NullOpExp($1, EQ)); }
  | IDENTIFIER IS NOT NULL       { $$ = new ParserVal(new NullOpExp($1, NEQ)); }
  | exp OR exp                   { $$ = new ParserVal(new LogicalOpExp($1, $3, OR)); }
