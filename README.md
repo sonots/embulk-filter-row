@@ -145,6 +145,8 @@ Characters surrounded by `'` such as `'foo'` is considered as a string literal
 
 ### Timestamp Literal
 
+NOTE: It became possible to omit `TIMESTAMP` keyword on comparing with `timestamp` identifier (column) from version >= 0.3.3.
+
 `TIMESTAMP ( NumberLiteral | StringLiteral )` such as `TIMESTAMP 1470433087.747123` or `TIMESTAMP '2016-08-06 06:38:07.747123 +0900'` is considered as a timestamp literal
 
 Number is a epoch time since 1970-01-01 UTC with nano time resolution.
@@ -159,8 +161,6 @@ String is a timestamp string which matches with one of following format:
 * `%Y-%m-%d`
 
 The time zone for formats without `%z` is UTC, and the time resolution is micro second (caused by limitation of Embulk TimestampParser).
-
-It is possible to omit `TIMESTAMP` keyword on comparing with `timestamp` identifier from version >= 0.3.3.
 
 ### Json Literal
 
