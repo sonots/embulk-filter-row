@@ -22,7 +22,8 @@ import org.msgpack.value.Value;
 // Literal Node of AST (Abstract Syntax Tree)
 public abstract class ParserLiteral extends ParserNode
 {
-    static ScriptingContainer jruby;
+    protected static ScriptingContainer jruby;
+    protected String yytext;
 
     public static void setJRuby(ScriptingContainer jruby)
     {
@@ -46,6 +47,10 @@ public abstract class ParserLiteral extends ParserNode
         return false;
     }
     public boolean isJson()
+    {
+        return false;
+    }
+    public boolean isIdentifier()
     {
         return false;
     }
@@ -78,11 +83,12 @@ public abstract class ParserLiteral extends ParserNode
 
 class BooleanLiteral extends ParserLiteral
 {
-    public boolean val;
+    protected boolean val;
 
-    public BooleanLiteral(boolean val)
+    public BooleanLiteral(String yytext)
     {
-        this.val = val;
+        this.yytext = yytext;
+        this.val = Boolean.parseBoolean(yytext); // but, only true|TRUE|false|FALSE are allowed in lexer
     }
 
     public boolean isBoolean()
@@ -100,14 +106,10 @@ class NumberLiteral extends ParserLiteral
 {
     protected double val;
 
-    public NumberLiteral(double val)
+    public NumberLiteral(String yytext)
     {
-        this.val = val;
-    }
-
-    public NumberLiteral(String str)
-    {
-        this.val = Double.parseDouble(str);
+        this.yytext = yytext;
+        this.val = Double.parseDouble(yytext);
     }
 
     public boolean isNumber()
@@ -125,9 +127,10 @@ class StringLiteral extends ParserLiteral
 {
     protected String val;
 
-    public StringLiteral(String val)
+    public StringLiteral(String yytext)
     {
-        this.val = val;
+        this.yytext = yytext;
+        this.val = yytext;
     }
 
     public boolean isString()
@@ -146,21 +149,30 @@ class TimestampLiteral extends ParserLiteral
     protected Timestamp val;
     private static final DateTimeZone default_timezone  = DateTimeZone.forID("UTC");
 
-    public TimestampLiteral(ParserVal val)
+    public TimestampLiteral(ParserLiteral literal)
     {
-        if (val.obj.getClass() == StringLiteral.class) {
-            initTimestampLiteral(((StringLiteral)val.obj).val);
+        if (literal.getClass() == StringLiteral.class) {
+            initTimestampLiteral((StringLiteral)literal);
         }
-        else if (val.obj.getClass() == NumberLiteral.class) {
-            initTimestampLiteral(((NumberLiteral)(val.obj)).val);
+        else if (literal.getClass() == NumberLiteral.class) {
+            initTimestampLiteral((NumberLiteral)(literal));
+        }
+        else if (literal.getClass() == TimestampLiteral.class) {
+            initTimestampLiteral((TimestampLiteral)literal);
         }
         else {
-            throw new RuntimeException();
+            throw new ConfigException(String.format("\"%s\" is not a Timestamp literal", literal.yytext));
         }
     }
 
-    public void initTimestampLiteral(String str)
+    public TimestampLiteral(ParserVal val)
     {
+        this((ParserLiteral)(val.obj));
+    }
+
+    void initTimestampLiteral(StringLiteral literal)
+    {
+        this.yytext = literal.yytext;
         String[] formats = {
                 "%Y-%m-%d %H:%M:%S.%N %z",
                 "%Y-%m-%d %H:%M:%S.%N",
@@ -174,7 +186,7 @@ class TimestampLiteral extends ParserLiteral
         for (String format : formats) {
             try {
                 TimestampParser timestampParser = new TimestampParser(jruby, format, default_timezone);
-                this.val = timestampParser.parse(str);
+                this.val = timestampParser.parse(literal.val);
                 break;
             }
             catch (TimestampParseException e) {
@@ -186,11 +198,19 @@ class TimestampLiteral extends ParserLiteral
         }
     }
 
-    public void initTimestampLiteral(double epoch)
+    void initTimestampLiteral(NumberLiteral literal)
     {
+        this.yytext = literal.yytext;
+        double epoch = literal.val;
         int epochSecond = (int) epoch;
         long nanoAdjustment = (long) ((epoch - epochSecond) * 1000000000);
         this.val = Timestamp.ofEpochSecond(epochSecond, nanoAdjustment);
+    }
+
+    void initTimestampLiteral(TimestampLiteral literal)
+    {
+        this.yytext = literal.yytext;
+        this.val = literal.val;
     }
 
     public boolean isTimestamp()
@@ -238,6 +258,10 @@ class IdentifierLiteral extends ParserLiteral
     public boolean isJson()
     {
         return (column.getType() instanceof JsonType);
+    }
+    public boolean isIdentifier()
+    {
+        return true;
     }
 
     public boolean isNull(PageReader pageReader)

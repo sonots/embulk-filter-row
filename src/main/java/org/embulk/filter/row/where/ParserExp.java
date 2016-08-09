@@ -12,9 +12,11 @@ public abstract class ParserExp extends ParserNode
 
 abstract class BinaryOpExp extends ParserExp
 {
-    protected ParserLiteral left;
-    protected ParserLiteral right;
-    protected int operator;
+    ParserLiteral left;
+    ParserLiteral right;
+    int operator;
+
+    public BinaryOpExp() {}
 
     public BinaryOpExp(ParserLiteral left, ParserLiteral right, int operator)
     {
@@ -27,10 +29,47 @@ abstract class BinaryOpExp extends ParserExp
     {
         this((ParserLiteral)(left.obj), (ParserLiteral)(right.obj), operator);
     }
+
+    static BinaryOpExp create(ParserLiteral left, ParserLiteral right, int operator)
+    {
+        if (left.isTimestamp() || right.isTimestamp()) {
+            // Either of left or right would be a string or a number
+            return new TimestampOpExp(left, right, operator);
+        }
+        else if (left.isString() || right.isString()) {
+            return new StringOpExp(left, right, operator);
+        }
+        else if (left.isNumber() || right.isNumber()) {
+            return new NumberOpExp(left, right, operator);
+        }
+        else if (left.isBoolean() || right.isBoolean()) {
+            return new BooleanOpExp(left, right, operator);
+        }
+        else {
+            throw new RuntimeException();
+        }
+    }
+
+    static BinaryOpExp create(ParserVal left, ParserVal right, int operator)
+    {
+        return BinaryOpExp.create(((ParserLiteral)left.obj), ((ParserLiteral)right.obj), operator);
+    }
+
+    static boolean isOperatorAllowed(int[] operators, int operator)
+    {
+        for (int o : operators) {
+            if (operator == o) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 class BooleanOpExp extends BinaryOpExp
 {
+    public static int[] operators = {Parser.EQ, Parser.NEQ, Parser.GT, Parser.GE, Parser.LT, Parser.LE};
+
     public BooleanOpExp(ParserLiteral left, ParserLiteral right, int operator)
     {
         super(left, right, operator);
@@ -39,6 +78,9 @@ class BooleanOpExp extends BinaryOpExp
         }
         if (! right.isBoolean()) {
             throw new ConfigException(String.format("\"%s\" is not a Boolean column", ((IdentifierLiteral)right).name));
+        }
+        if (! isOperatorAllowed(operators, operator)) {
+            throw new ConfigException(String.format("\"%s\" is not an allowed operator for BooleanOpExp", Parser.yyname[operator]));
         }
     }
 
@@ -66,6 +108,8 @@ class BooleanOpExp extends BinaryOpExp
 
 class NumberOpExp extends BinaryOpExp
 {
+    public static int[] operators = {Parser.EQ, Parser.NEQ, Parser.GT, Parser.GE, Parser.LT, Parser.LE};
+
     public NumberOpExp(ParserLiteral left, ParserLiteral right, int operator)
     {
         super(left, right, operator);
@@ -74,6 +118,9 @@ class NumberOpExp extends BinaryOpExp
         }
         if (! right.isNumber()) {
             throw new ConfigException(String.format("\"%s\" is not a Number column", ((IdentifierLiteral)right).name));
+        }
+        if (! isOperatorAllowed(operators, operator)) {
+            throw new ConfigException(String.format("\"%s\" is not an allowed operator for NumberOpExp", Parser.yyname[operator]));
         }
     }
 
@@ -113,14 +160,22 @@ class NumberOpExp extends BinaryOpExp
 
 class TimestampOpExp extends BinaryOpExp
 {
+    public static int[] operators = {Parser.EQ, Parser.NEQ, Parser.GT, Parser.GE, Parser.LT, Parser.LE};
+
     public TimestampOpExp(ParserLiteral left, ParserLiteral right, int operator)
     {
-        super(left, right, operator);
-        if (! left.isTimestamp()) {
-            throw new ConfigException(String.format("\"%s\" is not a Timestamp column", ((IdentifierLiteral)left).name));
+        this.left = left.isIdentifier() ? left : new TimestampLiteral(left);
+        this.right = right.isIdentifier() ? right : new TimestampLiteral(right);
+        this.operator = operator;
+
+        if (! this.left.isTimestamp()) {
+            throw new ConfigException(String.format("\"%s\" is not a Timestamp column", ((IdentifierLiteral)this.left).name));
         }
-        if (! right.isTimestamp()) {
-            throw new ConfigException(String.format("\"%s\" is not a Timestamp column", ((IdentifierLiteral)right).name));
+        if (! this.right.isTimestamp()) {
+            throw new ConfigException(String.format("\"%s\" is not a Timestamp column", ((IdentifierLiteral)this.right).name));
+        }
+        if (! isOperatorAllowed(operators, operator)) {
+            throw new ConfigException(String.format("\"%s\" is not an allowed operator for TimestampOpExp", Parser.yyname[operator]));
         }
     }
 
@@ -160,6 +215,8 @@ class TimestampOpExp extends BinaryOpExp
 
 class StringOpExp extends BinaryOpExp
 {
+    public static int[] operators = {Parser.EQ, Parser.NEQ, Parser.GT, Parser.GE, Parser.LT, Parser.LE, Parser.START_WITH, Parser.END_WITH, Parser.INCLUDE};
+
     public StringOpExp(ParserLiteral left, ParserLiteral right, int operator)
     {
         super(left, right, operator);
@@ -168,6 +225,9 @@ class StringOpExp extends BinaryOpExp
         }
         if (! right.isString()) {
             throw new ConfigException(String.format("\"%s\" is not a String column", ((IdentifierLiteral)right).name));
+        }
+        if (! isOperatorAllowed(operators, operator)) {
+            throw new ConfigException(String.format("\"%s\" is not an allowed operator for StringOpExp", Parser.yyname[operator]));
         }
     }
 
@@ -185,6 +245,18 @@ class StringOpExp extends BinaryOpExp
         }
         else if (operator == Parser.NEQ) {
             return ! l.equals(r);
+        }
+        else if (operator == Parser.GT) {
+            return l.compareTo(r) > 0;
+        }
+        else if (operator == Parser.GE) {
+            return l.compareTo(r) >= 0;
+        }
+        else if (operator == Parser.LT) {
+            return l.compareTo(r) < 0;
+        }
+        else if (operator == Parser.LE) {
+            return l.compareTo(r) <= 0;
         }
         else if (operator == Parser.START_WITH) {
             return l.startsWith(r);

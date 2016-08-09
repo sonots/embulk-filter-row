@@ -1,6 +1,7 @@
 package org.embulk.filter.row.where;
 
 import org.embulk.EmbulkTestRuntime;
+import org.embulk.config.Config;
 import org.embulk.config.ConfigException;
 import org.embulk.spi.Page;
 import org.embulk.spi.PageReader;
@@ -96,7 +97,7 @@ public class TestParser
         assertTrue(exp.eval(reader));
 
         try {
-            exp = parser.parse("\"unknown\" IS NULL");
+            parser.parse("\"unknown\" IS NULL");
             assertTrue(false);
         }
         catch (SchemaConfigException e) {
@@ -123,7 +124,14 @@ public class TestParser
         assertTrue(exp.eval(reader));
 
         try {
-            exp = parser.parse("timestamp = true");
+            parser.parse("timestamp = true");
+            assertTrue(false);
+        }
+        catch (ConfigException e) {
+        }
+
+        try {
+            parser.parse("boolean > true");
             assertTrue(false);
         }
         catch (ConfigException e) {
@@ -170,7 +178,14 @@ public class TestParser
         assertTrue(exp.eval(reader));
 
         try {
-            exp = parser.parse("timestamp = 1.5");
+            parser.parse("boolean = 1.5");
+            assertTrue(false);
+        }
+        catch (ConfigException e) {
+        }
+
+        try {
+            parser.parse("double START_WITH 1.5");
             assertTrue(false);
         }
         catch (ConfigException e) {
@@ -198,6 +213,26 @@ public class TestParser
         exp = parser.parse("string <> 'string'");
         assertFalse(exp.eval(reader));
 
+        exp = parser.parse("string > 's'");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("string > 't'");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("string >= 's'");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("string >= 't'");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("string < 't'");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("string < 's'");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("string <= 't'");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("string <= 's'");
+        assertFalse(exp.eval(reader));
+
         exp = parser.parse("string START_WITH 's'");
         assertTrue(exp.eval(reader));
         exp = parser.parse("string START_WITH 'f'");
@@ -217,7 +252,14 @@ public class TestParser
         assertTrue(exp.eval(reader));
 
         try {
-            exp = parser.parse("timestamp = 'string'");
+            parser.parse("boolean = 'string'");
+            assertTrue(false);
+        }
+        catch (ConfigException e) {
+        }
+
+        try {
+            parser.parse("string AND 'string'");
             assertTrue(false);
         }
         catch (ConfigException e) {
@@ -262,6 +304,19 @@ public class TestParser
 
         exp = parser.parse("TIMESTAMP 1.5 = timestamp");
         assertTrue(exp.eval(reader));
+
+        // auto guess of TIMESTAMP
+        exp = parser.parse("timestamp = 1.5");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("1.5 = timestamp");
+        assertTrue(exp.eval(reader));
+
+        try {
+            parser.parse("timestamp START_WITH 1.5");
+            assertTrue(false);
+        }
+        catch (ConfigException e) {
+        }
     }
 
     @Test
@@ -316,11 +371,24 @@ public class TestParser
         exp = parser.parse("timestamp = TIMESTAMP '1970-01-01'");
         assertFalse(exp.eval(reader));
 
+        // auto guess of TIMESTAMP
+        exp = parser.parse("timestamp = '1970-01-01 09:00:01.5 +0900'");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("'1970-01-01 09:00:01.5 +0900' = timestamp");
+        assertTrue(exp.eval(reader));
+
         try {
-            parser.parse("timestamp = TIMESTAMP '1970:01:01'");
+            parser.parse("timestamp = '1970:01:01'");
             assertTrue(false);
         }
         catch (TimestampParseException ex) {
+        }
+
+        try {
+            parser.parse("timestamp START_WITH '1970-01-01 09:00:01.5 +0900'");
+            assertTrue(false);
+        }
+        catch (ConfigException e) {
         }
     }
 
