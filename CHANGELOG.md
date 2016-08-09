@@ -19,8 +19,7 @@ Fxies:
 
 Changes:
 
-* Change identifier syntax from `[a-zA-Z$][a-zA-z0-9\.\-_]*` to `[a-zA-Z_][a-zA-z0-9_]*`
-  * Allow starting _. Disallow staring $. Diallow -. Disallow \.
+* Change identifier syntax from `[a-zA-Z$][a-zA-z0-9\.\-_]*` to `[a-zA-Z_][a-zA-z0-9_]*` to allow starting _, disallow staring $, disallow -, disallow . (dot).
 
 # 0.3.0 (2016-08-06)
 
