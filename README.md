@@ -168,7 +168,7 @@ Not supported yet
 
 ### Identifier Literal
 
-Characters matching with a regular expression `[a-zA-Z_][a-zA-z0-9_]*` such as `foobar`, and characters surrounded by `"` such as `"foo\"bar"` are considred as an identifier literal, that is, embulk's column name.
+Characters matching with a regular expression `[a-zA-Z_][a-zA-z0-9_]*` such as `foobar`, and characters surrounded by `"` such as `"foo-bar"`, `"foo.bar"`, and `"foo\"bar"` are considred as an identifier literal, that is, embulk's column name.
 
 ## Operators
 
