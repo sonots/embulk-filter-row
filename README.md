@@ -217,6 +217,7 @@ Not supported yet
 ## ToDo
 
 * Support filtering by values of `type: json` with JSONPath
+* Support IN operator
 
 ## ChangeLog
 
