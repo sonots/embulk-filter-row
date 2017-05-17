@@ -224,6 +224,11 @@ filters:
       - {column: d, operator: "IS NOT NULL"}
 ```
 
+## Comparisions
+
+* [embulk-filter-calcite](https://github.com/muga/embulk-filter-calcite)
+  * embulk-filter-calcite is a pretty nice plugin which enables us to write SQL query to filter embulk records.
+  * However, based on [my benchmark (Japanese)](http://qiita.com/sonots/items/a70482d29862de87624d), embulk-filter-calcite was 1471 times slower than embulk-filter-row in iterms of string `=` operator. Use `embulk-filter-row` (this plugin) when you need performance.
 
 ## ToDo
 
