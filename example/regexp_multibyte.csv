@@ -1,0 +1,12 @@
+time,foo,bar,flag,id,name,json,score
+2015-07-13,,bar,true,0,ゼロ,"{\"foo\":\"bar\"}",1370
+2015-07-13,,bar,true,1,イチ,"{\"foo\":\"bar\"}",3962
+2015-07-13,,bar,true,2,ニ,"{\"foo\":\"bar\"}",7323
+2015-07-13,,bar,true,3,サン,"{\"foo\":\"bar\"}",5905
+2015-07-13,,bar,true,4,ヨン,"{\"foo\":\"bar\"}",8378
+2015-07-13,,bar,true,5,ゴ,"{\"foo\":\"bar\"}",275
+2015-07-13,,bar,true,6,ロク,"{\"foo\":\"bar\"}",43
+2015-07-13,,bar,true,7,シチ,"{\"foo\":\"bar\"}",6130
+2015-07-13,,bar,true,8,ハチ,"{\"foo\":\"bar\"}",6652
+2015-07-13,,bar,true,9,キュウ,"{\"foo\":\"bar\"}",6822
+2015-07-13,NULL,bar,false,NULL,NULL,NULL,4170
