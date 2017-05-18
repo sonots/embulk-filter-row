@@ -1,3 +1,10 @@
+# 0.4.0 (2017-05-18)
+
+Enhancements
+
+* Use joni library for REGEXP operator to improve performance
+  * Note that This may introduce trival incompatibility changes
+
 # 0.3.3 (2016-08-09)
 
 Enhancements
