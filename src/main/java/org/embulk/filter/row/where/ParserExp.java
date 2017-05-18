@@ -9,6 +9,8 @@ import org.joni.Matcher;
 import org.joni.Option;
 import org.joni.Regex;
 
+import java.nio.charset.StandardCharsets;
+
 // Operation Node of AST (Abstract Syntax Tree)
 public abstract class ParserExp extends ParserNode
 {
@@ -290,7 +292,7 @@ class RegexpOpExp extends BinaryOpExp
     {
         super(left, right, operator);
 
-        byte[] pattern = (((StringLiteral)right).val).getBytes();
+        byte[] pattern = (((StringLiteral)right).val).getBytes(StandardCharsets.UTF_8);
         this.regex = new Regex(pattern, 0, pattern.length, Option.NONE, UTF8Encoding.INSTANCE);
 
         if (! left.isString()) {
@@ -305,7 +307,7 @@ class RegexpOpExp extends BinaryOpExp
 
     public boolean eval(PageReader pageReader)
     {
-        byte[] l = left.getString(pageReader).getBytes();
+        byte[] l = left.getString(pageReader).getBytes(StandardCharsets.UTF_8);
         Matcher matcher = regex.matcher(l);
         int result = matcher.search(0, l.length, Option.DEFAULT);
         return result != -1;
