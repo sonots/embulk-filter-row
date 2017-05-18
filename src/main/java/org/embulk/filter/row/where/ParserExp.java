@@ -4,8 +4,12 @@ import org.embulk.config.ConfigException;
 import org.embulk.spi.PageReader;
 import org.embulk.spi.time.Timestamp;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.jcodings.specific.UTF8Encoding;
+import org.joni.Matcher;
+import org.joni.Option;
+import org.joni.Regex;
+
+import java.nio.charset.StandardCharsets;
 
 // Operation Node of AST (Abstract Syntax Tree)
 public abstract class ParserExp extends ParserNode
@@ -282,12 +286,15 @@ class StringOpExp extends BinaryOpExp
 
 class RegexpOpExp extends BinaryOpExp
 {
-    Pattern pattern;
+    Regex regex;
 
     public RegexpOpExp(ParserLiteral left, ParserLiteral right, int operator)
     {
         super(left, right, operator);
-        this.pattern = Pattern.compile(((StringLiteral)right).val);
+
+        byte[] pattern = (((StringLiteral)right).val).getBytes(StandardCharsets.UTF_8);
+        this.regex = new Regex(pattern, 0, pattern.length, Option.NONE, UTF8Encoding.INSTANCE);
+
         if (! left.isString()) {
             throw new ConfigException(String.format("\"%s\" is not a String column", ((IdentifierLiteral)left).name));
         }
@@ -300,9 +307,10 @@ class RegexpOpExp extends BinaryOpExp
 
     public boolean eval(PageReader pageReader)
     {
-        String l = left.getString(pageReader);
-        Matcher m = pattern.matcher(l);
-        return m.find();
+        byte[] l = left.getString(pageReader).getBytes(StandardCharsets.UTF_8);
+        Matcher matcher = regex.matcher(l);
+        int result = matcher.search(0, l.length, Option.DEFAULT);
+        return result != -1;
     }
 }
 
