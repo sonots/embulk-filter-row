@@ -6,7 +6,7 @@ A filter plugin for Embulk to filter out rows
 
 ## Configuration
 
-Versions >= 0.3.0 has `where` option to support SQL-like syntax.
+Requirement: version >= 0.3.0
 
 * **where**: Select only rows which matches with conditions written in SQL-like syntax. See [SQL-like Syntax](#sql-like-syntax)
 
@@ -23,13 +23,13 @@ filters:
   - type: row
     where: |-
       (
-        string START_WITH 'str' AND
-        number > 1.0
+        string_column START_WITH 'str' AND
+        number_column > 1.0
       )
       OR
       (
-        time = TIMESTAMP '2016-01-01 +0900' AND
-        "true" = true
+        time_column = TIMESTAMP '2016-01-01 +0900' AND
+        "true_column" = true
       )
 ```
 
@@ -37,20 +37,22 @@ See [SQL-like Syntax](#sql-like-syntax) for more details
 
 # SQL-like Syntax
 
-Versions >= 0.3.0 suppors SQL-like syntax as:
+```sql
+where: column1 = 'str'
+```
 
 ```sql
 where: |-
   (
-    string START_WITH 'str' AND
-    number > 1.0
+    string_column START_WITH 'str' AND
+    number_column > 1.0
   
   )
   OR
   (
-    time = TIMESTAMP '2016-01-01 +0900' AND
-    "true" = true AND
-    string REGEXP '^reg'
+    time_column = TIMESTAMP '2016-01-01 +0900' AND
+    "true_column" = true AND
+    string_column REGEXP '^reg'
   )
 ```
 
