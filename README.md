@@ -227,8 +227,9 @@ filters:
 ## Comparisions
 
 * [embulk-filter-calcite](https://github.com/muga/embulk-filter-calcite)
-  * embulk-filter-calcite is a pretty nice plugin which enables us to write SQL query to filter embulk records.
-  * However, based on [my benchmark (Japanese)](http://qiita.com/sonots/items/a70482d29862de87624d), embulk-filter-calcite was 1471 times slower than embulk-filter-row in iterms of string `=` operator. Use `embulk-filter-row` (this plugin) when you need performance.
+  * embulk-filter-calcite is a pretty nice plugin which enables us to write SQL query to filter embulk records, not only `WHERE` but also `SELECT`.
+  * Based on [my benchmark (Japanese)](http://qiita.com/sonots/items/a70482d29862de87624d), embulk-filter-row was faster than embulk-filter-calcite.
+  * Choose which to use as your demand.
 
 ## ToDo
 
