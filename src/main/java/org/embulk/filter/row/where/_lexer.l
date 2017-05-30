@@ -24,7 +24,7 @@ import org.embulk.spi.Schema;
 
 Number = -?[0-9]+(\.[0-9]+)?
 QuotedIdentifierChar = [^\r\n\"\\]
-NonQuotedIdentifier = [a-zA-Z_][a-zA-z0-9_]*
+NonQuotedIdentifier = [a-zA-Z_][a-zA-z0-9_\-]*
 StringChar = [^\r\n\'\\]+
 Newline = \n|\r|\r\n
 
