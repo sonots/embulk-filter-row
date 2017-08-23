@@ -55,7 +55,6 @@ public class RowFilterPlugin implements FilterPlugin
             FilterPlugin.Control control)
     {
         PluginTask task = config.loadConfig(PluginTask.class);
-        ParserLiteral.setJRuby(task.getJRuby());
 
         configure(task, inputSchema);
         Schema outputSchema = inputSchema;

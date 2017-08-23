@@ -11,7 +11,6 @@ import org.embulk.spi.SchemaConfigException;
 import org.embulk.spi.time.Timestamp;
 
 import org.embulk.spi.time.TimestampParseException;
-import org.jruby.embed.ScriptingContainer;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,7 +31,6 @@ import static org.junit.Assert.assertTrue;
 public class TestParser
 {
     private static EmbulkTestRuntime runtime = new EmbulkTestRuntime(); // very slow
-    private static ScriptingContainer jruby = new ScriptingContainer();
 
     private static PageReader buildPageReader(Schema schema, final Object... objects)
     {
@@ -51,8 +49,6 @@ public class TestParser
     @BeforeClass
     public static void setupBeforeClass()
     {
-        ParserLiteral.setJRuby(jruby);
-
         // {"k1":{"k1":"v"},"k2":{"k2":"v"}}
         Value k1 = ValueFactory.newString("k1");
         Value k2 = ValueFactory.newString("k2");
