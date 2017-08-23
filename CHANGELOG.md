@@ -1,3 +1,10 @@
+# 0.5.0 (2017-08-23)
+
+Changes
+
+* Follow new TimestampParser API of embulk >= 0.8.29.
+  * Note that embulk-filter-row >= 0.5.0 requires embulk >= 0.8.29.
+
 # 0.4.0 (2017-05-18)
 
 Enhancements
