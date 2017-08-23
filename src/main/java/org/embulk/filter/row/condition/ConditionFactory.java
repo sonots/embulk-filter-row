@@ -15,11 +15,9 @@ import org.embulk.spi.type.StringType;
 import org.embulk.spi.type.TimestampType;
 import org.embulk.spi.type.Type;
 import org.joda.time.DateTimeZone;
-import org.jruby.embed.ScriptingContainer;
 
 public class ConditionFactory
 {
-    private final ScriptingContainer jruby;
     private Column column;
     private String columnName;
     private Type columnType;
@@ -27,9 +25,8 @@ public class ConditionFactory
     private String operator;
     private boolean not;
 
-    public ConditionFactory(ScriptingContainer jruby, Column column, ConditionConfig conditionConfig)
+    public ConditionFactory(Column column, ConditionConfig conditionConfig)
     {
-        this.jruby           = jruby;
         this.column          = column;
         this.columnName      = column.getName();
         this.columnType      = column.getType();
@@ -140,7 +137,7 @@ public class ConditionFactory
             String format          = (String) conditionConfig.getFormat().get();
             DateTimeZone timezone  = DateTimeZone.forID((String) conditionConfig.getTimezone().get());
 
-            TimestampParser parser = new TimestampParser(jruby, format, timezone);
+            TimestampParser parser = new TimestampParser(format, timezone);
             try {
                 Timestamp timestamp = parser.parse(argument);
                 return new TimestampCondition(operator, timestamp, not);

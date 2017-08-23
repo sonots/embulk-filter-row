@@ -6,7 +6,6 @@ import org.embulk.config.ConfigException;
 import org.embulk.config.TaskSource;
 import org.embulk.spi.Column;
 
-import org.jruby.embed.ScriptingContainer;
 import org.junit.Test;
 
 import static org.embulk.spi.type.Types.BOOLEAN;
@@ -63,11 +62,8 @@ public class TestConditionFactory
         }
     }
 
-    private final ScriptingContainer jruby;
-
     public TestConditionFactory()
     {
-        jruby = new ScriptingContainer();
     }
 
     @Test
@@ -83,7 +79,7 @@ public class TestConditionFactory
                 return Optional.of("IS NULL");
             }
         };
-        condition = (BooleanCondition) new ConditionFactory(jruby, column, config).createCondition();
+        condition = (BooleanCondition) new ConditionFactory(column, config).createCondition();
         assertTrue(condition.compare(null));
 
         config = new DefaultConditionConfig() {
@@ -97,7 +93,7 @@ public class TestConditionFactory
             }
         };
         try {
-            condition = (BooleanCondition) new ConditionFactory(jruby, column, config).createCondition();
+            condition = (BooleanCondition) new ConditionFactory(column, config).createCondition();
             fail("Argument is required");
         }
         catch (ConfigException e) {
@@ -113,7 +109,7 @@ public class TestConditionFactory
                 return Optional.of((Object) new Boolean(true));
             }
         };
-        condition = (BooleanCondition) new ConditionFactory(jruby, column, config).createCondition();
+        condition = (BooleanCondition) new ConditionFactory(column, config).createCondition();
         assertTrue(condition.compare(new Boolean(true)));
 
         config = new DefaultConditionConfig() {
@@ -127,7 +123,7 @@ public class TestConditionFactory
             }
         };
         try {
-            condition = (BooleanCondition) new ConditionFactory(jruby, column, config).createCondition();
+            condition = (BooleanCondition) new ConditionFactory(column, config).createCondition();
             fail("Argument type mismatch");
         }
         catch (ConfigException e) {
@@ -147,7 +143,7 @@ public class TestConditionFactory
                 return Optional.of("IS NULL");
             }
         };
-        condition = (DoubleCondition) new ConditionFactory(jruby, column, config).createCondition();
+        condition = (DoubleCondition) new ConditionFactory(column, config).createCondition();
         assertTrue(condition.compare(null));
 
         config = new DefaultConditionConfig() {
@@ -161,7 +157,7 @@ public class TestConditionFactory
             }
         };
         try {
-            condition = (DoubleCondition) new ConditionFactory(jruby, column, config).createCondition();
+            condition = (DoubleCondition) new ConditionFactory(column, config).createCondition();
             fail("Argument is required");
         }
         catch (ConfigException e) {
@@ -177,7 +173,7 @@ public class TestConditionFactory
                 return Optional.of((Object) new Double(10));
             }
         };
-        condition = (DoubleCondition) new ConditionFactory(jruby, column, config).createCondition();
+        condition = (DoubleCondition) new ConditionFactory(column, config).createCondition();
         assertTrue(condition.compare(new Double(10)));
 
         config = new DefaultConditionConfig() {
@@ -191,7 +187,7 @@ public class TestConditionFactory
             }
         };
         try {
-            condition = (DoubleCondition) new ConditionFactory(jruby, column, config).createCondition();
+            condition = (DoubleCondition) new ConditionFactory(column, config).createCondition();
             fail("Argument type mismatch");
         }
         catch (ConfigException e) {
@@ -211,7 +207,7 @@ public class TestConditionFactory
                 return Optional.of("IS NULL");
             }
         };
-        condition = (LongCondition) new ConditionFactory(jruby, column, config).createCondition();
+        condition = (LongCondition) new ConditionFactory(column, config).createCondition();
         assertTrue(condition.compare(null));
 
         config = new DefaultConditionConfig() {
@@ -225,7 +221,7 @@ public class TestConditionFactory
             }
         };
         try {
-            condition = (LongCondition) new ConditionFactory(jruby, column, config).createCondition();
+            condition = (LongCondition) new ConditionFactory(column, config).createCondition();
             fail("Argument is required");
         }
         catch (ConfigException e) {
@@ -241,7 +237,7 @@ public class TestConditionFactory
                 return Optional.of((Object) new Long(10));
             }
         };
-        condition = (LongCondition) new ConditionFactory(jruby, column, config).createCondition();
+        condition = (LongCondition) new ConditionFactory(column, config).createCondition();
         assertTrue(condition.compare(new Long(10)));
 
         config = new DefaultConditionConfig() {
@@ -255,7 +251,7 @@ public class TestConditionFactory
             }
         };
         try {
-            condition = (LongCondition) new ConditionFactory(jruby, column, config).createCondition();
+            condition = (LongCondition) new ConditionFactory(column, config).createCondition();
             fail("Argument type mismatch");
         }
         catch (ConfigException e) {
@@ -275,7 +271,7 @@ public class TestConditionFactory
                 return Optional.of("IS NULL");
             }
         };
-        condition = (StringCondition) new ConditionFactory(jruby, column, config).createCondition();
+        condition = (StringCondition) new ConditionFactory(column, config).createCondition();
         assertTrue(condition.compare(null));
 
         config = new DefaultConditionConfig() {
@@ -289,7 +285,7 @@ public class TestConditionFactory
             }
         };
         try {
-            condition = (StringCondition) new ConditionFactory(jruby, column, config).createCondition();
+            condition = (StringCondition) new ConditionFactory(column, config).createCondition();
             fail("Argument is required");
         }
         catch (ConfigException e) {
@@ -305,7 +301,7 @@ public class TestConditionFactory
                 return Optional.of((Object) "foo");
             }
         };
-        condition = (StringCondition) new ConditionFactory(jruby, column, config).createCondition();
+        condition = (StringCondition) new ConditionFactory(column, config).createCondition();
         assertTrue(condition.compare("foo"));
 
         config = new DefaultConditionConfig() {
@@ -319,7 +315,7 @@ public class TestConditionFactory
             }
         };
         try {
-            condition = (StringCondition) new ConditionFactory(jruby, column, config).createCondition();
+            condition = (StringCondition) new ConditionFactory(column, config).createCondition();
             fail("Argument type mismatch");
         }
         catch (ConfigException e) {
@@ -339,7 +335,7 @@ public class TestConditionFactory
                 return Optional.of("IS NULL");
             }
         };
-        condition = (TimestampCondition) new ConditionFactory(jruby, column, config).createCondition();
+        condition = (TimestampCondition) new ConditionFactory(column, config).createCondition();
         assertTrue(condition.compare(null));
 
         config = new DefaultConditionConfig() {
@@ -353,19 +349,11 @@ public class TestConditionFactory
             }
         };
         try {
-            condition = (TimestampCondition) new ConditionFactory(jruby, column, config).createCondition();
+            condition = (TimestampCondition) new ConditionFactory(column, config).createCondition();
             fail("Argument is required");
         }
         catch (ConfigException e) {
         }
-
-        //ToDo: How to create jruby object correctly?
-        //config = new DefaultConditionConfig() {
-        //    public Optional<String> getOperator() { return Optional.of("=="); }
-        //    public Optional<Object> getArgument() { return Optional.of((Object)"2015-07-15"); }
-        //    public Optional<String> getFormat()   { return Optional.of("%Y-%m-%d"); }
-        //};
-        //condition = (TimestampCondition)new ConditionFactory(jruby, column, config).createCondition();
 
         config = new DefaultConditionConfig() {
             public Optional<String> getOperator()
@@ -378,7 +366,7 @@ public class TestConditionFactory
             }
         };
         try {
-            condition = (TimestampCondition) new ConditionFactory(jruby, column, config).createCondition();
+            condition = (TimestampCondition) new ConditionFactory(column, config).createCondition();
             fail("Argument type mismatch");
         }
         catch (ConfigException e) {

@@ -16,19 +16,12 @@ import org.embulk.spi.type.StringType;
 import org.embulk.spi.type.TimestampType;
 import org.embulk.spi.type.Type;
 import org.joda.time.DateTimeZone;
-import org.jruby.embed.ScriptingContainer;
 import org.msgpack.value.Value;
 
 // Literal Node of AST (Abstract Syntax Tree)
 public abstract class ParserLiteral extends ParserNode
 {
-    protected static ScriptingContainer jruby;
     protected String yytext;
-
-    public static void setJRuby(ScriptingContainer jruby)
-    {
-        ParserLiteral.jruby = jruby;
-    }
 
     public boolean isBoolean()
     {
@@ -185,7 +178,7 @@ class TimestampLiteral extends ParserLiteral
         TimestampParseException ex = null;
         for (String format : formats) {
             try {
-                TimestampParser timestampParser = new TimestampParser(jruby, format, default_timezone);
+                TimestampParser timestampParser = new TimestampParser(format, default_timezone);
                 this.val = timestampParser.parse(literal.val);
                 break;
             }

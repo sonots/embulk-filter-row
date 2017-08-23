@@ -40,7 +40,7 @@ abstract class AbstractGuardColumnVisitor
             String columnName = conditionConfig.getColumn();
             for (Column column : outputSchema.getColumns()) {
                 if (columnName.equals(column.getName())) {
-                    ConditionFactory factory = new ConditionFactory(task.getJRuby(), column, conditionConfig);
+                    ConditionFactory factory = new ConditionFactory(column, conditionConfig);
                     Condition condition = factory.createCondition();
                     conditionMap.get(columnName).add(condition);
                     break;
