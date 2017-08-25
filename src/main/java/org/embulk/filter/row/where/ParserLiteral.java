@@ -1,5 +1,6 @@
 package org.embulk.filter.row.where;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 import org.embulk.config.ConfigException;
 import org.embulk.spi.Column;
@@ -16,6 +17,7 @@ import org.embulk.spi.type.StringType;
 import org.embulk.spi.type.TimestampType;
 import org.embulk.spi.type.Type;
 import org.joda.time.DateTimeZone;
+import org.jruby.embed.ScriptingContainer;
 import org.msgpack.value.Value;
 
 // Literal Node of AST (Abstract Syntax Tree)
@@ -140,7 +142,7 @@ class StringLiteral extends ParserLiteral
 class TimestampLiteral extends ParserLiteral
 {
     protected Timestamp val;
-    private static final DateTimeZone default_timezone  = DateTimeZone.forID("UTC");
+    private static final DateTimeZone defaultTimeZone  = DateTimeZone.forID("UTC");
 
     public TimestampLiteral(ParserLiteral literal)
     {
@@ -178,7 +180,7 @@ class TimestampLiteral extends ParserLiteral
         TimestampParseException ex = null;
         for (String format : formats) {
             try {
-                TimestampParser timestampParser = new TimestampParser(format, default_timezone);
+                TimestampParser timestampParser = getTimestampParser(format, defaultTimeZone);
                 this.val = timestampParser.parse(literal.val);
                 break;
             }
@@ -215,6 +217,86 @@ class TimestampLiteral extends ParserLiteral
     {
         return val;
     }
+
+    private class TimestampParserTaskImpl implements TimestampParser.Task
+    {
+        private final DateTimeZone defaultTimeZone;
+        private final String defaultTimestampFormat;
+        private final String defaultDate;
+        public TimestampParserTaskImpl(
+                DateTimeZone defaultTimeZone,
+                String defaultTimestampFormat,
+                String defaultDate)
+        {
+            this.defaultTimeZone = defaultTimeZone;
+            this.defaultTimestampFormat = defaultTimestampFormat;
+            this.defaultDate = defaultDate;
+        }
+        @Override
+        public DateTimeZone getDefaultTimeZone()
+        {
+            return this.defaultTimeZone;
+        }
+        @Override
+        public String getDefaultTimestampFormat()
+        {
+            return this.defaultTimestampFormat;
+        }
+        @Override
+        public String getDefaultDate()
+        {
+            return this.defaultDate;
+        }
+        @Override
+        public ScriptingContainer getJRuby()
+        {
+            return null;
+        }
+    }
+
+    private class TimestampParserColumnOptionImpl implements TimestampParser.TimestampColumnOption
+    {
+        private final Optional<DateTimeZone> timeZone;
+        private final Optional<String> format;
+        private final Optional<String> date;
+        public TimestampParserColumnOptionImpl(
+                Optional<DateTimeZone> timeZone,
+                Optional<String> format,
+                Optional<String> date)
+        {
+            this.timeZone = timeZone;
+            this.format = format;
+            this.date = date;
+        }
+        @Override
+        public Optional<DateTimeZone> getTimeZone()
+        {
+            return this.timeZone;
+        }
+        @Override
+        public Optional<String> getFormat()
+        {
+            return this.format;
+        }
+        @Override
+        public Optional<String> getDate()
+        {
+            return this.date;
+        }
+    }
+
+    private TimestampParser getTimestampParser(String format, DateTimeZone timezone)
+    {
+        // ToDo: Use following codes after deciding to drop supporting embulk < 0.8.29.
+        //
+        //     return new TimestampParser(format, timezone);
+        String date = "1970-01-01";
+        TimestampParserTaskImpl task = new TimestampParserTaskImpl(timezone, format, date);
+        TimestampParserColumnOptionImpl columnOption = new TimestampParserColumnOptionImpl(
+                Optional.of(timezone), Optional.of(format), Optional.of(date));
+        return new TimestampParser(task, columnOption);
+    }
+
 }
 
 class IdentifierLiteral extends ParserLiteral
