@@ -8,7 +8,7 @@ A filter plugin for Embulk to filter out rows
 
 Requirement: version >= 0.3.0
 
-* **where**: Select only rows which matches with conditions written in SQL-like syntax. See [SQL-like Syntax](#sql-like-syntax)
+* **where**: Select only rows which match with conditions written in SQL-like syntax. See [SQL-like Syntax](#sql-like-syntax)
 
 ## Example
 
