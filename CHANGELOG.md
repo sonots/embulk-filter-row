@@ -1,3 +1,9 @@
+# 0.5.1 (2017-08-26)
+
+Enhancements:
+
+* Use old, but non-deprecated TimestampParser API to support embulk < 0.8.29
+
 # 0.5.0 (2017-08-23)
 
 Changes
