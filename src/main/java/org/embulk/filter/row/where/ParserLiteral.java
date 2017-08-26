@@ -180,7 +180,7 @@ class TimestampLiteral extends ParserLiteral
         TimestampParseException ex = null;
         for (String format : formats) {
             try {
-                TimestampParser timestampParser = getTimestampParser(format, defaultTimeZone);
+                TimestampParser timestampParser = createTimestampParser(format, defaultTimeZone);
                 this.val = timestampParser.parse(literal.val);
                 break;
             }
@@ -285,18 +285,22 @@ class TimestampLiteral extends ParserLiteral
         }
     }
 
-    private TimestampParser getTimestampParser(String format, DateTimeZone timezone)
+    // ToDo: Replace with `new TimestampParser(format, timezone)`
+    // after deciding to drop supporting embulk < 0.8.29.
+    private TimestampParser createTimestampParser(String format, DateTimeZone timezone)
     {
-        // ToDo: Use following codes after deciding to drop supporting embulk < 0.8.29.
-        //
-        //     return new TimestampParser(format, timezone);
-        String date = "1970-01-01";
+        return createTimestampParser(format, timezone, "1970-01-01");
+    }
+
+    // ToDo: Replace with `new TimestampParser(format, timezone, date)`
+    // after deciding to drop supporting embulk < 0.8.29.
+    private TimestampParser createTimestampParser(String format, DateTimeZone timezone, String date)
+    {
         TimestampParserTaskImpl task = new TimestampParserTaskImpl(timezone, format, date);
         TimestampParserColumnOptionImpl columnOption = new TimestampParserColumnOptionImpl(
                 Optional.of(timezone), Optional.of(format), Optional.of(date));
         return new TimestampParser(task, columnOption);
     }
-
 }
 
 class IdentifierLiteral extends ParserLiteral

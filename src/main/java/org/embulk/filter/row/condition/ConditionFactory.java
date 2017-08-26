@@ -139,7 +139,7 @@ public class ConditionFactory
             String format          = (String) conditionConfig.getFormat().get();
             DateTimeZone timezone  = DateTimeZone.forID((String) conditionConfig.getTimezone().get());
 
-            TimestampParser parser = getTimestampParser(format, timezone);
+            TimestampParser parser = createTimestampParser(format, timezone);
             try {
                 Timestamp timestamp = parser.parse(argument);
                 return new TimestampCondition(operator, timestamp, not);
@@ -220,12 +220,17 @@ public class ConditionFactory
         }
     }
 
-    private TimestampParser getTimestampParser(String format, DateTimeZone timezone)
+    // ToDo: Replace with `new TimestampParser(format, timezone)`
+    // after deciding to drop supporting embulk < 0.8.29.
+    private TimestampParser createTimestampParser(String format, DateTimeZone timezone)
     {
-        // ToDo: Use following codes after deciding to drop supporting embulk < 0.8.29.
-        //
-        //     return new TimestampParser(format, timezone);
-        String date = "1970-01-01";
+        return createTimestampParser(format, timezone, "1970-01-01");
+    }
+
+    // ToDo: Replace with `new TimestampParser(format, timezone, date)`
+    // after deciding to drop supporting embulk < 0.8.29.
+    private TimestampParser createTimestampParser(String format, DateTimeZone timezone, String date)
+    {
         TimestampParserTaskImpl task = new TimestampParserTaskImpl(timezone, format, date);
         TimestampParserColumnOptionImpl columnOption = new TimestampParserColumnOptionImpl(
                 Optional.of(timezone), Optional.of(format), Optional.of(date));
