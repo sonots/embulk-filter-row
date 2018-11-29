@@ -37,7 +37,7 @@ See [SQL-like Syntax](#sql-like-syntax) for more details
 
 # SQL-like Syntax
 
-This syntax must be similar with a standard SQl syntax.
+This syntax must be similar with a standard SQL syntax.
 
 ```sql
 where: column1 = 'str'
