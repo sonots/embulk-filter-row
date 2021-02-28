@@ -1,34 +1,35 @@
 plugins {
-    id "com.jfrog.bintray" version "1.1"
-    id "com.github.jruby-gradle.base" version "0.1.5"
     id "java"
     id "checkstyle"
     id "jacoco"
-    id "findbugs"
+    id "maven-publish"
+    id "org.embulk.embulk-plugins" version "0.4.2"
 }
-import com.github.jrubygradle.JRubyExec
 repositories {
     mavenCentral()
     jcenter()
 }
-configurations {
-    provided
-}
 
+group = "io.github.sonots"
 version = "0.5.1"
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+description = "A filter plugin for Embulk to filter out rows with conditions."
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
-    compile  "org.embulk:embulk-core:0.8.+"
-    provided "org.embulk:embulk-core:0.8.+"
+    compileOnly  "org.embulk:embulk-core:0.9.23"
 
     compile  "org.jruby.joni:joni:2.1.11"
     compile  "org.jruby.jcodings:jcodings:1.0.18"
 
     testCompile "junit:junit:4.+"
-    testCompile "org.embulk:embulk-core:0.8.+:tests"
-    testCompile "org.embulk:embulk-standards:0.8.+"
+    testCompile  "org.embulk:embulk-core:0.9.23:tests"
+    testCompile  "org.embulk:embulk-standards:0.9.23"
+    // TODO: Remove them.
+    // These `testCompile` are a tentative workaround. It will be covered in Embulk core's testing mechanism.
+    testCompile "org.embulk:embulk-deps-buffer:0.9.23"
+    testCompile "org.embulk:embulk-deps-config:0.9.23"
 }
 
 checkstyle {
@@ -42,53 +43,35 @@ task byaccj() {
 // append dependsOn to compileJava task
 compileJava.dependsOn(byaccj)
 
-task classpath(type: Copy, dependsOn: ["jar"]) {
-    doFirst { file("classpath").deleteDir() }
-    from (configurations.runtime - configurations.provided + files(jar.archivePath))
-    into "classpath"
-}
-clean { delete "classpath" }
-
-task gem(type: JRubyExec, dependsOn: ["gemspec", "classpath"]) {
-    jrubyArgs "-rrubygems/gem_runner", "-eGem::GemRunner.new.run(ARGV)", "build"
-    script "${project.name}.gemspec"
-    doLast { ant.move(file: "${project.name}-${project.version}.gem", todir: "pkg") }
+embulkPlugin {
+    mainClass = "org.embulk.filter.row.RowFilterPlugin"
+    category = "filter"
+    type = "row"
 }
 
-task gemPush(type: JRubyExec, dependsOn: ["gem"]) {
-    jrubyArgs "-rrubygems/gem_runner", "-eGem::GemRunner.new.run(ARGV)", "push"
-    script "pkg/${project.name}-${project.version}.gem"
+// TODO: enable when the pure-java plugin publish.
+//publishing {
+//    publications {
+//        embulkPluginMaven(MavenPublication) {  // Publish it with "publishEmbulkPluginMavenPublicationToMavenRepository".
+//            from components.java  // Must be "components.java". The dependency modification works only for it.
+//        }
+//    }
+//    repositories {
+//        maven {
+//            url = "${project.buildDir}/mavenPublishLocal"
+//        }
+//    }
+//}
+
+gem {
+    from("LICENSE.txt")
+    authors = [ "Naotoshi Seo" ]
+    email = [ "sonots@gmail.com" ]
+    summary = "A filter plugin for Embulk to filter out rows with conditions"
+    homepage = "https://github.com/sonots/embulk-filter-row"
+    licenses = [ "MIT" ]
 }
 
-task "package"(dependsOn: ["gemspec", "classpath"]) << {
-    println "> Build succeeded."
-    println "> You can run embulk with '-L ${file(".").absolutePath}' argument."
+gemPush {
+    host = "https://rubygems.org"
 }
-
-task gemspec {
-    ext.gemspecFile = file("${project.name}.gemspec")
-    inputs.file "build.gradle"
-    outputs.file gemspecFile
-    doLast { gemspecFile.write($/
-Gem::Specification.new do |spec|
-  spec.name          = "${project.name}"
-  spec.version       = "${project.version}"
-  spec.authors       = ["Naotoshi Seo"]
-  spec.summary       = %[A filter plugin for Embulk to filter out rows with conditions]
-  spec.description   = %[A filter plugin for Embulk to filter out rows with conditions.]
-  spec.email         = ["sonots@gmail.com"]
-  spec.licenses      = ["MIT"]
-  spec.homepage      = "https://github.com/sonots/embulk-filter-row"
-
-  spec.files         = `git ls-files`.split("\n") + Dir["classpath/*.jar"]
-  spec.test_files    = spec.files.grep(%r"^(test|spec)/")
-  spec.require_paths = ["lib"]
-
-  #spec.add_dependency 'YOUR_GEM_DEPENDENCY', ['~> YOUR_GEM_DEPENDENCY_VERSION']
-  spec.add_development_dependency 'bundler', ['~> 1.0']
-  spec.add_development_dependency 'rake', ['>= 10.0']
-end
-/$)
-    }
-}
-clean { delete "${project.name}.gemspec" }
