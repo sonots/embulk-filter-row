@@ -20,15 +20,7 @@ targetCompatibility = 1.8
 dependencies {
     compileOnly "org.embulk:embulk-api:0.10.30"
     compileOnly "org.embulk:embulk-spi:0.10.30"
-    compile("org.embulk:embulk-util-config:0.2.1") {
-        // They conflict with embulk-core. They are once excluded here,
-        // and added explicitly with versions exactly the same with embulk-core:0.10.19.
-        exclude group: "com.fasterxml.jackson.core", module: "jackson-annotations"
-        exclude group: "com.fasterxml.jackson.core", module: "jackson-core"
-        exclude group: "com.fasterxml.jackson.core", module: "jackson-databind"
-        exclude group: "com.fasterxml.jackson.datatype", module: "jackson-datatype-jdk8"
-        exclude group: "javax.validation", module: "validation-api"
-    }
+    compile("org.embulk:embulk-util-config:0.3.0") 
     compile "org.embulk:embulk-util-timestamp:0.2.1"
     compile "org.embulk:embulk-util-text:0.1.1"
     compile "org.embulk:embulk-util-timestamp:0.2.1"
