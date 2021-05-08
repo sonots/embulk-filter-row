@@ -10,6 +10,7 @@ import org.joni.Option;
 import org.joni.Regex;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 
 // Operation Node of AST (Abstract Syntax Tree)
 public abstract class ParserExp extends ParserNode
@@ -193,8 +194,8 @@ class TimestampOpExp extends BinaryOpExp
 
     public boolean eval(PageReader pageReader)
     {
-        Timestamp l = left.getTimestamp(pageReader);
-        Timestamp r = right.getTimestamp(pageReader);
+        Instant l = left.getTimestamp(pageReader);
+        Instant r = right.getTimestamp(pageReader);
         if (operator == Parser.EQ) {
             return l.equals(r);
         }

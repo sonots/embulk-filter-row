@@ -17,6 +17,7 @@ import org.embulk.spi.time.Timestamp;
 
 import org.slf4j.Logger;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 
@@ -161,7 +162,7 @@ class GuardColumnVisitorAndImpl
                 }
             }
             else {
-                Timestamp subject = pageReader.getTimestamp(column);
+                Instant subject = pageReader.getTimestampInstant(column);
                 if (!condition.compare(subject)) {
                     shouldAddRecord = false;
                     break;

@@ -1,22 +1,18 @@
 package org.embulk.filter.row.condition;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Throwables;
-
+import java.time.Instant;
+import java.time.format.DateTimeParseException;
+import java.util.Optional;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.embulk.config.ConfigException;
 import org.embulk.spi.Column;
-import org.embulk.spi.time.Timestamp;
-import org.embulk.spi.time.TimestampParseException;
-import org.embulk.spi.time.TimestampParser;
+import org.embulk.util.timestamp.TimestampFormatter;
 import org.embulk.spi.type.BooleanType;
 import org.embulk.spi.type.DoubleType;
 import org.embulk.spi.type.LongType;
 import org.embulk.spi.type.StringType;
 import org.embulk.spi.type.TimestampType;
 import org.embulk.spi.type.Type;
-import org.joda.time.DateTimeZone;
-import org.jruby.embed.ScriptingContainer;
 
 public class ConditionFactory
 {
@@ -137,15 +133,15 @@ public class ConditionFactory
         else if (conditionConfig.getArgument().get() instanceof String) {
             String argument        = (String) conditionConfig.getArgument().get();
             String format          = (String) conditionConfig.getFormat().get();
-            DateTimeZone timezone  = DateTimeZone.forID((String) conditionConfig.getTimezone().get());
+            String timezone  = conditionConfig.getTimezone().get();
 
-            TimestampParser parser = createTimestampParser(format, timezone);
+            TimestampFormatter parser = createTimestampParser(format, timezone);
             try {
-                Timestamp timestamp = parser.parse(argument);
+                Instant timestamp = parser.parse(argument);
                 return new TimestampCondition(operator, timestamp, not);
             }
-            catch (TimestampParseException ex) {
-                throw Throwables.propagate(ex);
+            catch (DateTimeParseException ex) {
+                throw new RuntimeException(ex);
             }
         }
         else {
@@ -153,87 +149,11 @@ public class ConditionFactory
         }
     }
 
-    private class TimestampParserTaskImpl implements TimestampParser.Task
+    private TimestampFormatter createTimestampParser(String format, String timezone)
     {
-        private final DateTimeZone defaultTimeZone;
-        private final String defaultTimestampFormat;
-        private final String defaultDate;
-        public TimestampParserTaskImpl(
-                DateTimeZone defaultTimeZone,
-                String defaultTimestampFormat,
-                String defaultDate)
-        {
-            this.defaultTimeZone = defaultTimeZone;
-            this.defaultTimestampFormat = defaultTimestampFormat;
-            this.defaultDate = defaultDate;
-        }
-        @Override
-        public DateTimeZone getDefaultTimeZone()
-        {
-            return this.defaultTimeZone;
-        }
-        @Override
-        public String getDefaultTimestampFormat()
-        {
-            return this.defaultTimestampFormat;
-        }
-        @Override
-        public String getDefaultDate()
-        {
-            return this.defaultDate;
-        }
-        @Override
-        public ScriptingContainer getJRuby()
-        {
-            return null;
-        }
-    }
-
-    private class TimestampParserColumnOptionImpl implements TimestampParser.TimestampColumnOption
-    {
-        private final Optional<DateTimeZone> timeZone;
-        private final Optional<String> format;
-        private final Optional<String> date;
-        public TimestampParserColumnOptionImpl(
-                Optional<DateTimeZone> timeZone,
-                Optional<String> format,
-                Optional<String> date)
-        {
-            this.timeZone = timeZone;
-            this.format = format;
-            this.date = date;
-        }
-        @Override
-        public Optional<DateTimeZone> getTimeZone()
-        {
-            return this.timeZone;
-        }
-        @Override
-        public Optional<String> getFormat()
-        {
-            return this.format;
-        }
-        @Override
-        public Optional<String> getDate()
-        {
-            return this.date;
-        }
-    }
-
-    // ToDo: Replace with `new TimestampParser(format, timezone)`
-    // after deciding to drop supporting embulk < 0.8.29.
-    private TimestampParser createTimestampParser(String format, DateTimeZone timezone)
-    {
-        return createTimestampParser(format, timezone, "1970-01-01");
-    }
-
-    // ToDo: Replace with `new TimestampParser(format, timezone, date)`
-    // after deciding to drop supporting embulk < 0.8.29.
-    private TimestampParser createTimestampParser(String format, DateTimeZone timezone, String date)
-    {
-        TimestampParserTaskImpl task = new TimestampParserTaskImpl(timezone, format, date);
-        TimestampParserColumnOptionImpl columnOption = new TimestampParserColumnOptionImpl(
-                Optional.of(timezone), Optional.of(format), Optional.of(date));
-        return new TimestampParser(task, columnOption);
+        return TimestampFormatter.builder(format,true)
+                .setDefaultDateFromString("1970-01-01")
+                .setDefaultZoneFromString(timezone)
+                .build();
     }
 }
