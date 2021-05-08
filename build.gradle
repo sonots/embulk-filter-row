@@ -28,8 +28,10 @@ dependencies {
         exclude group: "org.msgpack", module: "msgpack-core"
     }
 
-    compile  "org.jruby.joni:joni:2.1.41"
-    compile  "org.jruby.jcodings:jcodings:1.0.55"
+    compile "org.jruby.joni:joni:2.1.41"
+    compile "org.jruby.jcodings:jcodings:1.0.55"
+    compile "org.apache.commons:commons-lang3:3.12.0"
+
 
     testCompile "junit:junit:4.+"
     testCompile "org.embulk:embulk-api:0.10.30"
