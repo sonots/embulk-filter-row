@@ -162,7 +162,8 @@ class GuardColumnVisitorAndImpl
                 }
             }
             else {
-                Instant subject = pageReader.getTimestampInstant(column);
+                // TODO: use getTimstampInstant after dropping v0.9
+                Instant subject = pageReader.getTimestamp(column).getInstant();
                 if (!condition.compare(subject)) {
                     shouldAddRecord = false;
                     break;

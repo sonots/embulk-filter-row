@@ -299,7 +299,8 @@ class IdentifierLiteral extends ParserLiteral
 
     public Instant getTimestamp(PageReader pageReader)
     {
-        return pageReader.getTimestampInstant(column);
+        // TODO: use getTimstampInstant after dropping v0.9
+        return pageReader.getTimestamp(column).getInstant();
     }
 
     public Value getJson(PageReader pageReader)
