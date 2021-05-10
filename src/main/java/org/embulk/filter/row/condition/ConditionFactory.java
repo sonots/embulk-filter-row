@@ -1,18 +1,18 @@
 package org.embulk.filter.row.condition;
 
-import java.time.Instant;
-import java.time.format.DateTimeParseException;
-import java.util.Optional;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.embulk.config.ConfigException;
 import org.embulk.spi.Column;
-import org.embulk.util.timestamp.TimestampFormatter;
 import org.embulk.spi.type.BooleanType;
 import org.embulk.spi.type.DoubleType;
 import org.embulk.spi.type.LongType;
 import org.embulk.spi.type.StringType;
 import org.embulk.spi.type.TimestampType;
 import org.embulk.spi.type.Type;
+import org.embulk.util.timestamp.TimestampFormatter;
+
+import java.time.Instant;
+import java.time.format.DateTimeParseException;
 
 public class ConditionFactory
 {

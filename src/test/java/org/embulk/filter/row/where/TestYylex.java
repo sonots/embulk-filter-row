@@ -2,8 +2,6 @@ package org.embulk.filter.row.where;
 
 import org.embulk.config.ConfigException;
 import org.embulk.spi.Schema;
-import org.embulk.spi.SchemaConfigException;
-import org.embulk.spi.time.Timestamp;
 import org.junit.Before;
 import org.junit.Test;
 

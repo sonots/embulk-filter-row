@@ -1,7 +1,5 @@
 package org.embulk.filter.row.condition;
 
-import org.embulk.spi.time.Timestamp;
-
 import org.junit.Test;
 
 import java.time.Instant;

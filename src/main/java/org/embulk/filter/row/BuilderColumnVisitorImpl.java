@@ -1,14 +1,12 @@
 package org.embulk.filter.row;
 
 import org.embulk.filter.row.RowFilterPlugin.PluginTask;
-
 import org.embulk.spi.Column;
 import org.embulk.spi.ColumnVisitor;
 import org.embulk.spi.Exec;
 import org.embulk.spi.PageBuilder;
 import org.embulk.spi.PageReader;
 import org.embulk.spi.Schema;
-
 import org.slf4j.Logger;
 
 public class BuilderColumnVisitorImpl

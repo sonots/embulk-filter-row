@@ -1,21 +1,18 @@
 package org.embulk.filter.row.condition;
 
-import java.util.Optional;
-
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.embulk.config.ConfigException;
 import org.embulk.config.TaskSource;
 import org.embulk.spi.Column;
-
 import org.junit.Test;
+
+import java.util.Optional;
 
 import static org.embulk.spi.type.Types.BOOLEAN;
 import static org.embulk.spi.type.Types.DOUBLE;
 import static org.embulk.spi.type.Types.LONG;
 import static org.embulk.spi.type.Types.STRING;
 import static org.embulk.spi.type.Types.TIMESTAMP;
-
-//import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 

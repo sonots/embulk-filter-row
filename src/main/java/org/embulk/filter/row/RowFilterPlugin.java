@@ -1,21 +1,11 @@
 package org.embulk.filter.row;
 
-import java.util.Optional;
-
-import org.embulk.util.config.Config;
-import org.embulk.util.config.ConfigDefault;
 import org.embulk.config.ConfigException;
 import org.embulk.config.ConfigSource;
-import org.embulk.util.config.ConfigMapper;
-import org.embulk.util.config.ConfigMapperFactory;
-import org.embulk.util.config.Task;
 import org.embulk.config.TaskSource;
-
 import org.embulk.filter.row.condition.ConditionConfig;
 import org.embulk.filter.row.where.Parser;
 import org.embulk.filter.row.where.ParserExp;
-
-import org.embulk.filter.row.where.ParserLiteral;
 import org.embulk.spi.Exec;
 import org.embulk.spi.FilterPlugin;
 import org.embulk.spi.Page;
@@ -23,12 +13,17 @@ import org.embulk.spi.PageBuilder;
 import org.embulk.spi.PageOutput;
 import org.embulk.spi.PageReader;
 import org.embulk.spi.Schema;
+import org.embulk.util.config.Config;
+import org.embulk.util.config.ConfigDefault;
+import org.embulk.util.config.ConfigMapper;
+import org.embulk.util.config.ConfigMapperFactory;
+import org.embulk.util.config.Task;
 import org.embulk.util.config.TaskMapper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 public class RowFilterPlugin implements FilterPlugin
 {

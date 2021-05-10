@@ -2,8 +2,6 @@ package org.embulk.filter.row.where;
 
 import org.embulk.config.ConfigException;
 import org.embulk.spi.PageReader;
-import org.embulk.spi.time.Timestamp;
-
 import org.jcodings.specific.UTF8Encoding;
 import org.joni.Matcher;
 import org.joni.Option;

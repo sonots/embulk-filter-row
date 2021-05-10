@@ -7,14 +7,11 @@ import org.embulk.filter.row.condition.DoubleCondition;
 import org.embulk.filter.row.condition.LongCondition;
 import org.embulk.filter.row.condition.StringCondition;
 import org.embulk.filter.row.condition.TimestampCondition;
-
 import org.embulk.spi.Column;
 import org.embulk.spi.ColumnVisitor;
 import org.embulk.spi.Exec;
 import org.embulk.spi.PageReader;
 import org.embulk.spi.Schema;
-import org.embulk.spi.time.Timestamp;
-
 import org.slf4j.Logger;
 
 import java.time.Instant;

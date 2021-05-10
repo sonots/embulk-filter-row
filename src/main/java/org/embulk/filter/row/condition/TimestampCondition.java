@@ -1,7 +1,5 @@
 package org.embulk.filter.row.condition;
 
-import org.embulk.spi.time.Timestamp;
-
 import java.time.Instant;
 
 public class TimestampCondition implements Condition

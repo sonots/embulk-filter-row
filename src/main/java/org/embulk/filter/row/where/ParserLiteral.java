@@ -1,24 +1,20 @@
 package org.embulk.filter.row.where;
 
-import java.time.Instant;
-import java.time.format.DateTimeParseException;
 import org.embulk.config.ConfigException;
 import org.embulk.spi.Column;
 import org.embulk.spi.PageReader;
 import org.embulk.spi.Schema;
-import org.embulk.util.config.Config;
-import org.embulk.util.config.ConfigDefault;
-import org.embulk.util.config.ConfigMapper;
-import org.embulk.util.config.ConfigMapperFactory;
-import org.embulk.util.timestamp.TimestampFormatter;
 import org.embulk.spi.type.BooleanType;
 import org.embulk.spi.type.DoubleType;
 import org.embulk.spi.type.JsonType;
 import org.embulk.spi.type.LongType;
 import org.embulk.spi.type.StringType;
 import org.embulk.spi.type.TimestampType;
-import org.embulk.spi.type.Type;
+import org.embulk.util.timestamp.TimestampFormatter;
 import org.msgpack.value.Value;
+
+import java.time.Instant;
+import java.time.format.DateTimeParseException;
 
 // Literal Node of AST (Abstract Syntax Tree)
 public abstract class ParserLiteral extends ParserNode

@@ -1,12 +1,10 @@
 package org.embulk.filter.row;
 
 import org.embulk.filter.row.RowFilterPlugin.PluginTask;
-
 import org.embulk.filter.row.where.ParserExp;
 import org.embulk.spi.Exec;
 import org.embulk.spi.PageReader;
 import org.embulk.spi.Schema;
-
 import org.slf4j.Logger;
 
 class GuardColumnVisitorWhereImpl

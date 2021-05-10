@@ -1,9 +1,10 @@
 package org.embulk.filter.row.condition;
 
-import java.util.Optional;
 import org.embulk.util.config.Config;
 import org.embulk.util.config.ConfigDefault;
 import org.embulk.util.config.Task;
+
+import java.util.Optional;
 
 public interface ConditionConfig extends Task
 {
