@@ -7,7 +7,6 @@ plugins {
 }
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 group = "io.github.sonots"
@@ -18,15 +17,12 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compileOnly "org.embulk:embulk-api:0.10.30"
-    compileOnly "org.embulk:embulk-spi:0.10.30"
+    compileOnly "org.embulk:embulk-api:0.10.31"
+    compileOnly "org.embulk:embulk-spi:0.10.31"
     compile("org.embulk:embulk-util-config:0.3.0") 
     compile "org.embulk:embulk-util-timestamp:0.2.1"
     compile "org.embulk:embulk-util-text:0.1.1"
-    compile "org.embulk:embulk-util-timestamp:0.2.1"
-    compile('org.embulk:embulk-util-json:0.1.0') {
-        exclude group: "org.msgpack", module: "msgpack-core"
-    }
+    compile "org.embulk:embulk-util-json:0.1.1"
 
     compile "org.jruby.joni:joni:2.1.41"
     compile "org.jruby.jcodings:jcodings:1.0.55"
@@ -34,12 +30,11 @@ dependencies {
 
 
     testCompile "junit:junit:4.+"
-    testCompile "org.embulk:embulk-api:0.10.30"
-    testCompile "org.embulk:embulk-spi:0.10.30"
-    testCompile "org.embulk:embulk-core:0.10.30"
-    testCompile "org.embulk:embulk-deps:0.10.30"
-    testCompile "org.embulk:embulk-core:0.10.30"
-    testCompile  "org.embulk:embulk-core:0.10.30:tests"
+    testCompile "org.embulk:embulk-api:0.10.31"
+    testCompile "org.embulk:embulk-spi:0.10.31"
+    testCompile "org.embulk:embulk-core:0.10.31"
+    testCompile "org.embulk:embulk-deps:0.10.31"
+    testCompile  "org.embulk:embulk-core:0.10.31:tests"
 }
 
 checkstyle {
