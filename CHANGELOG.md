@@ -1,8 +1,8 @@
-# 0.5.1 (2017-08-26)
+# 0.6.0 (2021-06-10)
 
-Enhancements:
+Changes:
 
-* Use old, but non-deprecated TimestampParser API to support embulk < 0.8.29
+* Get ready for v0.11 and v1.0 (thanks to hiroyuki-sato)
 
 # 0.5.0 (2017-08-23)
 

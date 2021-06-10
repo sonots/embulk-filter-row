@@ -10,7 +10,7 @@ repositories {
 }
 
 group = "io.github.sonots"
-version = "0.5.1"
+version = "0.6.0"
 description = "A filter plugin for Embulk to filter out rows with conditions."
 
 sourceCompatibility = 1.8
@@ -19,7 +19,7 @@ targetCompatibility = 1.8
 dependencies {
     compileOnly "org.embulk:embulk-api:0.10.31"
     compileOnly "org.embulk:embulk-spi:0.10.31"
-    compile("org.embulk:embulk-util-config:0.3.0") 
+    compile("org.embulk:embulk-util-config:0.3.0")
     compile "org.embulk:embulk-util-timestamp:0.2.1"
     compile "org.embulk:embulk-util-text:0.1.1"
     compile "org.embulk:embulk-util-json:0.1.1"
