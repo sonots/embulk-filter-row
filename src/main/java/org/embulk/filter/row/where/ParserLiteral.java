@@ -1,24 +1,20 @@
 package org.embulk.filter.row.where;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Throwables;
 import org.embulk.config.ConfigException;
 import org.embulk.spi.Column;
 import org.embulk.spi.PageReader;
 import org.embulk.spi.Schema;
-import org.embulk.spi.time.Timestamp;
-import org.embulk.spi.time.TimestampParseException;
-import org.embulk.spi.time.TimestampParser;
 import org.embulk.spi.type.BooleanType;
 import org.embulk.spi.type.DoubleType;
 import org.embulk.spi.type.JsonType;
 import org.embulk.spi.type.LongType;
 import org.embulk.spi.type.StringType;
 import org.embulk.spi.type.TimestampType;
-import org.embulk.spi.type.Type;
-import org.joda.time.DateTimeZone;
-import org.jruby.embed.ScriptingContainer;
+import org.embulk.util.timestamp.TimestampFormatter;
 import org.msgpack.value.Value;
+
+import java.time.Instant;
+import java.time.format.DateTimeParseException;
 
 // Literal Node of AST (Abstract Syntax Tree)
 public abstract class ParserLiteral extends ParserNode
@@ -66,7 +62,7 @@ public abstract class ParserLiteral extends ParserNode
     {
         throw new RuntimeException();
     }
-    public Timestamp getTimestamp(PageReader pageReader)
+    public Instant getTimestamp(PageReader pageReader)
     {
         throw new RuntimeException();
     }
@@ -74,6 +70,7 @@ public abstract class ParserLiteral extends ParserNode
     {
         throw new RuntimeException();
     }
+
 }
 
 class BooleanLiteral extends ParserLiteral
@@ -141,8 +138,8 @@ class StringLiteral extends ParserLiteral
 
 class TimestampLiteral extends ParserLiteral
 {
-    protected Timestamp val;
-    private static final DateTimeZone defaultTimeZone  = DateTimeZone.forID("UTC");
+    protected Instant val;
+    private static final String defaultTimeZone = "UTC";
 
     public TimestampLiteral(ParserLiteral literal)
     {
@@ -176,20 +173,23 @@ class TimestampLiteral extends ParserLiteral
                 "%Y-%m-%d %z",
                 "%Y-%m-%d",
                 };
-        Timestamp val = null;
-        TimestampParseException ex = null;
+        Instant val = null;
+        DateTimeParseException ex = null;
         for (String format : formats) {
             try {
-                TimestampParser timestampParser = createTimestampParser(format, defaultTimeZone);
+                TimestampFormatter timestampParser = createTimestampParser(format, defaultTimeZone);
                 this.val = timestampParser.parse(literal.val);
                 break;
             }
-            catch (TimestampParseException e) {
+            catch (DateTimeParseException e) {
                 ex = e;
             }
         }
         if (this.val == null) {
-            throw Throwables.propagate(ex);
+            if ( ex instanceof RuntimeException ) {
+                throw (RuntimeException)ex;
+            }
+            throw new RuntimeException(ex);
         }
     }
 
@@ -199,7 +199,7 @@ class TimestampLiteral extends ParserLiteral
         double epoch = literal.val;
         int epochSecond = (int) epoch;
         long nanoAdjustment = (long) ((epoch - epochSecond) * 1000000000);
-        this.val = Timestamp.ofEpochSecond(epochSecond, nanoAdjustment);
+        this.val = Instant.ofEpochSecond(epochSecond, nanoAdjustment);
     }
 
     void initTimestampLiteral(TimestampLiteral literal)
@@ -213,93 +213,18 @@ class TimestampLiteral extends ParserLiteral
         return true;
     }
 
-    public Timestamp getTimestamp(PageReader pageReader)
+    public Instant getTimestamp(PageReader pageReader)
     {
         return val;
     }
 
-    private class TimestampParserTaskImpl implements TimestampParser.Task
+    private TimestampFormatter createTimestampParser(String format, String timezone)
     {
-        private final DateTimeZone defaultTimeZone;
-        private final String defaultTimestampFormat;
-        private final String defaultDate;
-        public TimestampParserTaskImpl(
-                DateTimeZone defaultTimeZone,
-                String defaultTimestampFormat,
-                String defaultDate)
-        {
-            this.defaultTimeZone = defaultTimeZone;
-            this.defaultTimestampFormat = defaultTimestampFormat;
-            this.defaultDate = defaultDate;
-        }
-        @Override
-        public DateTimeZone getDefaultTimeZone()
-        {
-            return this.defaultTimeZone;
-        }
-        @Override
-        public String getDefaultTimestampFormat()
-        {
-            return this.defaultTimestampFormat;
-        }
-        @Override
-        public String getDefaultDate()
-        {
-            return this.defaultDate;
-        }
-        @Override
-        public ScriptingContainer getJRuby()
-        {
-            return null;
-        }
-    }
+        TimestampFormatter parser;
 
-    private class TimestampParserColumnOptionImpl implements TimestampParser.TimestampColumnOption
-    {
-        private final Optional<DateTimeZone> timeZone;
-        private final Optional<String> format;
-        private final Optional<String> date;
-        public TimestampParserColumnOptionImpl(
-                Optional<DateTimeZone> timeZone,
-                Optional<String> format,
-                Optional<String> date)
-        {
-            this.timeZone = timeZone;
-            this.format = format;
-            this.date = date;
-        }
-        @Override
-        public Optional<DateTimeZone> getTimeZone()
-        {
-            return this.timeZone;
-        }
-        @Override
-        public Optional<String> getFormat()
-        {
-            return this.format;
-        }
-        @Override
-        public Optional<String> getDate()
-        {
-            return this.date;
-        }
-    }
-
-    // ToDo: Replace with `new TimestampParser(format, timezone)`
-    // after deciding to drop supporting embulk < 0.8.29.
-    private TimestampParser createTimestampParser(String format, DateTimeZone timezone)
-    {
-        return createTimestampParser(format, timezone, "1970-01-01");
-    }
-
-    // ToDo: Replace with `new TimestampParser(format, timezone, date)`
-    // after deciding to drop supporting embulk < 0.8.29.
-    private TimestampParser createTimestampParser(String format, DateTimeZone timezone, String date)
-    {
-        TimestampParserTaskImpl task = new TimestampParserTaskImpl(timezone, format, date);
-        TimestampParserColumnOptionImpl columnOption = new TimestampParserColumnOptionImpl(
-                Optional.of(timezone), Optional.of(format), Optional.of(date));
-        return new TimestampParser(task, columnOption);
+        return TimestampFormatter.builder(format,true)
+                .setDefaultZoneFromString("UTC")
+                .setDefaultDateFromString("1970-01-01").build();
     }
 }
 
@@ -368,9 +293,10 @@ class IdentifierLiteral extends ParserLiteral
         return pageReader.getString(column);
     }
 
-    public Timestamp getTimestamp(PageReader pageReader)
+    public Instant getTimestamp(PageReader pageReader)
     {
-        return pageReader.getTimestamp(column);
+        // TODO: use getTimstampInstant after dropping v0.9
+        return pageReader.getTimestamp(column).getInstant();
     }
 
     public Value getJson(PageReader pageReader)

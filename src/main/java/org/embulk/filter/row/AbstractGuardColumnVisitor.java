@@ -2,7 +2,6 @@ package org.embulk.filter.row;
 
 import org.embulk.filter.row.RowFilterPlugin.PluginTask;
 import org.embulk.filter.row.condition.Condition;
-
 import org.embulk.filter.row.condition.ConditionConfig;
 import org.embulk.filter.row.condition.ConditionFactory;
 import org.embulk.spi.Column;

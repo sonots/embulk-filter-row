@@ -1,7 +1,6 @@
 package org.embulk.filter.row.where;
 
 import org.embulk.EmbulkTestRuntime;
-import org.embulk.config.Config;
 import org.embulk.config.ConfigException;
 import org.embulk.spi.Page;
 import org.embulk.spi.PageReader;
@@ -9,14 +8,12 @@ import org.embulk.spi.PageTestUtils;
 import org.embulk.spi.Schema;
 import org.embulk.spi.SchemaConfigException;
 import org.embulk.spi.time.Timestamp;
-
-import org.embulk.spi.time.TimestampParseException;
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
 import org.msgpack.value.Value;
 import org.msgpack.value.ValueFactory;
 
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import static org.embulk.spi.type.Types.BOOLEAN;
@@ -377,7 +374,7 @@ public class TestParser
             parser.parse("timestamp = '1970:01:01'");
             assertTrue(false);
         }
-        catch (TimestampParseException ex) {
+        catch (DateTimeParseException ex) {
         }
 
         try {

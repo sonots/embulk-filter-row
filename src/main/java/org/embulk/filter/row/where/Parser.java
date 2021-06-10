@@ -18,8 +18,8 @@ package org.embulk.filter.row.where;
 
 
 //#line 2 "src/main/java/org/embulk/filter/row/where/_parser.y"
+
 import org.embulk.config.ConfigException;
-import org.embulk.spi.Column;
 import org.embulk.spi.Schema;
 //#line 21 "Parser.java"
 

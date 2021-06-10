@@ -1,20 +1,18 @@
 package org.embulk.filter.row.condition;
 
-import com.google.common.base.Optional;
-
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.embulk.config.ConfigException;
 import org.embulk.config.TaskSource;
 import org.embulk.spi.Column;
-
 import org.junit.Test;
+
+import java.util.Optional;
 
 import static org.embulk.spi.type.Types.BOOLEAN;
 import static org.embulk.spi.type.Types.DOUBLE;
 import static org.embulk.spi.type.Types.LONG;
 import static org.embulk.spi.type.Types.STRING;
 import static org.embulk.spi.type.Types.TIMESTAMP;
-
-//import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -34,7 +32,7 @@ public class TestConditionFactory
 
         public Optional<Object> getArgument()
         {
-            return Optional.absent();
+            return Optional.empty();
         }
 
         public Optional<Boolean> getNot()
@@ -60,6 +58,15 @@ public class TestConditionFactory
         public void validate()
         {
         }
+        public TaskSource toTaskSource()
+        {
+            return null;
+        }
+        public ObjectNode toObjectNode()
+        {
+            return null;
+        }
+
     }
 
     public TestConditionFactory()
@@ -89,7 +96,7 @@ public class TestConditionFactory
             }
             public Optional<Object> getArgument()
             {
-                return Optional.absent();
+                return Optional.empty();
             }
         };
         try {
@@ -153,7 +160,7 @@ public class TestConditionFactory
             }
             public Optional<Object> getArgument()
             {
-                return Optional.absent();
+                return Optional.empty();
             }
         };
         try {
@@ -217,7 +224,7 @@ public class TestConditionFactory
             }
             public Optional<Object> getArgument()
             {
-                return Optional.absent();
+                return Optional.empty();
             }
         };
         try {
@@ -281,7 +288,7 @@ public class TestConditionFactory
             }
             public Optional<Object> getArgument()
             {
-                return Optional.absent();
+                return Optional.empty();
             }
         };
         try {
@@ -345,7 +352,7 @@ public class TestConditionFactory
             }
             public Optional<Object> getArgument()
             {
-                return Optional.absent();
+                return Optional.empty();
             }
         };
         try {

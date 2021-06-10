@@ -1,19 +1,11 @@
 package org.embulk.filter.row;
 
-import com.google.common.base.Optional;
-
-import org.embulk.config.Config;
-import org.embulk.config.ConfigDefault;
 import org.embulk.config.ConfigException;
 import org.embulk.config.ConfigSource;
-import org.embulk.config.Task;
 import org.embulk.config.TaskSource;
-
 import org.embulk.filter.row.condition.ConditionConfig;
 import org.embulk.filter.row.where.Parser;
 import org.embulk.filter.row.where.ParserExp;
-
-import org.embulk.filter.row.where.ParserLiteral;
 import org.embulk.spi.Exec;
 import org.embulk.spi.FilterPlugin;
 import org.embulk.spi.Page;
@@ -21,19 +13,29 @@ import org.embulk.spi.PageBuilder;
 import org.embulk.spi.PageOutput;
 import org.embulk.spi.PageReader;
 import org.embulk.spi.Schema;
-import org.embulk.spi.time.TimestampParser;
-
+import org.embulk.util.config.Config;
+import org.embulk.util.config.ConfigDefault;
+import org.embulk.util.config.ConfigMapper;
+import org.embulk.util.config.ConfigMapperFactory;
+import org.embulk.util.config.Task;
+import org.embulk.util.config.TaskMapper;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 public class RowFilterPlugin implements FilterPlugin
 {
-    private static final Logger logger = Exec.getLogger(RowFilterPlugin.class);
-
+    private static final Logger logger = LoggerFactory.getLogger(RowFilterPlugin.class);
+    private static final ConfigMapperFactory CONFIG_MAPPER_FACTORY = ConfigMapperFactory
+            .builder()
+            .addDefaultModules()
+            .build();
+    private static final ConfigMapper CONFIG_MAPPER = CONFIG_MAPPER_FACTORY.createConfigMapper();
     public RowFilterPlugin() {}
 
-    public interface PluginTask extends Task, TimestampParser.Task
+    public interface PluginTask extends Task
     {
         @Config("condition")
         @ConfigDefault("\"AND\"")
@@ -48,13 +50,46 @@ public class RowFilterPlugin implements FilterPlugin
         @Config("where")
         @ConfigDefault("null")
         public Optional<String> getWhere();
+
+        // From org.embulk.spi.time.TimestampParser.Task.
+        @Config("default_timezone")
+        @ConfigDefault("\"UTC\"")
+        String getDefaultTimeZoneId();
+
+        // From org.embulk.spi.time.TimestampParser.Task.
+        @Config("default_timestamp_format")
+        @ConfigDefault("\"%Y-%m-%d %H:%M:%S.%N %z\"")
+        String getDefaultTimestampFormat();
+
+        // From org.embulk.spi.time.TimestampParser.Task.
+        @Config("default_date")
+        @ConfigDefault("\"1970-01-01\"")
+        String getDefaultDate();
+    }
+
+    public interface TimestampColumnOption extends Task
+    {
+        // From org.embulk.spi.time.TimestampParser.TimestampColumnOption.
+        @Config("timezone")
+        @ConfigDefault("null")
+        public Optional<String> getTimeZoneId();
+
+        // From org.embulk.spi.time.TimestampParser.TimestampColumnOption.
+        @Config("format")
+        @ConfigDefault("null")
+        public Optional<String> getFormat();
+
+        // From org.embulk.spi.time.TimestampParser.TimestampColumnOption.
+        @Config("date")
+        @ConfigDefault("null")
+        public Optional<String> getDate();
     }
 
     @Override
     public void transaction(ConfigSource config, Schema inputSchema,
             FilterPlugin.Control control)
     {
-        PluginTask task = config.loadConfig(PluginTask.class);
+        final PluginTask task = CONFIG_MAPPER.map(config, PluginTask.class);
 
         configure(task, inputSchema);
         Schema outputSchema = inputSchema;
@@ -91,7 +126,8 @@ public class RowFilterPlugin implements FilterPlugin
     public PageOutput open(final TaskSource taskSource, final Schema inputSchema,
             final Schema outputSchema, final PageOutput output)
     {
-        final PluginTask task = taskSource.loadTask(PluginTask.class);
+        final TaskMapper taskMapper = CONFIG_MAPPER_FACTORY.createTaskMapper();
+        final PluginTask task = taskMapper.map(taskSource, PluginTask.class);
         final boolean orCondition = task.getCondition().toLowerCase().equals("or");
         final PageReader pageReader = new PageReader(inputSchema);
         final PageBuilder pageBuilder = new PageBuilder(Exec.getBufferAllocator(), outputSchema, output);
