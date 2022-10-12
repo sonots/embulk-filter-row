@@ -192,6 +192,17 @@ class TimestampOpExp extends BinaryOpExp
 
     public boolean eval(PageReader pageReader)
     {
+        boolean lIsNull = left.isIdentifier() && left.isNull(pageReader);
+        boolean rIsNull = right.isIdentifier() && right.isNull(pageReader);
+        if (lIsNull && rIsNull && operator == Parser.EQ) {
+            return true; // Both of left and right are equals as null, but it will never happen
+        }
+        else if (lIsNull != rIsNull && operator == Parser.NEQ) {
+            return true; // Either of left or right is null and both are not equals
+        }
+        else if (lIsNull || rIsNull) {
+            return false; // Can't be evaluated by any other operator if either of left or right is null
+        }
         Instant l = left.getTimestamp(pageReader);
         Instant r = right.getTimestamp(pageReader);
         if (operator == Parser.EQ) {
@@ -247,6 +258,17 @@ class StringOpExp extends BinaryOpExp
 
     public boolean eval(PageReader pageReader)
     {
+        boolean lIsNull = left.isIdentifier() && left.isNull(pageReader);
+        boolean rIsNull = right.isIdentifier() && right.isNull(pageReader);
+        if (lIsNull && rIsNull && operator == Parser.EQ) {
+            return true; // Both of left and right are equals as null, but it will never happen
+        }
+        else if (lIsNull != rIsNull && operator == Parser.NEQ) {
+            return true; // Either of left or right is null and both are not equals
+        }
+        else if (lIsNull || rIsNull) {
+            return false; // Can't be evaluated by any other operator if either of left or right is null
+        }
         String l = left.getString(pageReader);
         String r = right.getString(pageReader);
         if (operator == Parser.EQ) {
