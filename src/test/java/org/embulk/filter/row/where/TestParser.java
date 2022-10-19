@@ -425,6 +425,9 @@ public class TestParser
         exp = parser.parse("string REGEXP 'st$'");
         assertFalse(exp.eval(reader));
 
+        exp = parser.parse("null_string REGEXP '^st'");
+        assertFalse(exp.eval(reader));
+
         try {
             // right-side identifier is not allowed
             parser.parse("'string' REGEXP string");

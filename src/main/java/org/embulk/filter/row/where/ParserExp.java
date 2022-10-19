@@ -328,6 +328,9 @@ class RegexpOpExp extends BinaryOpExp
 
     public boolean eval(PageReader pageReader)
     {
+        if (left.isNull(pageReader)) {
+            return false;
+        }
         byte[] l = left.getString(pageReader).getBytes(StandardCharsets.UTF_8);
         Matcher matcher = regex.matcher(l);
         int result = matcher.search(0, l.length, Option.DEFAULT);
