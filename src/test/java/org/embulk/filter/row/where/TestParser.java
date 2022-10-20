@@ -61,6 +61,8 @@ public class TestParser
                 .add("long", LONG)
                 .add("double", DOUBLE)
                 .add("true", BOOLEAN)
+                .add("null_timestamp", TIMESTAMP)
+                .add("null_string", STRING)
                 .add("null", BOOLEAN)
                 .add("json", JSON)
                 .build();
@@ -72,6 +74,8 @@ public class TestParser
                 1L,
                 1.5,
                 true,
+                null,
+                null,
                 null,
                 map
                 );
@@ -88,6 +92,31 @@ public class TestParser
 
         exp = parser.parse("\"true\" = true");
         assertTrue(exp.eval(reader));
+
+        exp = parser.parse("null_timestamp IS NULL");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("null_timestamp IS NOT NULL");
+        assertFalse(exp.eval(reader));
+        exp = parser.parse("null_timestamp = TIMESTAMP '1970-01-01 09:00:01.5 +0900'");
+        assertFalse(exp.eval(reader));
+        exp = parser.parse("null_timestamp != TIMESTAMP '1970-01-01 09:00:01.5 +0900'");
+        assertTrue(exp.eval(reader));
+
+        exp = parser.parse("null_string IS NULL");
+        assertTrue(exp.eval(reader));
+        exp = parser.parse("null_string IS NOT NULL");
+        assertFalse(exp.eval(reader));
+        exp = parser.parse("null_string = 'string'");
+        assertFalse(exp.eval(reader));
+        exp = parser.parse("null_string != 'string'");
+        assertTrue(exp.eval(reader));
+
+        try {
+            parser.parse("null_timestamp = null_string"); // Both of left and right are an identifier
+            assertTrue(false);
+        }
+        catch (ConfigException e) {
+        }
 
         try {
             parser.parse("\"unknown\" IS NULL");
@@ -394,6 +423,9 @@ public class TestParser
         exp = parser.parse("string REGEXP '^st'");
         assertTrue(exp.eval(reader));
         exp = parser.parse("string REGEXP 'st$'");
+        assertFalse(exp.eval(reader));
+
+        exp = parser.parse("null_string REGEXP '^st'");
         assertFalse(exp.eval(reader));
 
         try {
