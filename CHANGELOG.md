@@ -1,3 +1,9 @@
+# 0.6.1 (2022-10-24)
+
+Fixes:
+
+* Avoid NullPointerException (thanks to Tetsuro Sano)
+
 # 0.6.0 (2021-06-10)
 
 Changes:

@@ -10,7 +10,7 @@ repositories {
 }
 
 group = "io.github.sonots"
-version = "0.6.0"
+version = "0.6.1"
 description = "A filter plugin for Embulk to filter out rows with conditions."
 
 sourceCompatibility = 1.8
